@@ -25,11 +25,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp
+    main.cpp \
+    mainwindow.cpp \
+    include/test.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    include/test.h
 
 FORMS += \
         mainwindow.ui
@@ -38,3 +40,16 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    assets/Untitled Document 1 \
+    include/Untitled Document 1 \
+
+/home/sunsun/Desktop/CS_3505/A8/a8-an-educational-app-f18-gurpartb/SFML
+
+LIBS += -L"../../SFML/lib"
+
+CONFIG(release, debug|release): LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+
+INCLUDEPATH += "../SFML/include"
+DEPENDPATH += "../SFML/include"
