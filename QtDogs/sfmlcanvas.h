@@ -4,7 +4,7 @@
 #include "qsfmlwidget.h"
 #include <iostream>
 
-class SFMLCanvas : QSFMLWidget
+class SFMLCanvas : public QSFMLWidget
 {
 public:
     explicit SFMLCanvas(QWidget *Parent = 0);
@@ -15,8 +15,6 @@ public:
 private:
     sf::Texture myTexture;
     sf::Sprite mySprite;
-
-
 };
 
 #endif // SFMLCANVAS_H

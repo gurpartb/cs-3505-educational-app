@@ -7,7 +7,8 @@ SFMLCanvas::SFMLCanvas(QWidget* Parent) : QSFMLWidget(Parent)
 
 void SFMLCanvas::OnInit()
 {
-    if(!myTexture.loadFromFile("assets/shiba_test.png"))
+
+    if(!myTexture.loadFromFile("../QtDogs/assets/shiba_test.png"))
     {
         std::cout << "Failed to load image" << std::endl;
     }

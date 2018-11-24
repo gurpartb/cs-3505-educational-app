@@ -57,5 +57,5 @@ CONFIG(release, debug|release): LIBS += -lsfml-graphics -lsfml-window -lsfml-aud
 CONFIG(debug, debug|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
 
 
-INCLUDEPATH += "../SFML/include"
-DEPENDPATH += "../SFML/include"
+INCLUDEPATH += "../../SFML/include"
+DEPENDPATH += "../../SFML/include"
