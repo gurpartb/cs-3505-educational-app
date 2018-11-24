@@ -27,11 +27,15 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    include/test.cpp
+    include/test.cpp \
+    qsfmlwidget.cpp \
+    sfmlcanvas.cpp
 
 HEADERS += \
         mainwindow.h \
-    include/test.h
+    include/test.h \
+    qsfmlwidget.h \
+    sfmlcanvas.h
 
 FORMS += \
         mainwindow.ui
@@ -49,7 +53,9 @@ DISTFILES += \
 
 LIBS += -L"../../SFML/lib"
 
-CONFIG(release, debug|release): LIBS += -lsfml-audio -lsfml-graphics -lsfml-network -lsfml-window -lsfml-system
+CONFIG(release, debug|release): LIBS += -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network  -lsfml-system
+CONFIG(debug, debug|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
+
 
 INCLUDEPATH += "../SFML/include"
 DEPENDPATH += "../SFML/include"
