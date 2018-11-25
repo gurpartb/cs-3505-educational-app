@@ -27,11 +27,17 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    gravity.cpp
+        gravity.cpp \
+        qsfmlwidget.cpp \
+        sfmlcanvas.cpp
 
 HEADERS += \
         mainwindow.h \
-    gravity.h
+        include/test.h \
+        qsfmlwidget.h \
+        sfmlcanvas.h \
+        gravity.h
+
 
 FORMS += \
         mainwindow.ui
@@ -43,3 +49,18 @@ LIBS += -lBox2D
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    assets/Untitled Document 1 \
+    include/Untitled Document 1 \
+
+/home/sunsun/Desktop/CS_3505/A8/a8-an-educational-app-f18-gurpartb/SFML
+
+LIBS += -L"../../SFML/lib"
+
+CONFIG(release, debug|release): LIBS += -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network  -lsfml-system
+CONFIG(debug, debug|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
+
+
+INCLUDEPATH += "../../SFML/include"
+DEPENDPATH += "../../SFML/include"
