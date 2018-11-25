@@ -9,6 +9,10 @@
 *.dll
 *.dylib
 
+#SFML
+SFML/**
+
+
 # Qt-es
 object_script.*.Release
 object_script.*.Debug
