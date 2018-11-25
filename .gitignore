@@ -5,12 +5,10 @@
 *.a
 *.la
 *.lai
-*.so
 *.dll
 *.dylib
 
 #SFML
-SFML/**
 
 
 # Qt-es
