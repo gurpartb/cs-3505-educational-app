@@ -26,14 +26,19 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    gravity.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    gravity.h
 
 FORMS += \
         mainwindow.ui
 
+INCLUDEPATH += ../Box2D-master
+LIBS += -L"../Box2D-master/Build/bin/x86_64/Debug"
+LIBS += -lBox2D
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
