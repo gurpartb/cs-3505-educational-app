@@ -2,15 +2,13 @@
 *.slo
 *.lo
 *.o
-
+*.so
+*.so.*
 *.a
 *.la
 *.lai
 *.dll
 *.dylib
-
-#SFML
-
 
 # Qt-es
 object_script.*.Release
