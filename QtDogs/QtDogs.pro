@@ -42,8 +42,8 @@ HEADERS += \
 FORMS += \
         mainwindow.ui
 
-INCLUDEPATH += ../Box2D-master
-LIBS += -L"../Box2D-master/Build/bin/x86_64/Debug"
+INCLUDEPATH += ../../Box2D-master
+LIBS += -L"../../Box2D-master/Build/bin/x86_64/Debug"
 LIBS += -lBox2D
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
