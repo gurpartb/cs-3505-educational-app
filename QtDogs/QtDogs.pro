@@ -54,13 +54,13 @@ DISTFILES += \
     assets/Untitled Document 1 \
     include/Untitled Document 1 \
 
-/home/sunsun/Desktop/CS_3505/A8/a8-an-educational-app-f18-gurpartb/SFML
+$$PWD/../../SFML
 
-LIBS += -L"../SFML/lib"
+LIBS += -L"../../SFML/lib"
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network  -lsfml-system
 CONFIG(debug, debug|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
 
 
-INCLUDEPATH += "../SFML/include"
-DEPENDPATH += "../SFML/include"
+INCLUDEPATH += "../../SFML/include"
+DEPENDPATH += "../../SFML/include"
