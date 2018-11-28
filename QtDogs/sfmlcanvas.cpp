@@ -17,7 +17,13 @@ void SFMLCanvas::OnInit()
 
 }
 
+void SFMLCanvas::setSpritePosition(float x, float y)
+{
+    mySprite.setPosition(sf::Vector2f(x,y));
+}
+
 void SFMLCanvas::OnUpdate()
 {
+
     RenderWindow::draw(mySprite);
 }

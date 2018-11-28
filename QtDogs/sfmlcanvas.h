@@ -11,10 +11,12 @@ public:
 
     void OnInit() override;
     void OnUpdate() override;
+    void setSpritePosition(float x, float y);
 
 private:
     sf::Texture myTexture;
     sf::Sprite mySprite;
+
 };
 
 #endif // SFMLCANVAS_H

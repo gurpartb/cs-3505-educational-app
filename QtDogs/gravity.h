@@ -5,10 +5,12 @@
 #include "../Box2D-master/Box2D/Box2D.h"
 #include <../Box2D-master/Box2D/Dynamics/b2World.h>
 #include <stdio.h>
+#include "sfmlcanvas.h"
 
 
 class gravity
 {
+
 public:
     gravity();
 };
