@@ -29,14 +29,16 @@ SOURCES += \
         mainwindow.cpp \
         gravity.cpp \
         qsfmlwidget.cpp \
-        sfmlcanvas.cpp
+        sfmlcanvas.cpp \
+    spritesheettool.cpp
 
 HEADERS += \
         mainwindow.h \
         include/test.h \
         qsfmlwidget.h \
         sfmlcanvas.h \
-        gravity.h
+        gravity.h \
+    spritesheettool.h
 
 
 FORMS += \
