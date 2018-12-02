@@ -16,15 +16,30 @@ SpriteSheetTool::SpriteSheetTool()
 /// \param path
 ///
 ///
-void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, std::string name, QString path)
+void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, std::string name, std::string path)
 {
-    QImage image(path);
-    std::vector<QImage> frames;
+    //Load up the textures using the rectangle coordinates
+    sf::Texture texture;
+    sf::IntRect rectSourceSprite(x, y, w, h);
+    texture.loadFromFile(path, rectSourceSprite);
+    std::vector<sf::Texture> frames;
+    //Add as many frames as numFrames, changing the initial x coordinate by adding the width.
     for(int i = 0; i < numFrames; i++)
     {
-        QImage newImage = image.copy(x,y,w,h);
-        frames.push_back(newImage);
+        frames.push_back(texture);
         x += w;
+        texture.loadFromFile(path, rectSourceSprite);
     }
     dict.insert(name, frames);
+}
+
+///
+/// \brief SpriteSheetTool::getAnimationFrame
+/// \param name
+/// \param frameCount
+///
+void SpriteSheetTool::getAnimationFrame(std::string name, int frameCount){
+    std::vector<sf::Texture> frames = dict[name];
+    QImage imageTextureCopy(frames[frameCount].copyToImage().getPixelsPtr(), frames[frameCount].getSize().x, frames[0].getSize().y, QImage::Format_ARGB32);
+    emit imageSendSignal(imageTextureCopy);
 }

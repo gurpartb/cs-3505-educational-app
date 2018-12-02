@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "spritesheettool.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +18,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    SpriteSheetTool spriteSheetTool;
+signals:
+    void getDogAnimationSignal(std::string, int);
+private slots:
+    void playDogAnimation(QImage);
 };
 
 #endif // MAINWINDOW_H
