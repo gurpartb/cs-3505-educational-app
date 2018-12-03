@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::playDogAnimation(QImage image){
-    ui->DogLabel->setPixmap(QPixmap::fromImage(image));
+   //ui->DogLabel->setPixmap(QPixmap::fromImage(image));
 }
 
 MainWindow::~MainWindow()
