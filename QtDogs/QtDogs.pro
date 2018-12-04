@@ -60,7 +60,7 @@ DISTFILES += \
 
 $$PWD/../../SFML
 
-LIBS += -L"../../SFML-master/lib"
+LIBS += -L"../../SFML/lib"
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network  -lsfml-system
 #CONFIG(debug, debug|release): LIBS +=  -lsfml-graphics-d -lsfml-window-d -lsfml-audio-d -lsfml-network-d -lsfml-system-d
