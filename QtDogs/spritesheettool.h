@@ -17,7 +17,6 @@ public:
     SpriteSheetTool();
     void addAnimation(int x, int y, int w, int h, int numFrames, std::string name, std::string path);
 
-
 private slots:
     void getAnimationFrame(std::string name, int frameCount);
 

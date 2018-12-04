@@ -1,11 +1,6 @@
 #include "sfmlcanvas.h"
 
-SFMLCanvas::SFMLCanvas(QWidget* Parent) : QSFMLWidget(Parent)
-{
-
-}
-
-void SFMLCanvas::OnInit()
+SFMLCanvas::SFMLCanvas()
 {
     if(!myTexture.loadFromFile("../QtDogs/assets/shiba_test.png"))
     {
@@ -18,10 +13,4 @@ void SFMLCanvas::OnInit()
 void SFMLCanvas::setSpritePosition(float x, float y)
 {
     mySprite.setPosition(sf::Vector2f(x,y));
-}
-
-void SFMLCanvas::OnUpdate()
-{
-
-    RenderWindow::draw(mySprite);
 }

@@ -46,7 +46,7 @@ void QSFMLWidget::paintEvent(QPaintEvent*)
     // Let the derived class do its specific stuff
     OnUpdate();
     // Display on screen
-    sf::RenderWindow::display();
+   sf::RenderWindow::display();
 }
 
 void QSFMLWidget::OnInit()
