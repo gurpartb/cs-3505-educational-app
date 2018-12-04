@@ -27,8 +27,6 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        qsfmlwidget.cpp \
-        sfmlcanvas.cpp \
         spritesheettool.cpp \
         dog.cpp \
         model.cpp
@@ -36,8 +34,6 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
         include/test.h \
-        qsfmlwidget.h \
-        sfmlcanvas.h \
         spritesheettool.h \
         dog.h \
         model.h
@@ -45,7 +41,7 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
-#CONFIG(debug, debug|release): LIBS +=  -lsfml-graphics-d -lsfml-window-d -lsfml-audio-d -lsfml-network-d -lsfml-system-d
+
 INCLUDEPATH += ../../Box2D-master
 LIBS += -L"../../Box2D-master/Build/bin/x86_64/Debug"
 LIBS += -lBox2D
