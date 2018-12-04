@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(this,SIGNAL(timeout()),this,SLOT(update()));
+    timer = new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(update()));
     timer->start(1000/60);
 }
 

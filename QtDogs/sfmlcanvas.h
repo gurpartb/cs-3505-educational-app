@@ -4,13 +4,11 @@
 #include "qsfmlwidget.h"
 #include <iostream>
 
-class SFMLCanvas : public QSFMLWidget
+class SFMLCanvas
 {
 public:
-    explicit SFMLCanvas(QWidget *Parent = 0);
+    explicit SFMLCanvas();
 
-    void OnInit() override;
-    void OnUpdate() override;
     void setSpritePosition(float x, float y);
 
 private:
