@@ -22,7 +22,7 @@ void QSFMLWidget::showEvent(QShowEvent *event)
         #endif
 
         // Create the SFML window with the widget handle
-        sf::RenderWindow::create(winId());
+        //sf::RenderWindow::create(winId());
 
         // Let the derived class do its specific stuff
         OnInit();
@@ -42,11 +42,11 @@ QPaintEngine* QSFMLWidget::paintEngine() const
 
 void QSFMLWidget::paintEvent(QPaintEvent*)
 {
-    sf::RenderWindow::clear();
+    //sf::RenderWindow::clear();
     // Let the derived class do its specific stuff
     OnUpdate();
     // Display on screen
-    sf::RenderWindow::display();
+   // sf::RenderWindow::display();
 }
 
 void QSFMLWidget::OnInit()

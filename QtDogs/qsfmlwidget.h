@@ -10,6 +10,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <SFML/Graphics.hpp>
+//#include <SFML/Graphics>
 
 class QSFMLWidget : public QWidget, public sf::RenderWindow
 {
