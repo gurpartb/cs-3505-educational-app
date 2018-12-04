@@ -6,6 +6,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    connect(this,SIGNAL(timeout()),this,SLOT(update()));
+    timer->start(1000/60);
+}
+
+void MainWindow::update()
+{
+
 }
 
 MainWindow::~MainWindow()
