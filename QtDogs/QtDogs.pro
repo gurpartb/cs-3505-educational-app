@@ -45,7 +45,7 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
-CONFIG(debug, debug|release): LIBS +=  -lsfml-graphics-d -lsfml-window-d -lsfml-audio-d -lsfml-network-d -lsfml-system-d
+#CONFIG(debug, debug|release): LIBS +=  -lsfml-graphics-d -lsfml-window-d -lsfml-audio-d -lsfml-network-d -lsfml-system-d
 INCLUDEPATH += ../../Box2D-master
 LIBS += -L"../../Box2D-master/Build/bin/x86_64/Debug"
 LIBS += -lBox2D
@@ -60,10 +60,10 @@ DISTFILES += \
 
 $$PWD/../../SFML
 
-LIBS += -L"../../SFML-master/lib"
+LIBS += -L"../../SFML/lib"
 
 CONFIG(release, debug|release): LIBS += -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network  -lsfml-system
-#CONFIG(debug, debug|release): LIBS +=  -lsfml-graphics-d -lsfml-window-d -lsfml-audio-d -lsfml-network-d -lsfml-system-d
+CONFIG(debug, debug|release): LIBS +=  -lsfml-graphics-d -lsfml-window-d -lsfml-audio-d -lsfml-network-d -lsfml-system-d
 
 
 INCLUDEPATH += "../../SFML/include"
