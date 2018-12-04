@@ -27,7 +27,6 @@ CONFIG += c++11
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        gravity.cpp \
         qsfmlwidget.cpp \
         sfmlcanvas.cpp \
     spritesheettool.cpp
@@ -37,7 +36,6 @@ HEADERS += \
         include/test.h \
         qsfmlwidget.h \
         sfmlcanvas.h \
-        gravity.h \
     spritesheettool.h
 
 
