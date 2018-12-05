@@ -40,9 +40,12 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(&model, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
 }
 
+
 void MainWindow::playDogAnimation(QImage image)
 {
-    ui->imageLabel->setPixmap(QPixmap::fromImage(image));
+   //QPixmap convertedImage = QPixmap::fromImage(image);
+   //convertedImage = convertedImage.scaled(144, 104);
+   //ui->imageLabel->setPixmap(convertedImage);
 }
 
 void MainWindow::update()
