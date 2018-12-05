@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include "dog.h"
 
-#define SCALE 2.0f/800.0f
+#define SCALE 2.0f/768.0f
 
 class Model: public QObject
 {

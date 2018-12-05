@@ -12,11 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(timer,SIGNAL(timeout()),this,SLOT(update()));
         timer->start(1000/30);
 
-       // connect(this, SIGNAL(getDogAnimationSignal(std::string, int)), &spriteSheetTool, SLOT(getAnimationFrame(std::string, int)));
-      //  connect(&spriteSheetTool, SIGNAL(imageSendSignal(QImage)), this, SLOT(playDogAnimation(QImage)));
-       // spriteSheetTool.addAnimation(0, 0, 36, 28, 4, "Idle", "../QtDogs/assets/Dog.png");
-      //  int frameNumber = 1;
-      //  emit getDogAnimationSignal("Idle", frameNumber);
+        connect(this, SIGNAL(getDogAnimationSignal(std::string, int)), &spriteSheetTool, SLOT(getAnimationFrame(std::string, int)));
+        connect(&spriteSheetTool, SIGNAL(imageSendSignal(sf::Texture)), this, SLOT(playDogAnimation(sf::Texture)));
+        spriteSheetTool.addAnimation(0,0, 36, 28, 4, "Idle", "../QtDogs/assets/Dog.png");
+        int frameNumber = 1;
+        emit getDogAnimationSignal("Idle", frameNumber);
 
 
         width = ui->imageLabel->size().width();
@@ -41,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
-void MainWindow::playDogAnimation(QImage image)
+void MainWindow::playDogAnimation(sf::Texture texture)
 {
+    dog.setTexture(texture);
    //QPixmap convertedImage = QPixmap::fromImage(image);
    //convertedImage = convertedImage.scaled(144, 104);
    //ui->imageLabel->setPixmap(convertedImage);
@@ -55,11 +56,12 @@ void MainWindow::update()
    qDebug() << "x:" << model.ballX();
    qDebug() << "y:" << model.ballY();
 
-   ball.setPosition(model.ballX()*400.0f,model.ballY()*400.0f);
-   ball.setRotation(model.ballR()*180.0/3.14159);
+   ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
+   ball.setRotation(model.ballR()*180.0f/3.14159f);
 
    frame.clear(sf::Color::White);
    frame.draw(ball);
+   frame.draw(dog);
    frame.display();
 
 

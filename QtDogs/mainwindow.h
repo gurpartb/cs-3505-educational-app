@@ -31,6 +31,7 @@ public:
 
     sf::Sprite ball;
     sf::Sprite treat;
+    sf::Sprite dog;
 
     int width;
     int height;
@@ -50,7 +51,7 @@ signals:
     void getDogAnimationSignal(std::string, int);
 
 private slots:
-    void playDogAnimation(QImage);
+    void playDogAnimation(sf::Texture);
 
 };
 
