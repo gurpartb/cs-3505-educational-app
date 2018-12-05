@@ -409,14 +409,14 @@
           <widget class="QLabel" name="imageLabel">
            <property name="minimumSize">
             <size>
-             <width>800</width>
-             <height>800</height>
+             <width>768</width>
+             <height>768</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>800</width>
-             <height>800</height>
+             <width>768</width>
+             <height>768</height>
             </size>
            </property>
            <property name="styleSheet">
