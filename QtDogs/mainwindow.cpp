@@ -1,39 +1,73 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <bits/stdc++.h>
-MainWindow::MainWindow(Model* myModel, QWidget *parent) :
+
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
         ui->setupUi(this);
+
         timer = new QTimer(this);
         connect(timer,SIGNAL(timeout()),this,SLOT(update()));
-        timer->start(1000/60);
-        connect(this, SIGNAL(getDogAnimationSignal(std::string, int)), &spriteSheetTool, SLOT(getAnimationFrame(std::string, int)));
-        connect(&spriteSheetTool, SIGNAL(imageSendSignal(QImage)), this, SLOT(playDogAnimation(QImage)));
+        timer->start(1000/30);
 
-        spriteSheetTool.addAnimation(0, 0, 36, 28, 4, "Idle", "../QtDogs/assets/Dog.png");
-        int frameNumber = 1;
-        emit getDogAnimationSignal("Idle", frameNumber);
+       // connect(this, SIGNAL(getDogAnimationSignal(std::string, int)), &spriteSheetTool, SLOT(getAnimationFrame(std::string, int)));
+      //  connect(&spriteSheetTool, SIGNAL(imageSendSignal(QImage)), this, SLOT(playDogAnimation(QImage)));
+       // spriteSheetTool.addAnimation(0, 0, 36, 28, 4, "Idle", "../QtDogs/assets/Dog.png");
+      //  int frameNumber = 1;
+      //  emit getDogAnimationSignal("Idle", frameNumber);
+
+
+        width = ui->imageLabel->size().width();
+        height = ui->imageLabel->size().height();
+
+        frame.create(unsigned(width), unsigned(height));
+
+        ballTex.loadFromFile("../QtDogs/assets/Beach_Ball.png");
+        ball.setTexture(ballTex);
+        ball.setOrigin(64,64);
+
 
         //model connection
-        connect(ui->petButton, &QPushButton::pressed, myModel, &Model::dogPetted);
-        connect(ui->foodButton, &QPushButton::pressed, myModel, &Model::dogFed);
-        connect(ui->ballButton, &QPushButton::pressed, myModel, &Model::dogPlayedWithBall);
-        connect(ui->parkButton, &QPushButton::pressed, myModel, &Model::dogWentToThePark);
-        connect(ui->letOutButton, &QPushButton::pressed, myModel, &Model::dogLetOut);
-        connect(myModel, SIGNAL(updateTrustLevel(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
-        connect(myModel, SIGNAL(updateHungerLevel(int)), this, SLOT(on_hungerProgressBar_valueChanged(int)));
-        connect(myModel, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
+        connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
+        connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
+        connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
+        connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
+        connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
+        connect(&model, SIGNAL(updateTrustLevel(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
+        connect(&model, SIGNAL(updateHungerLevel(int)), this, SLOT(on_hungerProgressBar_valueChanged(int)));
+        connect(&model, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
 }
 
-void MainWindow::playDogAnimation(QImage image){
-   ui->imageLabel->setPixmap(QPixmap::fromImage(image));
+void MainWindow::playDogAnimation(QImage image)
+{
+    ui->imageLabel->setPixmap(QPixmap::fromImage(image));
 }
 
 void MainWindow::update()
 {
+   model.update();
 
+   qDebug() << "x:" << model.ballX();
+   qDebug() << "y:" << model.ballY();
+
+   ball.setPosition(model.ballX()*400.0f,model.ballY()*400.0f);
+   ball.setRotation(model.ballR()*180.0/3.14159);
+
+   frame.clear(sf::Color::White);
+   frame.draw(ball);
+   frame.display();
+
+
+   sf::Texture rt = frame.getTexture();
+   sf::Image irt = rt.copyToImage();
+   const uint8_t *pp = irt.getPixelsPtr();
+
+   QImage qi(pp,width,height,QImage::Format_ARGB32);
+   qi = qi.rgbSwapped();
+
+   ui->imageLabel->setPixmap(QPixmap::fromImage(qi));
 }
 
 MainWindow::~MainWindow()

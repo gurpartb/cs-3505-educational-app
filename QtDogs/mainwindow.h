@@ -5,6 +5,7 @@
 #include "spritesheettool.h"
 #include <QTimer>
 #include "model.h"
+#include <QtDebug>
 
 namespace Ui {
 class MainWindow;
@@ -18,8 +19,21 @@ public slots:
     void update();
 
 public:
-    explicit MainWindow(Model* myModel,QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    Model model;
+
+    sf::RenderTexture frame;
+
+    sf::Texture ballTex;
+    sf::Texture treatTex;
+
+    sf::Sprite ball;
+    sf::Sprite treat;
+
+    int width;
+    int height;
 
 private slots:
     void on_trustProgressBar_valueChanged(int value);
