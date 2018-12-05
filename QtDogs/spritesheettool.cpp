@@ -1,4 +1,5 @@
 #include "spritesheettool.h"
+#include <iostream>
 
 SpriteSheetTool::SpriteSheetTool()
 {
@@ -19,18 +20,33 @@ SpriteSheetTool::SpriteSheetTool()
 void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, std::string name, std::string path)
 {
     //Load up the textures using the rectangle coordinates
+
     sf::Texture texture;
     sf::IntRect rectSourceSprite(x, y, w, h);
     texture.loadFromFile(path, rectSourceSprite);
     std::vector<sf::Texture> frames;
+
     //Add as many frames as numFrames, changing the initial x coordinate by adding the width.
     for(int i = 0; i < numFrames; i++)
     {
         frames.push_back(texture);
         x += w;
+        sf::IntRect rectSourceSprite(x, y, w, h);
         texture.loadFromFile(path, rectSourceSprite);
     }
-    dict.insert(name, frames);
+    //If the given item exists in the dictionary, get the frames vector and append the frames to the vector.
+    //Otherwise insert it into our dictionary.
+    if(dict.count(name) > 0)
+    {
+        std::vector<sf::Texture> framesMappedToDictionary = dict[name];
+        framesMappedToDictionary.reserve(frames.size() + framesMappedToDictionary.size());
+        framesMappedToDictionary.insert(framesMappedToDictionary.end(), frames.begin(), frames.end());
+        dict[name] = framesMappedToDictionary;
+    }
+    else
+    {
+        dict.insert(name, frames);
+    }
 }
 
 ///
@@ -39,7 +55,8 @@ void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, st
 /// \param frameCount
 ///
 void SpriteSheetTool::getAnimationFrame(std::string name, int frameCount){
+    //std::cout << name << " " << frameCount << std::endl;
     std::vector<sf::Texture> frames = dict[name];
-    QImage imageTextureCopy(frames[frameCount].copyToImage().getPixelsPtr(), frames[frameCount].getSize().x, frames[0].getSize().y, QImage::Format_ARGB32);
-    emit imageSendSignal(imageTextureCopy);
+    //QImage imageTextureCopy(frames[frameCount].copyToImage().getPixelsPtr(), frames[frameCount].getSize().x, frames[0].getSize().y, QImage::Format_ARGB32);
+    emit imageSendSignal(frames[frameCount]);
 }

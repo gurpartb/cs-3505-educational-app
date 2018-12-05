@@ -21,7 +21,7 @@ private slots:
     void getAnimationFrame(std::string name, int frameCount);
 
 signals:
-    void imageSendSignal(QImage);
+    void imageSendSignal(sf::Texture);
 };
 
 #endif // SPRITESHEETTOOL_H

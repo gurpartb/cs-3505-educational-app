@@ -31,6 +31,7 @@ private:
     Ui::MainWindow *ui;
     SpriteSheetTool spriteSheetTool;
 
+    int dogFrameNumber = 0;
 signals:
     void getDogAnimationSignal(std::string, int);
 
