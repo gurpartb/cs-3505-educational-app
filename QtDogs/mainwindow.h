@@ -28,6 +28,10 @@ public:
 
     sf::Texture ballTex;
     sf::Texture treatTex;
+    sf::Texture dogTex;
+
+    int updateAnimation;
+    int numFrames;
 
     sf::Sprite ball;
     sf::Sprite treat;
@@ -46,12 +50,12 @@ private:
     Ui::MainWindow *ui;
     SpriteSheetTool spriteSheetTool;
 
-    int dogFrameNumber = 0;
+    int frameNumber = 0;
 signals:
     void getDogAnimationSignal(std::string, int);
 
 private slots:
-    void playDogAnimation(sf::Texture);
+    void playDogAnimation(sf::Texture&);
 
 };
 

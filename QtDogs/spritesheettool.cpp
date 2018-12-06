@@ -55,8 +55,6 @@ void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, st
 /// \param frameCount
 ///
 void SpriteSheetTool::getAnimationFrame(std::string name, int frameCount){
-    //std::cout << name << " " << frameCount << std::endl;
-    std::vector<sf::Texture> frames = dict[name];
-    //QImage imageTextureCopy(frames[frameCount].copyToImage().getPixelsPtr(), frames[frameCount].getSize().x, frames[0].getSize().y, QImage::Format_ARGB32);
-    emit imageSendSignal(frames[frameCount]);
+    //sf::Texture texture = ;
+    emit imageSendSignal(dict[name][frameCount]);
 }

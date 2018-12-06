@@ -13,11 +13,25 @@ MainWindow::MainWindow(QWidget *parent) :
         timer->start(1000/30);
 
         connect(this, SIGNAL(getDogAnimationSignal(std::string, int)), &spriteSheetTool, SLOT(getAnimationFrame(std::string, int)));
-        connect(&spriteSheetTool, SIGNAL(imageSendSignal(sf::Texture)), this, SLOT(playDogAnimation(sf::Texture)));
-        spriteSheetTool.addAnimation(0,0, 36, 28, 4, "Idle", "../QtDogs/assets/Dog.png");
-        int frameNumber = 1;
-        emit getDogAnimationSignal("Idle", frameNumber);
+        connect(&spriteSheetTool, SIGNAL(imageSendSignal(sf::Texture&)), this, SLOT(playDogAnimation(sf::Texture&)));
 
+        updateAnimation = 0;
+        numFrames = 0;
+
+        std::string dogPath = "../QtDogs/assets/Dog.png";
+         //adding animation frames
+        spriteSheetTool.addAnimation(0, 0, 36, 28, 4,      "Dog_Idle",       dogPath);
+        spriteSheetTool.addAnimation(4, 28, 38, 27, 15,    "Dog_Sitting",    dogPath);
+        spriteSheetTool.addAnimation(4, 59, 38, 26, 13,    "Dog_Barking",    dogPath);
+        spriteSheetTool.addAnimation(4, 138, 38, 26, 23,   "Dog_Peeing",     dogPath);
+        spriteSheetTool.addAnimation(19, 166, 38, 26, 5,   "Dog_Peeing",     dogPath);
+        spriteSheetTool.addAnimation(4, 189, 38, 26, 10,   "Dog_BeginSleep", dogPath);
+        spriteSheetTool.addAnimation(375, 189, 38, 26, 14, "Dog_Sleeping",   dogPath);
+        spriteSheetTool.addAnimation(122, 215, 38, 24, 10, "Dog_WakeUp",     dogPath);
+        spriteSheetTool.addAnimation(4, 239, 36, 29, 12,   "Dog_Walking",    dogPath);
+        spriteSheetTool.addAnimation(4, 265, 39, 26, 5,    "Dog_Running",    dogPath);
+        spriteSheetTool.addAnimation(4, 265, 39, 26, 5,    "Dog_Walking",    dogPath);
+        spriteSheetTool.addAnimation(2, 316, 38, 55, 11,   "Dog_Flipping",   dogPath);
 
         width = ui->imageLabel->size().width();
         height = ui->imageLabel->size().height();
@@ -28,6 +42,9 @@ MainWindow::MainWindow(QWidget *parent) :
         ball.setTexture(ballTex);
         ball.setOrigin(64,64);
 
+        dog.setTexture(dogTex);
+        dog.setScale(4.0,4.0);
+        dog.setOrigin(0,0);
 
         //model connection
         connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
@@ -41,20 +58,43 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 
-void MainWindow::playDogAnimation(sf::Texture texture)
+void MainWindow::playDogAnimation(sf::Texture& texture)
 {
-    dog.setTexture(texture);
-   //QPixmap convertedImage = QPixmap::fromImage(image);
-   //convertedImage = convertedImage.scaled(144, 104);
-   //ui->imageLabel->setPixmap(convertedImage);
+    dog.setTextureRect(sf::IntRect(0,0,texture.getSize().x,texture.getSize().y));
+    dogTex = texture;
 }
 
 void MainWindow::update()
 {
    model.update();
 
-   qDebug() << "x:" << model.ballX();
-   qDebug() << "y:" << model.ballY();
+
+
+
+
+   if(updateAnimation >= 4)
+   {
+       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Flipping");
+       emit getDogAnimationSignal("Dog_Flipping", frameNumber);
+
+       if(frameNumber >= numFrames)
+       {
+           frameNumber = 0;
+       }
+
+       frameNumber++;
+       updateAnimation = 1;
+   }
+   else
+   {
+       ++updateAnimation;
+   }
+
+   //  qDebug() << "x:" << model.ballX();
+   //  qDebug() << "y:" << model.ballY();
+
+
+   dog.setPosition(100,470);
 
    ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
    ball.setRotation(model.ballR()*180.0f/3.14159f);
