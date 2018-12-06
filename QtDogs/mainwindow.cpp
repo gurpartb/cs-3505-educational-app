@@ -53,9 +53,6 @@ void MainWindow::update()
 {
    model.update();
 
-   qDebug() << "x:" << model.ballX();
-   qDebug() << "y:" << model.ballY();
-
    ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
    ball.setRotation(model.ballR()*180.0f/3.14159f);
 
