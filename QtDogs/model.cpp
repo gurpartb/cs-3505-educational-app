@@ -10,6 +10,11 @@ Model::Model(){
     createBall();
 
     dog = new Dog();
+
+    bathroomProgress = 0;
+    hungerProgress = 0;
+    trustProgress = 0;
+    level = 1;
 }
 
 Model::~Model(){
@@ -136,7 +141,7 @@ void Model::dogFed(){
 
 void Model::dogPlayedWithBall()
 {
-        world->DestroyBody(ball);
+    world->DestroyBody(ball);
     createBall();
 }
 
@@ -148,8 +153,75 @@ void Model::dogLetOut(){
 
 }
 
-void Model::updateLevels(){
 
+///
+/// \brief Model::updateBathroomProgress
+///
+void Model::updateBathroomProgress()
+{
+    bathroomProgress++;
+    if(bathroomProgress == 100)
+    {
+        bathroomProgress = 0;
+        if(trustProgress >= 10)
+            trustProgress -= 10;
+        else
+            trustProgress = 0;
+        emit updateTrustProgress(trustProgress);
+    }
+    emit updateBathroomLevel(bathroomProgress);
+}
+
+///
+/// \brief Model::resetBathroomProgress
+///
+void Model::resetBathroomProgress()
+{
+    bathroomProgress = 0;
+    trustProgress += 10;
+    if(trustProgress == 100)
+    {
+        trustProgress = 0;
+        level++;
+        emit updateLevels(level);
+    }
+    emit updateTrustProgress(trustProgress);
+    emit updateBathroomLevel(bathroomProgress);
+}
+
+///
+/// \brief Model::updateHungerProgress
+///
+void Model::updateHungerProgress()
+{
+    hungerProgress++;
+    if(hungerProgress == 100)
+    {
+        hungerProgress = 0;
+        if(trustProgress >= 5)
+            trustProgress -= 5;
+        else
+            trustProgress = 0;
+        emit updateTrustProgress(trustProgress);
+    }
+    emit updateHungerLevel(hungerProgress);
+}
+
+///
+/// \brief Model::resetHungerProgress
+///
+void Model::resetHungerProgress()
+{
+    hungerProgress = 0;
+    trustProgress += 5;
+    if(trustProgress == 100)
+    {
+        trustProgress = 0;
+        level++;
+        emit updateLevels(level);
+    }
+    emit updateTrustProgress(trustProgress);
+    emit updateHungerLevel(hungerProgress);
 }
 
 

@@ -8,9 +8,22 @@ MainWindow::MainWindow(QWidget *parent) :
 {
         ui->setupUi(this);
 
+        ui->hungerProgressBar->setValue(0);
+        ui->bathroomProgressBar->setValue(0);
+        ui->trustProgressBar->setValue(0);
+        ui->levelNumber->display(1);
+
         timer = new QTimer(this);
         connect(timer,SIGNAL(timeout()),this,SLOT(update()));
         timer->start(1000/30);
+
+        poopTimer = new QTimer(this);
+        connect(poopTimer, SIGNAL(timeout()), this, SLOT(updatePoopBar()));
+        poopTimer->start(1000);
+
+        hungerTimer = new QTimer(this);
+        connect(hungerTimer, SIGNAL(timeout()), this, SLOT(updateHungerBar()));
+        hungerTimer->start(2000);
 
         connect(this, SIGNAL(getDogAnimationSignal(std::string, int)), &spriteSheetTool, SLOT(getAnimationFrame(std::string, int)));
         connect(&spriteSheetTool, SIGNAL(imageSendSignal(sf::Texture&)), this, SLOT(playDogAnimation(sf::Texture&)));
@@ -59,6 +72,13 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(&model, SIGNAL(updateTrustLevel(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateHungerLevel(int)), this, SLOT(on_hungerProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
+        connect(this, &MainWindow::updateBathroomProgressBar, &model, &Model::updateBathroomProgress);
+        connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
+        connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::resetBathroomProgress);
+        connect(this, &MainWindow::updateHungerProgressBar, &model, &Model::updateHungerProgress);
+        connect(ui->foodButton, &QPushButton::pressed, &model, &Model::resetHungerProgress);
+        connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
+        connect(&model, &Model::updateLevels, this, &MainWindow::on_trustLevel_valueChanged);
 }
 
 
@@ -121,17 +141,50 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+///
+/// \brief MainWindow::on_trustProgressBar_valueChanged
+/// \param value
+///
 void MainWindow::on_trustProgressBar_valueChanged(int value)
 {
     ui->trustProgressBar->setValue(value);
 }
 
+///
+/// \brief MainWindow::on_hungerProgressBar_valueChanged
+/// \param value
+///
 void MainWindow::on_hungerProgressBar_valueChanged(int value)
 {
     ui->hungerProgressBar->setValue(value);
 }
 
+///
+/// \brief MainWindow::on_bathroomProgressBar_valueChanged
+/// \param value
+///
 void MainWindow::on_bathroomProgressBar_valueChanged(int value)
 {
     ui->bathroomProgressBar->setValue(value);
+}
+
+void MainWindow::on_trustLevel_valueChanged(int value)
+{
+    ui->levelNumber->display(value);
+}
+
+///
+/// \brief MainWindow::updatePoopBar
+///
+void MainWindow::updatePoopBar()
+{
+    emit updateBathroomProgressBar();
+}
+
+///
+/// \brief MainWindow::updateHungerBar
+///
+void MainWindow::updateHungerBar()
+{
+    emit updateHungerProgressBar();
 }

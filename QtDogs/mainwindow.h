@@ -46,15 +46,22 @@ private slots:
     void on_trustProgressBar_valueChanged(int value);
     void on_hungerProgressBar_valueChanged(int value);
     void on_bathroomProgressBar_valueChanged(int value);
+    void updatePoopBar();
+    void updateHungerBar();
+    void on_trustLevel_valueChanged(int value);
 
 private:
     QTimer* timer;
+    QTimer* poopTimer;
+    QTimer* hungerTimer;
     Ui::MainWindow *ui;
     SpriteSheetTool spriteSheetTool;
 
     int frameNumber = 0;
 signals:
     void getDogAnimationSignal(std::string, int);
+    void updateBathroomProgressBar();
+    void updateHungerProgressBar();
 
 private slots:
     void playDogAnimation(sf::Texture&);
