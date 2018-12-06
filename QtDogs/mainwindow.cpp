@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
         updateAnimation = 0;
         numFrames = 0;
+        dogX = 100;
+        dogY = 500;
 
         std::string dogPath = "../QtDogs/assets/Dog.png";
          //adding animation frames
@@ -49,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
         dog.setTexture(dogTex);
         dog.setScale(4.0,4.0);
         dog.setOrigin(0,0);
-
         //model connection
         connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
         connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
@@ -59,6 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(&model, SIGNAL(updateTrustLevel(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateHungerLevel(int)), this, SLOT(on_hungerProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
+        connect(this, SIGNAL(dogWalkLeft()),&model,SLOT(dogWalkLeft()));
+        connect(this, SIGNAL(dogWalkRight()),&model,SLOT(dogWalkRight()));
 }
 
 
@@ -94,11 +97,20 @@ void MainWindow::update()
    //  qDebug() << "y:" << model.ballY();
 
 
-   dog.setPosition(100,510);
+   dog.setPosition(model.Dogx()*width/2.0f,model.Dogy()*height/2.0f);
 
    ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
    ball.setRotation(model.ballR()*180.0f/3.14159f);
-
+   if(model.ballX()*width/2.0f - model.Dogx()*width/2.0f > 0)
+   {
+       emit dogWalkRight();
+         qDebug() << "Walk right";
+   }
+   else
+   {
+       emit dogWalkLeft();
+       qDebug() << "Walk left";
+   }
    frame.clear(sf::Color::White);
    frame.draw(background);
    frame.draw(ball);

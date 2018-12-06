@@ -8,6 +8,7 @@ Model::Model(){
 
     createScene();
     createBall();
+    createDog();
 
     dog = new Dog();
 }
@@ -23,27 +24,39 @@ void Model::update()
 
 void Model::createBall()
 {
-
-
-
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(0.1f,1.0f);
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0f+1.0,-float(rand()) / float(RAND_MAX)*2.0-1.0 );
     ball = world->CreateBody(&BodyDef);
-
+    ball->ApplyAngularImpulse(32.0f,32.0f);
     b2CircleShape shape;
-    shape.m_radius = SCALE * 64.0f;
+    shape.m_radius = SCALE * 30.0f;
 
     b2FixtureDef FixtureDef;
-    FixtureDef.density = 0.5f;
+    FixtureDef.density = 0.1f;
     FixtureDef.friction = 0.7f;
-    FixtureDef.restitution = 0.4f;
+    FixtureDef.restitution = 0.8f;
     FixtureDef.shape = &shape;
 
     ball->CreateFixture(&FixtureDef);
 }
+void Model::createDog()
+{
+    b2BodyDef BodyDef;
+    BodyDef.position = b2Vec2(0.0f,0.0f);
+    BodyDef.type = b2_dynamicBody;
+    dogBody = world->CreateBody(&BodyDef);
+    b2PolygonShape rect;
+    rect.SetAsBox(.2f,.2f);
 
+    b2FixtureDef FixtureDef;
+    FixtureDef.density = 3.f;
+    FixtureDef.friction = 0.1f;
+    FixtureDef.shape = &rect;
+
+    dogBody->CreateFixture(&FixtureDef);
+}
 void Model::createTreat()
 {
     b2BodyDef BodyDef;
@@ -68,7 +81,7 @@ void Model::createScene()
     //ground
     {
         b2BodyDef BodyDef;
-        BodyDef.position = b2Vec2(0.0,2.9);
+        BodyDef.position = b2Vec2(0.0,2.7);
         BodyDef.type = b2_staticBody;
         b2Body* Body = world->CreateBody(&BodyDef);
 
@@ -136,7 +149,7 @@ void Model::dogFed(){
 
 void Model::dogPlayedWithBall()
 {
-        world->DestroyBody(ball);
+    world->DestroyBody(ball);
     createBall();
 }
 
@@ -152,4 +165,15 @@ void Model::updateLevels(){
 
 }
 
+void Model::dogWalkLeft()
+{
+    b2Vec2 vec(-0.05f,0.0f) ;
+    dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
+}
+
+void Model::dogWalkRight()
+{
+    b2Vec2 vec(0.05f,0.0f) ;
+    dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
+}
 

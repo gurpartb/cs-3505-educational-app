@@ -21,6 +21,7 @@ public slots:
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    int dogX, dogY;
 
     Model model;
 
@@ -55,6 +56,8 @@ private:
     int frameNumber = 0;
 signals:
     void getDogAnimationSignal(std::string, int);
+    void dogWalkLeft();
+    void dogWalkRight();
 
 private slots:
     void playDogAnimation(sf::Texture&);

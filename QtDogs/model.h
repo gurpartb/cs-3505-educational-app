@@ -18,6 +18,7 @@ private:
     Dog* dog;
     b2Body* ball;
     b2Body* treat;
+    b2Body* dogBody;
 
 public:
     Model();
@@ -32,11 +33,17 @@ public:
     float treatY(){return treat->GetPosition().y;}
     float treatR(){return treat->GetAngle();}
 
+    float Dogx(){return dogBody->GetPosition().x;}
+    float Dogy(){return dogBody->GetPosition().y-0.2f;}
+
+
+
 private:
     void updateLevels();
     void createBall();
     void createTreat();
     void createScene();
+    void createDog();
 
 public slots:
     void dogPetted();
@@ -44,6 +51,8 @@ public slots:
     void dogPlayedWithBall();
     void dogWentToThePark();
     void dogLetOut();
+    void dogWalkLeft();
+    void dogWalkRight();
 
 signals:
     void updateTrustLevel(int);
