@@ -23,10 +23,13 @@ void Model::update()
 
 void Model::createBall()
 {
+
+
+
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(0.1f,1.0f);
     BodyDef.type = b2_dynamicBody;
-    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*10.0f,0.0 );
+    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0f+1.0,-float(rand()) / float(RAND_MAX)*2.0-1.0 );
     ball = world->CreateBody(&BodyDef);
 
     b2CircleShape shape;
@@ -65,7 +68,7 @@ void Model::createScene()
     //ground
     {
         b2BodyDef BodyDef;
-        BodyDef.position = b2Vec2(0.0,2.8);
+        BodyDef.position = b2Vec2(0.0,2.9);
         BodyDef.type = b2_staticBody;
         b2Body* Body = world->CreateBody(&BodyDef);
 
@@ -131,8 +134,10 @@ void Model::dogFed(){
 
 }
 
-void Model::dogPlayedWithBall(){
-
+void Model::dogPlayedWithBall()
+{
+        world->DestroyBody(ball);
+    createBall();
 }
 
 void Model::dogWentToThePark(){

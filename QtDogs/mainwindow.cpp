@@ -38,6 +38,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
         frame.create(unsigned(width), unsigned(height));
 
+        backgroundTex.loadFromFile("../QtDogs/assets/pixelartparkfinal.png");
+        background.setTexture(backgroundTex);
+        background.setScale(2.4,2.4);
+
         ballTex.loadFromFile("../QtDogs/assets/Beach_Ball.png");
         ball.setTexture(ballTex);
         ball.setOrigin(64,64);
@@ -90,12 +94,13 @@ void MainWindow::update()
    //  qDebug() << "y:" << model.ballY();
 
 
-   dog.setPosition(100,470);
+   dog.setPosition(100,510);
 
    ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
    ball.setRotation(model.ballR()*180.0f/3.14159f);
 
    frame.clear(sf::Color::White);
+   frame.draw(background);
    frame.draw(ball);
    frame.draw(dog);
    frame.display();
