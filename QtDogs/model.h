@@ -21,11 +21,13 @@ private:
     b2Body* dogBody;
 
 public:
+    bool ballExists;
+    bool treatExists;
     Model();
     virtual ~Model();
     void update();
 
-    float ballX(){return ball->GetPosition().x;}
+    float ballX(){return ball->GetPosition().x -.3f;}
     float ballY(){return ball->GetPosition().y;}
     float ballR(){return ball->GetAngle();}
 

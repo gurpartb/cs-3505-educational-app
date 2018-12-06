@@ -42,11 +42,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
         backgroundTex.loadFromFile("../QtDogs/assets/pixelartparkfinal.png");
         background.setTexture(backgroundTex);
-        background.setScale(2.4,2.4);
+        background.setScale(2.4f,2.4f);
 
         ballTex.loadFromFile("../QtDogs/assets/Beach_Ball.png");
         ball.setTexture(ballTex);
-        ball.setOrigin(64,64);
+        ball.setOrigin(0,0);
+
+        treatTex.loadFromFile("../QtDogs/assets/Dog_biscuit.png");
+        treat.setTexture(treatTex);
+        treat.setOrigin(64,64);
+        treat.setScale(0.2f,0.2f);
 
         dog.setTexture(dogTex);
         dog.setScale(4.0,4.0);
@@ -77,8 +82,8 @@ void MainWindow::update()
 
    if(updateAnimation >= 4)
    {
-       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Flipping");
-       emit getDogAnimationSignal("Dog_Flipping", frameNumber);
+       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Idle");
+       emit getDogAnimationSignal("Dog_Idle", frameNumber);
 
        if(frameNumber >= numFrames)
        {
@@ -96,24 +101,49 @@ void MainWindow::update()
    //  qDebug() << "x:" << model.ballX();
    //  qDebug() << "y:" << model.ballY();
 
-
-   dog.setPosition(model.Dogx()*width/2.0f,model.Dogy()*height/2.0f);
-
-   ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
-   ball.setRotation(model.ballR()*180.0f/3.14159f);
-   if(model.ballX()*width/2.0f - model.Dogx()*width/2.0f > 0)
+    dog.setPosition(model.Dogx()*width/2.0f, model.Dogy()*height/2.0f);
+   if(model.ballExists)
    {
-       emit dogWalkRight();
-         qDebug() << "Walk right";
+
+       ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
+       ball.setRotation(model.ballR()*180.0f/3.14159f);
+       if(model.ballX()*width/2.0f - model.Dogx()*width/2.0f > 0)
+       {
+           dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
+           emit dogWalkRight();
+       }
+       else
+       {
+           dog.setTextureRect(sf::IntRect(dogTex.getSize().x, 0, -dogTex.getSize().x, dogTex.getSize().y));
+           emit dogWalkLeft();
+       }
    }
-   else
+   else if(model.treatExists)
    {
-       emit dogWalkLeft();
-       qDebug() << "Walk left";
+
+       treat.setPosition(model.treatX()*width/2.0f,model.treatY()*height/2.0f);
+       treat.setRotation(model.treatR()*180.0f/3.14159f);
+       if(model.treatX()*width/2.0f - model.Dogx()*width/2.0f > 0)
+       {
+           dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
+           emit dogWalkRight();
+       }
+       else
+       {
+           dog.setTextureRect(sf::IntRect(dogTex.getSize().x, 0, -dogTex.getSize().x, dogTex.getSize().y));
+           emit dogWalkLeft();
+       }
    }
    frame.clear(sf::Color::White);
    frame.draw(background);
-   frame.draw(ball);
+   if(model.ballExists)
+   {
+       frame.draw(ball);
+   }
+   else if(model.treatExists)
+   {
+       frame.draw(treat);
+   }
    frame.draw(dog);
    frame.display();
 

@@ -11,6 +11,8 @@ Model::Model(){
     createDog();
 
     dog = new Dog();
+//    ballExists = false;
+//    treatExists = false;
 }
 
 Model::~Model(){
@@ -24,23 +26,25 @@ void Model::update()
 
 void Model::createBall()
 {
+    ballExists = !ballExists;
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(0.1f,1.0f);
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0f+1.0,-float(rand()) / float(RAND_MAX)*2.0-1.0 );
     ball = world->CreateBody(&BodyDef);
-    ball->ApplyAngularImpulse(32.0f,32.0f);
+    //ball->ApplyAngularImpulse(32.0f, 32.0f);
     b2CircleShape shape;
     shape.m_radius = SCALE * 30.0f;
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 0.1f;
     FixtureDef.friction = 0.7f;
-    FixtureDef.restitution = 0.8f;
+    FixtureDef.restitution = 0.4f;
     FixtureDef.shape = &shape;
 
     ball->CreateFixture(&FixtureDef);
 }
+
 void Model::createDog()
 {
     b2BodyDef BodyDef;
@@ -52,13 +56,15 @@ void Model::createDog()
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 3.f;
-    FixtureDef.friction = 0.1f;
+    FixtureDef.friction = 0.4f;
     FixtureDef.shape = &rect;
 
     dogBody->CreateFixture(&FixtureDef);
 }
+
 void Model::createTreat()
 {
+    treatExists = !treatExists;
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(1.0f,0.1f);
     BodyDef.type = b2_dynamicBody;
@@ -66,7 +72,7 @@ void Model::createTreat()
     treat = world->CreateBody(&BodyDef);
 
     b2PolygonShape shape;
-    shape.SetAsBox(0.1f,0.2f);
+    shape.SetAsBox(0.01f,0.02f);
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
@@ -143,13 +149,33 @@ void Model::dogPetted(){
 
 }
 
-void Model::dogFed(){
-
+void Model::dogFed()
+{
+    if(ballExists)
+    {
+        world->DestroyBody(ball);
+        ballExists = false;
+    }
+    if(treatExists)
+    {
+        world->DestroyBody(treat);
+        treatExists = false;
+    }
+    createTreat();
 }
 
 void Model::dogPlayedWithBall()
 {
-    world->DestroyBody(ball);
+    if(ballExists)
+    {
+        world->DestroyBody(ball);
+        ballExists = false;
+    }
+    if(treatExists)
+    {
+        world->DestroyBody(treat);
+        treatExists = false;
+    }
     createBall();
 }
 
