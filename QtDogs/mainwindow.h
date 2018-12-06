@@ -29,6 +29,7 @@ public:
     sf::Texture ballTex;
     sf::Texture treatTex;
     sf::Texture dogTex;
+    sf::Texture backgroundTex;
 
     int updateAnimation;
     int numFrames;
@@ -36,6 +37,7 @@ public:
     sf::Sprite ball;
     sf::Sprite treat;
     sf::Sprite dog;
+    sf::Sprite background;
 
     int width;
     int height;
