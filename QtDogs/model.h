@@ -20,6 +20,11 @@ private:
     b2Body* treat;
     b2Body* dogBody;
 
+    int bathroomProgress;
+    int hungerProgress;
+    int trustProgress;
+    int level;
+
 public:
     bool ballExists;
     bool treatExists;
@@ -27,7 +32,7 @@ public:
     virtual ~Model();
     void update();
 
-    float ballX(){return ball->GetPosition().x -.3f;}
+    float ballX(){return ball->GetPosition().x;}
     float ballY(){return ball->GetPosition().y;}
     float ballR(){return ball->GetAngle();}
 
@@ -36,12 +41,11 @@ public:
     float treatR(){return treat->GetAngle();}
 
     float Dogx(){return dogBody->GetPosition().x;}
-    float Dogy(){return dogBody->GetPosition().y-0.2f;}
+    float Dogy(){return dogBody->GetPosition().y;}
 
 
 
 private:
-    void updateLevels();
     void createBall();
     void createTreat();
     void createScene();
@@ -55,11 +59,17 @@ public slots:
     void dogLetOut();
     void dogWalkLeft();
     void dogWalkRight();
+    void updateBathroomProgress();
+    void resetBathroomProgress();
+    void updateHungerProgress();
+    void resetHungerProgress();
 
 signals:
+    void updateLevels(int);
     void updateTrustLevel(int);
     void updateHungerLevel(int);
     void updateBathroomLevel(int);
+    void updateTrustProgress(int);
 
 
 };
