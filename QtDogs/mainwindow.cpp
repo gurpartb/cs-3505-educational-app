@@ -68,10 +68,6 @@ void MainWindow::update()
 {
    model.update();
 
-
-
-
-
    if(updateAnimation >= 4)
    {
        numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Flipping");
