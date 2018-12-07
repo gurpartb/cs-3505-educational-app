@@ -35,6 +35,7 @@ Model::~Model(){
 void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
+    checkCollisions();
     emit currentBallPosX(ballX());
     emit currentDogPosX(dogX());
     emit currentFoodPosX(foodX());
@@ -75,7 +76,7 @@ void Model::createDog()
     BodyDef.type = b2_dynamicBody;
     dogBody = world->CreateBody(&BodyDef);
     b2PolygonShape rect;
-    rect.SetAsBox(.2f,.2f);
+    rect.SetAsBox(.15f,.15f);
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 3.f;
@@ -135,14 +136,14 @@ void Model::createScene()
         b2BodyDef BodyDef;
         BodyDef.position = b2Vec2(0.0,2.7);
         BodyDef.type = b2_staticBody;
-        b2Body* Body = world->CreateBody(&BodyDef);
+        ground = world->CreateBody(&BodyDef);
 
         b2PolygonShape shape;
         shape.SetAsBox(2.0,1.0);
         b2FixtureDef FixtureDef;
         FixtureDef.density = 0.0f;
         FixtureDef.shape = &shape;
-        Body->CreateFixture(&FixtureDef);
+        ground->CreateFixture(&FixtureDef);
     }
 
     //ceiling
@@ -150,14 +151,14 @@ void Model::createScene()
         b2BodyDef BodyDef;
         BodyDef.position = b2Vec2(0.0,-1.0);
         BodyDef.type = b2_staticBody;
-        b2Body* Body = world->CreateBody(&BodyDef);
+        ceiling = world->CreateBody(&BodyDef);
 
         b2PolygonShape shape;
         shape.SetAsBox(2.0,1.0);
         b2FixtureDef FixtureDef;
         FixtureDef.density = 0.f;
         FixtureDef.shape = &shape;
-        Body->CreateFixture(&FixtureDef);
+        ceiling->CreateFixture(&FixtureDef);
     }
 
     //right wall
@@ -165,14 +166,14 @@ void Model::createScene()
         b2BodyDef BodyDef;
         BodyDef.position = b2Vec2(3.0,2.0);
         BodyDef.type = b2_staticBody;
-        b2Body* Body = world->CreateBody(&BodyDef);
+        rightWall = world->CreateBody(&BodyDef);
 
         b2PolygonShape shape;
         shape.SetAsBox(1.0,2.0);
         b2FixtureDef FixtureDef;
         FixtureDef.density = 0.f;
         FixtureDef.shape = &shape;
-        Body->CreateFixture(&FixtureDef);
+        rightWall->CreateFixture(&FixtureDef);
     }
 
     //left wall
@@ -180,14 +181,90 @@ void Model::createScene()
         b2BodyDef BodyDef;
         BodyDef.position = b2Vec2(-1.0,0.0);
         BodyDef.type = b2_staticBody;
-        b2Body* Body = world->CreateBody(&BodyDef);
+        leftWall = world->CreateBody(&BodyDef);
 
         b2PolygonShape shape;
         shape.SetAsBox(1.0,2.0);
         b2FixtureDef FixtureDef;
         FixtureDef.density = 0.f;
         FixtureDef.shape = &shape;
-        Body->CreateFixture(&FixtureDef);
+        leftWall->CreateFixture(&FixtureDef);
+    }
+}
+
+void Model::dogCollisions()
+{
+    for (b2ContactEdge* edge = dogBody->GetContactList() ; edge; edge = edge->next)
+    {
+          if (edge->contact->IsTouching())
+          {
+              if (edge->contact->GetFixtureB()->GetUserData() == rightWall->GetUserData())
+              {
+                  //emit pan right background
+              }
+              if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
+              {
+                  //emit pan left background
+              }
+              if (edge->contact->GetFixtureB()->GetUserData() == ball->GetUserData())
+              {
+                  //emit ball sound
+              }
+              if (edge->contact->GetFixtureB()->GetUserData() == treat->GetUserData())
+              {
+                  world->DestroyBody(treat);
+                  treatExists = false;
+                  //emit eating sound
+                  //make treat disappear
+                  //change state to idle
+              }
+              if (edge->contact->GetFixtureB()->GetUserData() == food->GetUserData())
+              {
+                  //emit eating sound
+                  //make food disappear
+                  //change state to idle
+              }
+          }
+    }
+}
+
+void Model::ballCollisions()
+{
+    for (b2ContactEdge* edge = ball->GetContactList() ; edge; edge = edge->next)
+    {
+          if (edge->contact->IsTouching())
+          {
+              if (edge->contact->GetFixtureB()->GetUserData() == rightWall->GetUserData())
+              {
+                  //emit bounce sound
+              }
+              if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
+              {
+                  //emit bounce sound
+              }
+              if (edge->contact->GetFixtureB()->GetUserData() == ground->GetUserData())
+              {
+                  //emit bounce sound
+              }
+              if (edge->contact->GetFixtureB()->GetUserData() == ceiling->GetUserData())
+              {
+                  //emit bounce sound
+              }
+          }
+    }
+}
+
+void Model::treatCollisions()
+{
+    for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
+    {
+          if (edge->contact->IsTouching())
+          {
+              if (edge->contact->GetFixtureB()->GetUserData() == ground->GetUserData())
+              {
+                  //emit falling sound
+              }
+          }
     }
 }
 
@@ -243,5 +320,19 @@ void Model::dogWalkRight()
 {
     b2Vec2 vec(0.05f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
+}
+
+void Model::checkCollisions()
+{
+    if(ballExists)
+    {
+        dogCollisions();
+        ballCollisions();
+    }
+    if(treatExists)
+    {
+        dogCollisions();
+        ballCollisions();
+    }
 }
 

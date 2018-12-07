@@ -21,6 +21,10 @@ private:
     b2Body* treat;
     b2Body* food;
     b2Body* dogBody;
+    b2Body* ground;
+    b2Body* ceiling;
+    b2Body* rightWall;
+    b2Body* leftWall;
 
     int bathroomProgress;
     int hungerProgress;
@@ -63,6 +67,10 @@ private:
     void createFood();
     void createScene();
     void createDog();
+    void dogCollisions();
+    void ballCollisions();
+    void treatCollisions();
+    void checkCollisions();
 
 public slots:
     void dogPetted();
