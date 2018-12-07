@@ -158,9 +158,6 @@ void MainWindow::update()
        ++updateAnimation;
    }
 
-   //  qDebug() << "x:" << model.ballX();
-   //  qDebug() << "y:" << model.ballY();
-
     dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
    if(model.getBallExists())
    {

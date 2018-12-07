@@ -33,7 +33,7 @@ void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, st
         frames.push_back(texture);
         x += w;
         sf::IntRect rectSourceSprite = sf::IntRect(x, y, w, h);
-        std::cout << "X: " << x << " Y: " << y << std::endl;
+        //std::cout << "X: " << x << " Y: " << y << std::endl;
         texture.loadFromFile(path, rectSourceSprite);
     }
     //If the given item exists in the dictionary, get the frames vector and append the frames to the vector.
