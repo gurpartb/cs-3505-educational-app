@@ -6,6 +6,7 @@
 #include <QTimer>
 #include "model.h"
 #include <QtDebug>
+#include<SFML/Audio.hpp>
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,8 @@ public:
     int dogX, dogY;
 
     Model model;
+    sf::Sound sound;
+    sf::SoundBuffer buffer;
 
     sf::RenderTexture frame;
 
@@ -68,6 +71,7 @@ signals:
 
 private slots:
     void playDogAnimation(sf::Texture&);
+    void playMusic();
 
 };
 

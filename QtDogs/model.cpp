@@ -8,7 +8,7 @@ Model::Model(){
     ballExists = false;
     treatExists = false;
     createScene();
-    createBall();
+    //createBall();
     createDog();
 
     dog = new Dog();
@@ -30,7 +30,7 @@ void Model::update()
 
 void Model::createBall()
 {
-    ballExists = !ballExists;
+    ballExists = true;
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(0.1f,1.0f);
     BodyDef.type = b2_dynamicBody;
@@ -68,7 +68,7 @@ void Model::createDog()
 
 void Model::createTreat()
 {
-    treatExists = !treatExists;
+    treatExists = true;
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(1.0f,0.1f);
     BodyDef.type = b2_dynamicBody;
