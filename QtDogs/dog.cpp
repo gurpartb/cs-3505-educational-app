@@ -177,15 +177,6 @@ std::string Dog::getDogState()
 }
 
 ///
-/// \brief Dog::getNumOfFrames
-/// \return current number of frames for current animation
-///
-int Dog::getNumOfFrames()
-{
-    return currentNumOfFrames;
-}
-
-///
 /// \brief Dog::getDogDirectionLeft
 /// \return returns true if dog is heading left. False otherwise.
 ///

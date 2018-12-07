@@ -30,15 +30,13 @@ public:
     Dog();
     b2Vec2 UpdateDogState(bool);
     std::string getDogState();
-    int getNumOfFrames();
-
+    void feedTreat();
 
 private:
     bool getDogDirectionLeft();
 
     float getHunger();
     bool increaseHunger();
-    void feedTreat();
     void resetHunger();
 
     float getBathroom();
