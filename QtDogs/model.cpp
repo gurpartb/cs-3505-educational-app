@@ -18,8 +18,19 @@ Model::Model(){
     trustProgress = 0;
     level = 1;
 
+    /*
+    void doesBallExist(bool);
+    void doesFoodExist(bool);
+    void doesTreatExist(bool);
+    void BallPositionX(float);
+    void DogPositionX(float);
+    void FoodPositionX(float);
+    void TreatPositionX(float);
+    */
+
     //connections to dog class
     connect(this, &Model::ballOnScreen, dog, &Dog::doesBallExist);
+
 }
 
 Model::~Model(){
