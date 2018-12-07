@@ -37,21 +37,56 @@ MainWindow::MainWindow(QWidget *parent) :
         numFrames = 0;
         dogX = 100;
         dogY = 500;
-
-        std::string dogPath = "../QtDogs/assets/Dog.png";
          //adding animation frames
-        spriteSheetTool.addAnimation(0, 0, 36, 28, 4,      "Dog_Idle",       dogPath);
-        spriteSheetTool.addAnimation(4, 28, 38, 27, 15,    "Dog_Sitting",    dogPath);
-        spriteSheetTool.addAnimation(4, 59, 38, 26, 13,    "Dog_Barking",    dogPath);
-        spriteSheetTool.addAnimation(4, 138, 38, 26, 23,   "Dog_Peeing",     dogPath);
-        spriteSheetTool.addAnimation(19, 166, 38, 26, 5,   "Dog_Peeing",     dogPath);
-        spriteSheetTool.addAnimation(4, 189, 38, 26, 10,   "Dog_BeginSleep", dogPath);
-        spriteSheetTool.addAnimation(375, 189, 38, 26, 14, "Dog_Sleeping",   dogPath);
-        spriteSheetTool.addAnimation(122, 215, 38, 24, 10, "Dog_WakeUp",     dogPath);
-        spriteSheetTool.addAnimation(4, 239, 36, 29, 12,   "Dog_Walking",    dogPath);
-        spriteSheetTool.addAnimation(4, 265, 39, 26, 5,    "Dog_Running",    dogPath);
-        spriteSheetTool.addAnimation(4, 265, 39, 26, 5,    "Dog_Walking",    dogPath);
-        spriteSheetTool.addAnimation(2, 316, 38, 55, 11,   "Dog_Flipping",   dogPath);
+        std::string dogPath = "../QtDogs/assets/DogSpriteSheetFinal.png";
+        spriteSheetTool.addAnimation(0,   0,    36, 26,  4, "Dog_Idle",       dogPath);
+        spriteSheetTool.addAnimation(0,   28,   36, 26, 15, "Dog_Sitting",    dogPath);
+        spriteSheetTool.addAnimation(0,   59,   36, 26, 13, "Dog_Barking",    dogPath);
+        spriteSheetTool.addAnimation(0,   138,  36, 26, 23, "Dog_Peeing",     dogPath);
+        spriteSheetTool.addAnimation(15,  166,  36, 26, 5,  "Dog_Peeing",     dogPath);
+        spriteSheetTool.addAnimation(0,   189,  36, 26, 10, "Dog_BeginSleep", dogPath);
+        spriteSheetTool.addAnimation(360, 189,  36, 26, 14, "Dog_Sleeping",   dogPath);
+        spriteSheetTool.addAnimation(122, 215,  36, 24, 10, "Dog_WakeUp",     dogPath);
+        spriteSheetTool.addAnimation(0, 240, 36, 26, 12,    "Dog_Walking",    dogPath);
+        spriteSheetTool.addAnimation(0, 263, 36, 26, 5,     "Dog_Running",    dogPath);
+        spriteSheetTool.addAnimation(0, 265, 36, 26, 5,     "Dog_Walking",    dogPath);
+        spriteSheetTool.addAnimation(0, 316, 36, 55, 11,    "Dog_Flipping",   dogPath);
+
+        std::string splashScreenPath = "../QtDogs/assets/Daytime.png";
+        spriteSheetTool.addAnimation(0,   0,     768, 768,  9, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   768,   768, 768,  9, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   1536,  768, 768,  9, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   2304,  768, 768,  9, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   3072,  768, 768,  9, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   3840,  768, 768,  9, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   4608,  768, 768,  9, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   4608,  768, 768,  9, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   5376,  768, 768,  8, "Splash_Screen",    splashScreenPath);
+
+
+        std::string daytimePath = "../QtDogs/assets/Daytime.png";
+        spriteSheetTool.addAnimation(0,   0,     768, 768,  6, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   768,   768, 768,  6, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   1536,  768, 768,  6, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   2304,  768, 768,  6, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   3072,  768, 768,  6, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   3840,  768, 768,  2, "Daytime",    daytimePath);
+
+        std::string eveningPath = "../QtDogs/assets/Night.png";
+        spriteSheetTool.addAnimation(0,   0,     768, 768,  6, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   768,   768, 768,  6, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   1536,  768, 768,  6, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   2304,  768, 768,  6, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   3072,  768, 768,  6, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   3840,  768, 768,  2, "Evening",    eveningPath);
+
+        std::string nightPath = "../QtDogs/assets/Evening.png";
+        spriteSheetTool.addAnimation(0,   0,     768, 768,  6, "Night",    nightPath);
+        spriteSheetTool.addAnimation(0,   768,   768, 768,  6, "Night",    nightPath);
+        spriteSheetTool.addAnimation(0,   1536,  768, 768,  6, "Night",    nightPath);
+        spriteSheetTool.addAnimation(0,   2304,  768, 768,  6, "Night",    nightPath);
+        spriteSheetTool.addAnimation(0,   3072,  768, 768,  6, "Night",    nightPath);
+        spriteSheetTool.addAnimation(0,   3840,  768, 768,  2, "Night",    nightPath);
 
         width = ui->imageLabel->size().width();
         height = ui->imageLabel->size().height();
@@ -108,11 +143,10 @@ void MainWindow::playDogAnimation(sf::Texture& texture)
 void MainWindow::update()
 {
    model.update();
-
    if(updateAnimation >= 4)
    {
-       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Idle");
-       emit getDogAnimationSignal("Dog_Idle", frameNumber);
+       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Walking");
+       emit getDogAnimationSignal("Dog_Walking", frameNumber);
 
        if(frameNumber >= numFrames)
        {
