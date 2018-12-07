@@ -49,12 +49,12 @@ public:
     bool atHouse;
 
 private slots:
-    void on_trustProgressBar_valueChanged(int value);
-    void on_hungerProgressBar_valueChanged(int value);
-    void on_bathroomProgressBar_valueChanged(int value);
+    void on_trustProgressBar_valueChanged(int);
+    void on_hungerProgressBar_valueChanged(int);
+    void on_bathroomProgressBar_valueChanged(int);
     void updatePoopBar();
     void updateHungerBar();
-    void on_trustLevel_valueChanged(int value);
+    void on_trustLevel_valueChanged(int);
     void playDogAnimation(sf::Texture&);
     void playMusic();
     void changeTimeOfDay();
