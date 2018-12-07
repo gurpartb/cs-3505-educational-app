@@ -26,6 +26,10 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(hungerTimer, SIGNAL(timeout()), this, SLOT(updateHungerBar()));
         hungerTimer->start(2000);
 
+        timeOfDayChange = new QTimer(this);
+        connect(timeOfDayChange, SIGNAL(timeout()), this, SLOT(changeTimeOfDay()));
+        timeOfDayChange->start(180000);
+
         connect(this, SIGNAL(getDogAnimationSignal(std::string, int)), &spriteSheetTool, SLOT(getAnimationFrame(std::string, int)));
         connect(&spriteSheetTool, SIGNAL(imageSendSignal(sf::Texture&)), this, SLOT(playDogAnimation(sf::Texture&)));
 
@@ -70,6 +74,9 @@ MainWindow::MainWindow(QWidget *parent) :
         dog.setTexture(dogTex);
         dog.setScale(4.0,4.0);
         dog.setOrigin(0,0);
+
+        atHouse = true;
+
         //model connection
         connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
         connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
@@ -250,4 +257,9 @@ void MainWindow::playMusic()
     sound.play();
 
     //qDebug() << sound.getStatus();
+}
+
+void MainWindow::changeTimeOfDay()
+{
+
 }

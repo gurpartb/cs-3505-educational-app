@@ -46,6 +46,8 @@ public:
     int width;
     int height;
 
+    bool atHouse;
+
 private slots:
     void on_trustProgressBar_valueChanged(int value);
     void on_hungerProgressBar_valueChanged(int value);
@@ -53,11 +55,15 @@ private slots:
     void updatePoopBar();
     void updateHungerBar();
     void on_trustLevel_valueChanged(int value);
+    void playDogAnimation(sf::Texture&);
+    void playMusic();
+    void changeBackground();
 
 private:
     QTimer* timer;
     QTimer* poopTimer;
     QTimer* hungerTimer;
+    QTimer* timeOfDayChange;
     Ui::MainWindow *ui;
     SpriteSheetTool spriteSheetTool;
 
@@ -69,9 +75,6 @@ signals:
     void updateBathroomProgressBar();
     void updateHungerProgressBar();
 
-private slots:
-    void playDogAnimation(sf::Texture&);
-    void playMusic();
 
 };
 
