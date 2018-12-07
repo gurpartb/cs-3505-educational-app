@@ -35,8 +35,11 @@ Model::~Model(){
 void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
-    checkCollisions();
-    emit currentBallPosX(ballX());
+    //checkCollisions();
+    if (ballExists)
+    {
+        emit currentBallPosX(ballX());
+    }
     emit currentDogPosX(dogX());
     emit currentFoodPosX(foodX());
     emit currentTreatPosX(treatX());
@@ -57,7 +60,7 @@ void Model::createBall()
     ball = world->CreateBody(&BodyDef);
     //ball->ApplyAngularImpulse(32.0f, 32.0f);
     b2CircleShape shape;
-    shape.m_radius = SCALE * 30.0f;
+    shape.m_radius = SCALE * 15.0f;
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 0.1f;
@@ -72,11 +75,13 @@ void Model::createBall()
 void Model::createDog()
 {
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(0.0f,0.0f);
+    BodyDef.position = b2Vec2(0.05f,0.05f);
     BodyDef.type = b2_dynamicBody;
     dogBody = world->CreateBody(&BodyDef);
     b2PolygonShape rect;
-    rect.SetAsBox(.15f,.15f);
+    rect.SetAsBox(0.2f,0.2f);
+//    b2CircleShape rect;
+//    rect.m_radius = SCALE * 18.0f;
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 3.f;
@@ -209,11 +214,11 @@ void Model::dogCollisions()
               if (edge->contact->GetFixtureB()->GetUserData() == ball->GetUserData())
               {
                   //emit ball sound
+//                  world->DestroyBody(ball);
+//                  ballExists = false;
               }
               if (edge->contact->GetFixtureB()->GetUserData() == treat->GetUserData())
               {
-                  world->DestroyBody(treat);
-                  treatExists = false;
                   //emit eating sound
                   //make treat disappear
                   //change state to idle
@@ -312,13 +317,13 @@ void Model::dogLetOut(){
 
 void Model::dogWalkLeft()
 {
-    b2Vec2 vec(-0.05f,0.0f);
+    b2Vec2 vec(-0.04f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
 void Model::dogWalkRight()
 {
-    b2Vec2 vec(0.05f,0.0f);
+    b2Vec2 vec(0.04f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 

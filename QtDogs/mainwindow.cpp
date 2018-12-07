@@ -105,7 +105,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
         dog.setTexture(dogTex);
         dog.setScale(4.0,4.0);
-        dog.setOrigin(0,0);
+        dog.setOrigin(18,0);
 
         atHouse = true;
 
@@ -133,6 +133,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::playDogAnimation(sf::Texture& texture)
 {
+    dog.setOrigin(0,texture.getSize().y);
     dog.setTextureRect(sf::IntRect(0,0,texture.getSize().x,texture.getSize().y));
     dogTex = texture;
 }

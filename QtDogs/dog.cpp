@@ -28,7 +28,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
     bool isHungry = increaseHunger();
     bool needsToGo = false;
 
-
     if(hunger >= 50) {
         needsToGo = increaseBathroom();
     }
