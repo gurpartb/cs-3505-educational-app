@@ -25,9 +25,11 @@ private:
     int trustProgress;
     int level;
 
-public:
     bool ballExists;
     bool treatExists;
+
+public:
+
     Model();
     virtual ~Model();
     void update();
@@ -35,10 +37,12 @@ public:
     float ballX(){return ball->GetPosition().x;}
     float ballY(){return ball->GetPosition().y;}
     float ballR(){return ball->GetAngle();}
+    bool getBallExists(){return ballExists;}
 
     float treatX(){return treat->GetPosition().x;}
     float treatY(){return treat->GetPosition().y;}
     float treatR(){return treat->GetAngle();}
+    bool getTreatExists(){return treatExists;}
 
     float Dogx(){return dogBody->GetPosition().x;}
     float Dogy(){return dogBody->GetPosition().y;}

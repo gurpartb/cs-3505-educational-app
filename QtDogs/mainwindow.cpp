@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <bits/stdc++.h>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -75,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
         connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
         connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
+        connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
         connect(&model, SIGNAL(updateTrustLevel(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateHungerLevel(int)), this, SLOT(on_hungerProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
@@ -89,6 +91,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(ui->foodButton, &QPushButton::pressed, &model, &Model::resetHungerProgress);
         connect(&model, SIGNAL(updateTrustProgress(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
         //connect(&model, SIGNAL(updateLevels(int)), this, SLOT(on_trustLevel_valueChanged(int)));
+
 
 }
 
@@ -124,11 +127,11 @@ void MainWindow::update()
    //  qDebug() << "y:" << model.ballY();
 
     dog.setPosition(model.Dogx()*width/2.0f, model.Dogy()*height/2.0f);
-   if(model.ballExists)
+   if(model.getBallExists())
    {
-
        ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
        ball.setRotation(model.ballR()*180.0f/3.14159f);
+
        if(model.ballX()*width/2.0f - model.Dogx()*width/2.0f > 0)
        {
            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
@@ -140,11 +143,11 @@ void MainWindow::update()
            emit dogWalkLeft();
        }
    }
-   else if(model.treatExists)
+   else if(model.getTreatExists())
    {
-
        treat.setPosition(model.treatX()*width/2.0f,model.treatY()*height/2.0f);
        treat.setRotation(model.treatR()*180.0f/3.14159f);
+
        if(model.treatX()*width/2.0f - model.Dogx()*width/2.0f > 0)
        {
            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
@@ -158,11 +161,11 @@ void MainWindow::update()
    }
    frame.clear(sf::Color::White);
    frame.draw(background);
-   if(model.ballExists)
+   if(model.getBallExists())
    {
        frame.draw(ball);
    }
-   else if(model.treatExists)
+   else if(model.getTreatExists())
    {
        frame.draw(treat);
    }
@@ -231,4 +234,19 @@ void MainWindow::updatePoopBar()
 void MainWindow::updateHungerBar()
 {
     emit updateHungerProgressBar();
+}
+
+void MainWindow::playMusic()
+{
+
+    if(!buffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg"))
+    {
+        std::cout << "ERRRRROR";
+    }
+
+    sound.setBuffer(buffer);
+    sound.setVolume(100.f);
+    sound.play();
+
+    //qDebug() << sound.getStatus();
 }
