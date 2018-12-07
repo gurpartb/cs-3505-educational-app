@@ -24,7 +24,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         needsToGo = increaseBathroom();
     }
     if(isNight && !(currentState == "Dead")) {
-        currentState = "Sleeping";
+        currentState = "BeginSleeping";
     }
 
     //State behavior
@@ -129,19 +129,28 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         srand(static_cast <unsigned int> (time(nullptr)));
         int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
         decreaseTrustProgress();
-        //Bark here
         if(!(barkChance % 100))
         {
             currentState = "Idle";
         }
+    }
+    else if(currentState == "BeginSleeping")
+    {
+        currentForce = b2Vec2_zero;
+        currentState = "Sleeping";
     }
     else if(currentState == "Sleeping")
     {
         currentForce = b2Vec2_zero;
         if(!isNight)
         {
-            currentState = "Idle";
+            currentState = "EndSleeping";
         }
+    }
+    else if(currentState == "EndSleeping")
+    {
+        currentForce = b2Vec2_zero;
+        currentState = "Idle";
     }
     else if(currentState == "Dead")
     {
