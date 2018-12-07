@@ -100,6 +100,8 @@ MainWindow::MainWindow(QWidget *parent) :
         //connect(&model, SIGNAL(updateLevels(int)), this, SLOT(on_trustLevel_valueChanged(int)));
 
 
+
+
 }
 
 
@@ -137,6 +139,7 @@ void MainWindow::update()
     dog.setPosition(model.Dogx()*width/2.0f, model.Dogy()*height/2.0f);
    if(model.getBallExists())
    {
+
        ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
        ball.setRotation(model.ballR()*180.0f/3.14159f);
 

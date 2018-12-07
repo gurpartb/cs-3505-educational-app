@@ -17,6 +17,9 @@ Model::Model(){
     hungerProgress = 0;
     trustProgress = 0;
     level = 1;
+
+    //connections to dog class
+    connect(this, &Model::ballOnScreen, dog, &Dog::doesBallExist);
 }
 
 Model::~Model(){
@@ -47,6 +50,7 @@ void Model::createBall()
     FixtureDef.shape = &shape;
 
     ball->CreateFixture(&FixtureDef);
+    emit ballOnScreen(ballExists);
 }
 
 void Model::createDog()
@@ -264,13 +268,13 @@ void Model::resetHungerProgress()
 
 void Model::dogWalkLeft()
 {
-    b2Vec2 vec(-0.05f,0.0f) ;
+    b2Vec2 vec(-0.05f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
 void Model::dogWalkRight()
 {
-    b2Vec2 vec(0.05f,0.0f) ;
+    b2Vec2 vec(0.05f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 

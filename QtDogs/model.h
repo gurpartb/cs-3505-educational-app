@@ -11,6 +11,7 @@
 class Model: public QObject
 {
     Q_OBJECT
+
 private:
     b2Vec2* gravity;
     b2World* world;
@@ -74,6 +75,7 @@ signals:
     void updateHungerLevel(int);
     void updateBathroomLevel(int);
     void updateTrustProgress(int);
+    void ballOnScreen(bool);
 
 
 };

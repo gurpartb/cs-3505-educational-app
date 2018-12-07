@@ -57,7 +57,7 @@ private slots:
     void on_trustLevel_valueChanged(int value);
     void playDogAnimation(sf::Texture&);
     void playMusic();
-    void changeBackground();
+    void changeTimeOfDay();
 
 private:
     QTimer* timer;

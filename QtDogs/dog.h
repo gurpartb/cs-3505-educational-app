@@ -10,6 +10,7 @@
 
 class Dog: public QObject
 {
+    Q_OBJECT
 private:
     bool ballExists;
     bool foodExists;
@@ -32,6 +33,7 @@ private:
 
 public:
     Dog();
+    virtual ~Dog();
     b2Vec2 UpdateDogState(bool);
     std::string getDogState();
     void feedTreat();
