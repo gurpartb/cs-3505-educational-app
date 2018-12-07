@@ -264,13 +264,13 @@ void Model::resetHungerProgress()
 
 void Model::dogWalkLeft()
 {
-    b2Vec2 vec(-0.05f,0.0f) ;
-    dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
+   // b2Vec2 vec(-0.05f,0.0f) ;
+    dogBody->ApplyLinearImpulse(dog->UpdateDogState(false),dogBody->GetWorldCenter(),true);
 }
 
 void Model::dogWalkRight()
 {
-    b2Vec2 vec(0.05f,0.0f) ;
-    dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
+    //b2Vec2 vec(0.05f,0.0f) ;
+    dogBody->ApplyLinearImpulse(dog->UpdateDogState(false),dogBody->GetWorldCenter(),true);
 }
 
