@@ -9,6 +9,9 @@
 Dog::Dog()
 {
     currentBallPositionX = 0;
+    currentDogPositionX = 0;
+    currentFoodPositionX = 0;
+    currentTreatPositionX = 0;
     hunger = 0;
     bathroom = 0;
     trustLevel = 0;
@@ -46,6 +49,10 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(ballExists)
         {
             currentState = "Playing";
+        }
+        else if(foodExists || treatExists)
+        {
+            currentState = "Eating";
         }
         else if(stateFlag == "Sit")
         {
@@ -86,10 +93,15 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentState = "Playing";
         }
+        else if(foodExists || treatExists)
+        {
+            currentState = "Eating";
+        }
     }
     else if(currentState == "Sitting")
     {
         currentForce = b2Vec2_zero;
+        currentState = "Idle";
     }
     else if(currentState == "Running")
     {
@@ -110,6 +122,10 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         if(ballExists)
         {
             currentState = "Playing";
+        }
+        else if(foodExists || treatExists)
+        {
+            currentState = "Eating";
         }
     }
     else if(currentState == "Peeing")
@@ -158,19 +174,54 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
     }
     else if(currentState == "Playing")
     {
-        if(currentBallPositionX > currentDogPositionX)
+        if(ballExists)
         {
-            currentForce.x = runSpeed;
-        }
-        else if(currentBallPositionX < currentDogPositionX)
-        {
-            currentForce.x = -runSpeed;
+            if(currentBallPositionX > currentDogPositionX)
+            {
+                currentForce.x = runSpeed;
+            }
+            else if(currentBallPositionX < currentDogPositionX)
+            {
+               currentForce.x = -runSpeed;
+            }
+            else
+            {
+                currentForce = b2Vec2_zero;
+            }
         }
         else
         {
-            currentForce = b2Vec2_zero;
+            currentState = "Idle";
         }
 
+    }
+    else if(currentState == "Eating") {
+        if(foodExists)
+        {
+            if(currentFoodPositionX > currentDogPositionX)
+            {
+                currentForce.x = runSpeed;
+            }
+            else if(currentFoodPositionX < currentDogPositionX)
+            {
+                currentForce.x = -runSpeed;
+            }
+        }
+        else if(treatExists)
+        {
+            if(currentTreatPositionX > currentDogPositionX)
+            {
+                currentForce.x = runSpeed;
+            }
+            else if(currentTreatPositionX < currentDogPositionX)
+            {
+                currentForce.x = -runSpeed;
+            }
+        }
+        else
+        {
+            currentState = "Idle";
+        }
     }
 
     return currentForce;
@@ -253,6 +304,20 @@ void Dog::feedTreat()
         {
             increaseTrustProgress();
         }
+    }
+}
+
+///
+/// \brief Dog::feedFood
+/// Gives the dog a full hunger bar
+///
+void Dog::feedFood()
+{
+    if (hunger > 0)
+    {
+        hunger += 100;
+        //Clamp hunger to set interval
+        hunger = fmin(fmax(hunger, 0.0f), 100.0f);
     }
 }
 
@@ -404,4 +469,14 @@ void Dog::BallPositionX(float position)
 void Dog::DogPositionX(float position)
 {
     currentDogPositionX = position;
+}
+
+void Dog::FoodPositionX(float position)
+{
+    currentFoodPositionX = position;
+}
+
+void Dog::TreatPositionX(float position)
+{
+    currentTreatPositionX = position;
 }

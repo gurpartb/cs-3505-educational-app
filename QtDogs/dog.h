@@ -12,8 +12,12 @@ class Dog: public QObject
 {
 private:
     bool ballExists;
+    bool foodExists;
+    bool treatExists;
     float currentBallPositionX;
     float currentDogPositionX;
+    float currentTreatPositionX;
+    float currentFoodPositionX;
     int currentNumOfFrames;
     float hunger;
     float bathroom;
@@ -31,20 +35,23 @@ public:
     b2Vec2 UpdateDogState(bool);
     std::string getDogState();
     void feedTreat();
+    float getHunger();
+    float getBathroom();
+    int getTrustLevel();
+    int getTrustProgress();
+    void feedFood();
 
 private:
     bool getDogDirectionLeft();
 
-    float getHunger();
     bool increaseHunger();
     void resetHunger();
 
-    float getBathroom();
+
     bool increaseBathroom();
     void resetBathroom();
 
-    int getTrustLevel();
-    int getTrustProgress();
+
     void increaseTrustLevel();
     void increaseTrustProgress();
     void decreaseTrustProgress();
@@ -53,8 +60,12 @@ private:
 
 public slots:
     void doesBallExist(bool);
+    void doesFoodExist(bool);
+    void doesTreatExist(bool);
     void BallPositionX(float);
     void DogPositionX(float);
+    void FoodPositionX(float);
+    void TreatPositionX(float);
 };
 
 #endif // DOG_H
