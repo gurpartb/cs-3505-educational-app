@@ -18,19 +18,14 @@ Model::Model(){
     trustProgress = 0;
     level = 1;
 
-    /*
-    void doesBallExist(bool);
-    void doesFoodExist(bool);
-    void doesTreatExist(bool);
-    void BallPositionX(float);
-    void DogPositionX(float);
-    void FoodPositionX(float);
-    void TreatPositionX(float);
-    */
-
     //connections to dog class
     connect(this, &Model::ballOnScreen, dog, &Dog::doesBallExist);
-
+    connect(this, &Model::foodOnScreen, dog, &Dog::doesFoodExist);
+    connect(this, &Model::treatOnScreen, dog, &Dog::doesTreatExist);
+    connect(this, &Model::currentBallPosX, dog, &Dog::BallPositionX);
+    connect(this, &Model::currentDogPosX, dog, &Dog::DogPositionX);
+    connect(this, &Model::currentFoodPosX, dog, &Dog::FoodPositionX);
+    connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
 }
 
 Model::~Model(){
@@ -40,6 +35,15 @@ Model::~Model(){
 void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
+    emit currentBallPosX(ballX());
+    emit currentDogPosX(dogX());
+    emit currentFoodPosX(foodX());
+    emit currentTreatPosX(treatX());
+    emit updateTrustLevel(dog->getTrustLevel());
+    emit updateHungerLevel(dog->getHunger());
+    emit updateBathroomLevel(dog->getBathroom());
+    emit updateTrustProgress(dog->getTrustProgress());
+
 }
 
 void Model::createBall()
@@ -99,6 +103,29 @@ void Model::createTreat()
     FixtureDef.shape = &shape;
 
     treat->CreateFixture(&FixtureDef);
+    emit treatOnScreen(treatExists);
+
+}
+
+void Model::createFood()
+{
+    foodExists = true;
+    b2BodyDef BodyDef;
+    BodyDef.position = b2Vec2(1.0f,0.1f);
+    BodyDef.type = b2_dynamicBody;
+    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX),0.0f);
+    treat = world->CreateBody(&BodyDef);
+
+    b2PolygonShape shape;
+    shape.SetAsBox(0.01f,0.02f);
+
+    b2FixtureDef FixtureDef;
+    FixtureDef.density = 2.f;
+    FixtureDef.friction = 0.7f;
+    FixtureDef.shape = &shape;
+
+    treat->CreateFixture(&FixtureDef);
+    emit treatOnScreen(treatExists);
 }
 
 void Model::createScene()
@@ -204,77 +231,6 @@ void Model::dogWentToThePark(){
 
 void Model::dogLetOut(){
 
-}
-
-
-///
-/// \brief Model::updateBathroomProgress
-///
-void Model::updateBathroomProgress()
-{
-    bathroomProgress++;
-    if(bathroomProgress == 100)
-    {
-        bathroomProgress = 0;
-        if(trustProgress >= 10)
-            trustProgress -= 10;
-        else
-            trustProgress = 0;
-        emit updateTrustProgress(trustProgress);
-    }
-    emit updateBathroomLevel(bathroomProgress);
-}
-
-///
-/// \brief Model::resetBathroomProgress
-///
-void Model::resetBathroomProgress()
-{
-    bathroomProgress = 0;
-    trustProgress += 10;
-    if(trustProgress == 100)
-    {
-        trustProgress = 0;
-        level++;
-        emit updateLevels(level);
-    }
-    emit updateTrustProgress(trustProgress);
-    emit updateBathroomLevel(bathroomProgress);
-}
-
-///
-/// \brief Model::updateHungerProgress
-///
-void Model::updateHungerProgress()
-{
-    hungerProgress++;
-    if(hungerProgress == 100)
-    {
-        hungerProgress = 0;
-        if(trustProgress >= 5)
-            trustProgress -= 5;
-        else
-            trustProgress = 0;
-        emit updateTrustProgress(trustProgress);
-    }
-    emit updateHungerLevel(hungerProgress);
-}
-
-///
-/// \brief Model::resetHungerProgress
-///
-void Model::resetHungerProgress()
-{
-    hungerProgress = 0;
-    trustProgress += 5;
-    if(trustProgress == 100)
-    {
-        trustProgress = 0;
-        level++;
-        emit updateLevels(level);
-    }
-    emit updateTrustProgress(trustProgress);
-    emit updateHungerLevel(hungerProgress);
 }
 
 void Model::dogWalkLeft()

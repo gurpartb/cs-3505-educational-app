@@ -19,6 +19,7 @@ private:
     Dog* dog;
     b2Body* ball;
     b2Body* treat;
+    b2Body* food;
     b2Body* dogBody;
 
     int bathroomProgress;
@@ -28,6 +29,7 @@ private:
 
     bool ballExists;
     bool treatExists;
+    bool foodExists;
 
 public:
 
@@ -45,14 +47,20 @@ public:
     float treatR(){return treat->GetAngle();}
     bool getTreatExists(){return treatExists;}
 
-    float Dogx(){return dogBody->GetPosition().x;}
-    float Dogy(){return dogBody->GetPosition().y;}
+    float foodX(){return food->GetPosition().x;}
+    float foodY(){return food->GetPosition().y;}
+    float foodR(){return food->GetAngle();}
+    bool getFoodExists(){return foodExists;}
+
+    float dogX(){return dogBody->GetPosition().x;}
+    float dogY(){return dogBody->GetPosition().y;}
 
 
 
 private:
     void createBall();
     void createTreat();
+    void createFood();
     void createScene();
     void createDog();
 
@@ -64,19 +72,20 @@ public slots:
     void dogLetOut();
     void dogWalkLeft();
     void dogWalkRight();
-    void updateBathroomProgress();
-    void resetBathroomProgress();
-    void updateHungerProgress();
-    void resetHungerProgress();
 
 signals:
     void updateLevels(int);
-    void updateTrustLevel(int);
-    void updateHungerLevel(int);
-    void updateBathroomLevel(int);
-    void updateTrustProgress(int);
+    void updateTrustLevel(float);
+    void updateHungerLevel(float);
+    void updateBathroomLevel(float);
+    void updateTrustProgress(float);
     void ballOnScreen(bool);
-
+    void foodOnScreen(bool);
+    void treatOnScreen(bool);
+    void currentBallPosX(float);
+    void currentDogPosX(float);
+    void currentFoodPosX(float);
+    void currentTreatPosX(float);
 
 };
 

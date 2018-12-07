@@ -83,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
         connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
         connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
-        //connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
+        connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
         connect(&model, SIGNAL(updateTrustLevel(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateHungerLevel(int)), this, SLOT(on_hungerProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
@@ -91,16 +91,10 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(this, SIGNAL(dogWalkLeft()),&model,SLOT(dogWalkLeft()));
         connect(this, SIGNAL(dogWalkRight()),&model,SLOT(dogWalkRight()));
 
-        connect(this, &MainWindow::updateBathroomProgressBar, &model, &Model::updateBathroomProgress);
         connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
-        connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::resetBathroomProgress);
-        connect(this, &MainWindow::updateHungerProgressBar, &model, &Model::updateHungerProgress);
-        connect(ui->foodButton, &QPushButton::pressed, &model, &Model::resetHungerProgress);
+
         connect(&model, SIGNAL(updateTrustProgress(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
         //connect(&model, SIGNAL(updateLevels(int)), this, SLOT(on_trustLevel_valueChanged(int)));
-
-
-
 
 }
 
@@ -136,14 +130,14 @@ void MainWindow::update()
    //  qDebug() << "x:" << model.ballX();
    //  qDebug() << "y:" << model.ballY();
 
-    dog.setPosition(model.Dogx()*width/2.0f, model.Dogy()*height/2.0f);
+    dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
    if(model.getBallExists())
    {
 
        ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
        ball.setRotation(model.ballR()*180.0f/3.14159f);
 
-       if(model.ballX()*width/2.0f - model.Dogx()*width/2.0f > 0)
+       if(model.ballX()*width/2.0f - model.dogX()*width/2.0f > 0)
        {
            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
            emit dogWalkRight();
@@ -159,7 +153,7 @@ void MainWindow::update()
        treat.setPosition(model.treatX()*width/2.0f,model.treatY()*height/2.0f);
        treat.setRotation(model.treatR()*180.0f/3.14159f);
 
-       if(model.treatX()*width/2.0f - model.Dogx()*width/2.0f > 0)
+       if(model.treatX()*width/2.0f - model.dogX()*width/2.0f > 0)
        {
            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
            emit dogWalkRight();
