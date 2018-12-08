@@ -18,10 +18,16 @@ Dog::Dog()
     currentState = "Idle";
 }
 
+Dog::~Dog()
+{
+
+}
+
 b2Vec2 Dog::UpdateDogState(bool isNight){
 
     bool isHungry = increaseHunger();
     bool needsToGo = false;
+
 
     if(hunger >= 50) {
         needsToGo = increaseBathroom();
@@ -459,6 +465,16 @@ void Dog::resetTrustLevel()
 void Dog::doesBallExist(bool exists)
 {
     ballExists = exists;
+}
+
+void Dog::doesFoodExist(bool exists)
+{
+    foodExists = exists;
+}
+
+void Dog::doesTreatExist(bool exists)
+{
+    treatExists = exists;
 }
 
 void Dog::BallPositionX(float position)

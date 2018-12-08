@@ -37,22 +37,54 @@ MainWindow::MainWindow(QWidget *parent) :
         numFrames = 0;
         dogX = 100;
         dogY = 500;
-
-        std::string dogPath = "../QtDogs/assets/Dog.png";
          //adding animation frames
-        spriteSheetTool.addAnimation(0, 0, 36, 28, 4,      "Dog_Idle",       dogPath);
-        spriteSheetTool.addAnimation(4, 28, 38, 27, 15,    "Dog_Sitting",    dogPath);
-        spriteSheetTool.addAnimation(4, 59, 38, 26, 13,    "Dog_Barking",    dogPath);
-        spriteSheetTool.addAnimation(4, 138, 38, 26, 23,   "Dog_Peeing",     dogPath);
-        spriteSheetTool.addAnimation(19, 166, 38, 26, 5,   "Dog_Peeing",     dogPath);
-        spriteSheetTool.addAnimation(4, 189, 38, 26, 10,   "Dog_BeginSleep", dogPath);
-        spriteSheetTool.addAnimation(375, 189, 38, 26, 14, "Dog_Sleeping",   dogPath);
-        spriteSheetTool.addAnimation(122, 215, 38, 24, 10, "Dog_WakeUp",     dogPath);
-        spriteSheetTool.addAnimation(4, 239, 36, 29, 12,   "Dog_Walking",    dogPath);
-        spriteSheetTool.addAnimation(4, 265, 39, 26, 5,    "Dog_Running",    dogPath);
-        spriteSheetTool.addAnimation(4, 265, 39, 26, 5,    "Dog_Walking",    dogPath);
-        spriteSheetTool.addAnimation(2, 316, 38, 55, 11,   "Dog_Flipping",   dogPath);
+        std::string dogPath = "../QtDogs/assets/DogSpriteSheetFinal.png";
+        spriteSheetTool.addAnimation(0,   0,    36, 26,  3, "Dog_Idle",       dogPath);
+        spriteSheetTool.addAnimation(0,   28,   36, 26, 14, "Dog_Sitting",    dogPath);
+        spriteSheetTool.addAnimation(0,   59,   36, 26, 12, "Dog_Barking",    dogPath);
+        spriteSheetTool.addAnimation(0,   138,  36, 26, 22, "Dog_Peeing",     dogPath);
+        spriteSheetTool.addAnimation(15,  166,  36, 26, 4,  "Dog_Peeing",     dogPath);
+        spriteSheetTool.addAnimation(0,   189,  36, 26, 9, "Dog_BeginSleep", dogPath);
+        spriteSheetTool.addAnimation(360, 189,  36, 26, 13, "Dog_Sleeping",   dogPath);
+        spriteSheetTool.addAnimation(122, 215,  36, 24, 9, "Dog_WakeUp",     dogPath);
+        spriteSheetTool.addAnimation(0, 240, 36, 26, 11,    "Dog_Walking",    dogPath);
+        spriteSheetTool.addAnimation(0, 263, 36, 26, 4,     "Dog_Running",    dogPath);
+        spriteSheetTool.addAnimation(0, 265, 36, 26, 4,     "Dog_Walking",    dogPath);
+        spriteSheetTool.addAnimation(0, 316, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
+        std::string splashScreenPath = "../QtDogs/assets/Splash_Screen.png";
+        spriteSheetTool.addAnimation(0,   0,     768, 768,  8, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   768,   768, 768,  8, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   1536,  768, 768,  8, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   2304,  768, 768,  8, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   3072,  768, 768,  8, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   3840,  768, 768,  8, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   4608,  768, 768,  8, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   4608,  768, 768,  8, "Splash_Screen",    splashScreenPath);
+        spriteSheetTool.addAnimation(0,   5376,  768, 768,  7, "Splash_Screen",    splashScreenPath);
+
+
+        std::string daytimePath = "../QtDogs/assets/Daytime.png";
+        spriteSheetTool.addAnimation(0,   0,     768, 768,  5, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   768,   768, 768,  5, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   1536,  768, 768,  5, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   2304,  768, 768,  5, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   3072,  768, 768,  5, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   3840,  768, 768,  1, "Daytime",    daytimePath);
+
+        std::string eveningPath = "../QtDogs/assets/Evening.png";
+        spriteSheetTool.addAnimation(0,   0,     768, 768,  5, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   768,   768, 768,  5, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   1536,  768, 768,  5, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   2304,  768, 768,  5, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   3072,  768, 768,  5, "Evening",    eveningPath);
+        spriteSheetTool.addAnimation(0,   3840,  768, 768,  1, "Evening",    eveningPath);
+
+        std::string nightPath = "../QtDogs/assets/Night.png";
+        spriteSheetTool.addAnimation(0,   0,     768, 768,  3, "Night",    nightPath);
+        spriteSheetTool.addAnimation(0,   768,   768, 768,  3, "Night",    nightPath);
+        spriteSheetTool.addAnimation(0,   1536,  768, 768,  3, "Night",    nightPath);
+        spriteSheetTool.addAnimation(0,   2304,  768, 768,  3, "Night",    nightPath);
         width = ui->imageLabel->size().width();
         height = ui->imageLabel->size().height();
 
@@ -83,7 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
         connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
         connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
-        //connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
+        connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
         connect(&model, SIGNAL(updateTrustLevel(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateHungerLevel(int)), this, SLOT(on_hungerProgressBar_valueChanged(int)));
         connect(&model, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
@@ -91,14 +123,10 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(this, SIGNAL(dogWalkLeft()),&model,SLOT(dogWalkLeft()));
         connect(this, SIGNAL(dogWalkRight()),&model,SLOT(dogWalkRight()));
 
-        connect(this, &MainWindow::updateBathroomProgressBar, &model, &Model::updateBathroomProgress);
         connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
-        connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::resetBathroomProgress);
-        connect(this, &MainWindow::updateHungerProgressBar, &model, &Model::updateHungerProgress);
-        connect(ui->foodButton, &QPushButton::pressed, &model, &Model::resetHungerProgress);
+
         connect(&model, SIGNAL(updateTrustProgress(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
         //connect(&model, SIGNAL(updateLevels(int)), this, SLOT(on_trustLevel_valueChanged(int)));
-
 
 }
 
@@ -112,11 +140,10 @@ void MainWindow::playDogAnimation(sf::Texture& texture)
 void MainWindow::update()
 {
    model.update();
-
    if(updateAnimation >= 4)
    {
-       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Idle");
-       emit getDogAnimationSignal("Dog_Idle", frameNumber);
+       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Walking");
+       emit getDogAnimationSignal("Dog_Walking", frameNumber);
 
        if(frameNumber >= numFrames)
        {
@@ -131,16 +158,14 @@ void MainWindow::update()
        ++updateAnimation;
    }
 
-   //  qDebug() << "x:" << model.ballX();
-   //  qDebug() << "y:" << model.ballY();
-
-    dog.setPosition(model.Dogx()*width/2.0f, model.Dogy()*height/2.0f);
+    dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
    if(model.getBallExists())
    {
+
        ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
        ball.setRotation(model.ballR()*180.0f/3.14159f);
 
-       if(model.ballX()*width/2.0f - model.Dogx()*width/2.0f > 0)
+       if(model.ballX()*width/2.0f - model.dogX()*width/2.0f > 0)
        {
            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
            emit dogWalkRight();
@@ -156,7 +181,7 @@ void MainWindow::update()
        treat.setPosition(model.treatX()*width/2.0f,model.treatY()*height/2.0f);
        treat.setRotation(model.treatR()*180.0f/3.14159f);
 
-       if(model.treatX()*width/2.0f - model.Dogx()*width/2.0f > 0)
+       if(model.treatX()*width/2.0f - model.dogX()*width/2.0f > 0)
        {
            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
            emit dogWalkRight();
