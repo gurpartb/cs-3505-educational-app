@@ -36,7 +36,6 @@ private:
     bool foodExists;
 
 public:
-
     Model();
     virtual ~Model();
     void update();
@@ -58,8 +57,6 @@ public:
 
     float dogX(){return dogBody->GetPosition().x;}
     float dogY(){return dogBody->GetPosition().y;}
-
-
 
 private:
     void createBall();
