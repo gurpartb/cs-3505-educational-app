@@ -12,7 +12,6 @@ Dog::Dog()
     currentDogPositionX = 0;
     currentFoodPositionX = 0;
     currentTreatPositionX = 0;
-    animationFrameNumber = 0;
     hunger = 100;
     bathroom = 0;
     trustLevel = 0;
@@ -20,6 +19,11 @@ Dog::Dog()
 }
 
 Dog::~Dog()
+{
+
+}
+
+int Dog::updateDogAnimation()
 {
 
 }
@@ -46,11 +50,13 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             srand(static_cast <unsigned int> (time(nullptr)));
             float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
 
-            std::string stateFlag = currentStateFlag[2];
-            if(stateFlagChoice < 0.1f)
+            std::string stateFlag = currentStateFlag[3];
+            if(stateFlagChoice < 0.50f)
                 stateFlag = currentStateFlag[0];
-            else if(stateFlagChoice < 0.15f)
+            else if(stateFlagChoice < 0.85f)
                 stateFlag = currentStateFlag[1];
+            else if(stateFlagChoice < 0.95f)
+                stateFlag = currentStateFlag[2];
 
 
             if(isHungry && hunger >= 0)
@@ -59,7 +65,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             }
             else if(needsToGo)
             {
-                animationFrameNumber = 4;
                 currentState = "Peeing";
             }
             else if(ballExists)
@@ -73,17 +78,14 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             else if(stateFlag == "Sit")
             {
                 currentState = "Sitting";
-                animationFrameNumber = 14;
             }
             else if(stateFlag == "Flip")
             {
                 currentState = "Flipping";
-                animationFrameNumber = 10;
             }
             else if(stateFlag == "Walk")
             {
                 currentState = "Walking";
-                animationFrameNumber = 11;
             }
         }
         else if(currentState == "Walking")
@@ -99,41 +101,31 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 currentForce.x = walkSpeed;
             }
 
-            if(animationFrameNumber <= 1)
+            //Random change of behavior to running or idle
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            if(behaviorChangeChance < 10)
             {
-                //Random change of behavior to running or idle
-                srand(static_cast <unsigned int> (time(nullptr)));
-                int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-                if(behaviorChangeChance < 10)
-                {
-                    currentState = "Running";
-                }
-                else if(behaviorChangeChance >= 10)
-                {
-                    currentState = "Idle";
-                }
-                if(ballExists)
-                {
-                    currentState = "Playing";
-                }
-                else if(foodExists || treatExists)
-                {
-                    currentState = "Eating";
-                }
+                currentState = "Running";
             }
-            else --animationFrameNumber;
+            else if(behaviorChangeChance >= 10)
+            {
+                currentState = "Idle";
+            }
+            if(ballExists)
+            {
+                currentState = "Playing";
+            }
+            else if(foodExists || treatExists)
+            {
+                currentState = "Eating";
+            }
         }
         else if(currentState == "Sitting")
         {
             currentForce = b2Vec2_zero;
-            if(animationFrameNumber <= 1)
-            {
-                currentState = "Idle";
-            }
-            else
-            {
-                animationFrameNumber--;
-            }
+
+            currentState = "Idle";
         }
         else if(currentState == "Running")
         {
@@ -166,26 +158,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             resetBathroom();
-            if(animationFrameNumber <= 1)
-            {
-                currentState = "Idle";
-            }
-            else
-            {
-                animationFrameNumber--;
-            }
+            currentState = "Idle";
         }
         else if(currentState == "Flipping")
         {
             currentForce = b2Vec2_zero;
-            if(animationFrameNumber <= 1)
-            {
-                currentState = "Idle";
-            }
-            else
-            {
-                animationFrameNumber--;
-            }
+            currentState = "Idle";
         }
         else if(currentState == "Barking")
         {
@@ -202,15 +180,8 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "BeginSleeping")
         {
             currentForce = b2Vec2_zero;
-            if(animationFrameNumber <= 1)
-            {
-                animationFrameNumber = 13;
-                currentState = "Sleeping";
-            }
-            else
-            {
-                animationFrameNumber--;
-            }
+
+            currentState = "Sleeping";
         }
         else if(currentState == "Sleeping")
         {

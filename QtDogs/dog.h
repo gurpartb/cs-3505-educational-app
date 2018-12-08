@@ -22,17 +22,16 @@ private:
     float currentDogPositionX;
     float currentTreatPositionX;
     float currentFoodPositionX;
-    int currentNumOfFrames;
     float hunger;
     float bathroom;
     int trustLevel;
     int trustProgress;
-    int animationFrameNumber;
+    int currentAnimationFrame;
     bool dogDirectionLeft;
     float walkSpeed = 0.015f;
     float runSpeed = 0.017f;
     b2Vec2 currentForce;
-    std::vector<std::string> currentStateFlag = {"Sit", "Flip", "Walk"};
+    std::vector<std::string> currentStateFlag = {"Idle","Walk", "Sit", "Flip"};
     std::string currentState;
 
 public:
@@ -40,6 +39,7 @@ public:
     virtual ~Dog();
 
     b2Vec2 UpdateDogState(bool);
+    int updateDogAnimation();
     std::string getDogState();
 
     float getHunger();
