@@ -7,6 +7,8 @@ Model::Model(){
     srand(uint32_t(time(nullptr)));
     ballExists = false;
     treatExists = false;
+    foodExists = false;
+
     createScene();
     //createBall();
     createDog();
@@ -37,6 +39,7 @@ void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
     checkCollisions();
+
     if (ballExists)
     {
         emit currentBallPosX(ballX());
@@ -49,6 +52,7 @@ void Model::update()
     {
         emit currentFoodPosX(foodX());
     }
+
     emit currentDogPosX(dogX());
     emit updateTrustLevel(dog->getTrustLevel());
     emit updateHungerLevel(dog->getHunger());
@@ -82,7 +86,7 @@ void Model::createBall()
 void Model::createDog()
 {
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(0.4f,0.4f);
+    BodyDef.position = b2Vec2(0.5f,0.5f);
     BodyDef.type = b2_dynamicBody;
     dogBody = world->CreateBody(&BodyDef);
 
@@ -92,9 +96,7 @@ void Model::createDog()
     vertices[2].Set(-SCALE*36.0f*1.0f,-SCALE*26.0f*2.0f);
     vertices[3].Set(-SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
 
-
     b2PolygonShape rect;
-
 
     rect.Set(vertices,4);
     //rect.SetAsBox(SCALE*36*2.0,SCALE*26*2.0);
