@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     loadAnimations();
     frame.create(unsigned(width), unsigned(height));
 
-    backgroundTex.loadFromFile("../QtDogs/assets/Splash_Screen.png");
+    //backgroundTex.loadFromFile("../QtDogs/assets/Splash_Screen.png");
     background.setTexture(backgroundTex);
     background.setScale(1.0f,1.0f);
     backgroundAnimation = "Splash_Screen";
@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
     treat.setScale(0.25f,0.25f);
     treat.setOrigin(128,128);
 
-
+    //dogTex.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     dog.setTexture(dogTex);
     dog.setScale(4.0,4.0);
     dog.setOrigin(18,0);
@@ -79,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::loadAnimations()
 {
     //adding animation frames
-    sf::Image dogPath;
+
     dogPath.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     spriteSheetTool.addAnimation(0,   0,    36, 26,  3, "Dog_Idle",       dogPath);
     spriteSheetTool.addAnimation(0,   28,   36, 26, 14, "Dog_Sitting",    dogPath);
@@ -94,28 +94,28 @@ void MainWindow::loadAnimations()
     spriteSheetTool.addAnimation(0, 316, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
 
-    sf::Image splashScreenPath;
+
     splashScreenPath.loadFromFile("../QtDogs/assets/Splash_Screen.png");
     for(int i = 0; i < 7; ++i)
         spriteSheetTool.addAnimation(0, i*768, 768, 768,  8, "Splash_Screen", splashScreenPath);
     spriteSheetTool.addAnimation(0,   5376,  768, 768,  7, "Splash_Screen",    splashScreenPath);
 
 
-    sf::Image daytimePath;
+
     daytimePath.loadFromFile("../QtDogs/assets/Daytime.png");
     for(int i = 0; i < 5; ++i)
         spriteSheetTool.addAnimation(0,   768*i,   768, 768,  5, "Daytime",    daytimePath);
     spriteSheetTool.addAnimation(0,   3840,  768, 768,  1, "Daytime",    daytimePath);
 
 
-    sf::Image eveningPath;
+
     eveningPath.loadFromFile("../QtDogs/assets/Evening.png");
     for(int i = 0; i < 5; ++i)
         spriteSheetTool.addAnimation(0,   768*i,   768, 768,  5, "Evening",    eveningPath);
     spriteSheetTool.addAnimation(0,   3840,  768, 768,  1, "Evening",    eveningPath);
 
 
-    sf::Image nightPath;
+
     nightPath.loadFromFile("../QtDogs/assets/Night.png");
     for(int i = 0; i < 4; ++i)
         spriteSheetTool.addAnimation(0,   768*i,   768, 768,  3, "Night",    nightPath);
@@ -129,11 +129,13 @@ void MainWindow::updateDogAnimation()
     if(dogFrameNumber >= dogAnimationLength)
         dogFrameNumber = 0;
 
-    dogAnimationLength = spriteSheetTool.getAnimationFrameCount(dogAnimation);
-    sf::Texture* texture = spriteSheetTool.getAnimationFrame(dogAnimation, dogFrameNumber);
+    sf::IntRect* rect = spriteSheetTool.getAnimationFrame(dogAnimation, dogFrameNumber);
+    sf::Texture* texture = spriteSheetTool.getTexture(dogAnimation);
 
-    dog.setOrigin(texture->getSize().x/2,texture->getSize().y - 12);
-    dog.setTextureRect(sf::IntRect(0,0,int(texture->getSize().x),int(texture->getSize().y)));
+    dogAnimationLength = spriteSheetTool.getAnimationFrameCount(dogAnimation);
+    dog.setOrigin(rect->width/2.0,rect->height - 12);
+
+    dog.setTextureRect(*rect);
     dog.setTexture(*texture);
 }
 
@@ -144,10 +146,13 @@ void MainWindow::updateBackgroundAnimation()
     if(backgroundFrameNumber >= backgroundAnimationLength)
         backgroundFrameNumber = 0;
 
-    backgroundAnimationLength = spriteSheetTool.getAnimationFrameCount(backgroundAnimation);
-    sf::Texture* texture = spriteSheetTool.getAnimationFrame(backgroundAnimation, backgroundFrameNumber);
+    sf::IntRect* rect = spriteSheetTool.getAnimationFrame(backgroundAnimation, backgroundFrameNumber);
+    sf::Texture* texture = spriteSheetTool.getTexture(backgroundAnimation);
 
-    background.setTextureRect(sf::IntRect(0,0,int(texture->getSize().x),int(texture->getSize().y)));
+    backgroundAnimationLength = spriteSheetTool.getAnimationFrameCount(backgroundAnimation);
+    background.setOrigin(0,0);
+
+    background.setTextureRect(*rect);
     background.setTexture(*texture);
 }
 
@@ -177,6 +182,9 @@ void MainWindow::update()
     //update animations
     if(animationDelayCounter <= 1)
     {
+        if(prevDogAnimation!= dogAnimation)
+            dogFrameNumber = 0;
+        prevDogAnimation = dogAnimation;
         updateDogAnimation();
         updateBackgroundAnimation();
         animationDelayCounter = 6;

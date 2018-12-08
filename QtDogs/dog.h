@@ -28,7 +28,7 @@ private:
     int trustProgress;
     int currentAnimationFrame;
     bool dogDirectionLeft;
-    float walkSpeed = 0.015f;
+    float walkSpeed = 0.008f;
     float runSpeed = 0.017f;
     b2Vec2 currentForce;
     std::vector<std::string> currentStateFlag = {"Idle","Walk", "Sit", "Flip"};

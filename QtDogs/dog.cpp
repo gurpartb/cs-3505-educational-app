@@ -104,11 +104,8 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             //Random change of behavior to running or idle
             srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 10)
-            {
-                currentState = "Running";
-            }
-            else if(behaviorChangeChance >= 10)
+
+            if(behaviorChangeChance < 20)
             {
                 currentState = "Idle";
             }
@@ -124,8 +121,14 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "Sitting")
         {
             currentForce = b2Vec2_zero;
+            //Random change of behavior to idle
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            if(behaviorChangeChance < 50)
+            {
+                currentState = "Idle";
+            }
 
-            currentState = "Idle";
         }
         else if(currentState == "Running")
         {
@@ -163,7 +166,13 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "Flipping")
         {
             currentForce = b2Vec2_zero;
-            currentState = "Idle";
+            //Random change of behavior to idle
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            if(behaviorChangeChance < 50)
+            {
+                currentState = "Idle";
+            }
         }
         else if(currentState == "Barking")
         {
@@ -396,7 +405,7 @@ std::string Dog::getDogState()
 bool Dog::getRandomDogDirectionLeft()
 {
     srand(static_cast <unsigned int> (time(nullptr)));
-    int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX)+0.5);
+    int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX)*2.0f);
     if(dogDirectionChance == 0)
     {
         return true;

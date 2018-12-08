@@ -45,7 +45,14 @@ private:
     sf::Sprite background;
 
     std::string dogAnimation;
+    std::string prevDogAnimation;
     std::string backgroundAnimation;
+
+    sf::Texture dogPath;
+    sf::Texture splashScreenPath;
+    sf::Texture daytimePath;
+    sf::Texture eveningPath;
+    sf::Texture nightPath;
 
     int width;
     int height;
