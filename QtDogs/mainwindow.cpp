@@ -10,22 +10,28 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Model connections
+    //connectios for buttons
     connect(ui->trickButton, &QPushButton::pressed, &model, &Model::dogTrick);
     connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
+    connect(ui->treatButton, &QPushButton::pressed,&model, &Model::dogTreat);
     connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
     connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
     connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
-    connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
+    connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
+
+    //connections for updating status bars
     connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustProgressBar_valueChanged);
     connect(&model, &Model::updateHungerLevel, this, &MainWindow::on_hungerProgressBar_valueChanged);
     connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
-
-    connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
-    connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
-    connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
-
     connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
     connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
+
+    //connections for dog movement
+    connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
+    connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
+    //connections for sound effects
+    connect(&model, &Model::playBounceSound, this, &MainWindow::playBounceSound);
+    connect(&model, &Model::playWhistleSound, this, &MainWindow::playWhistleSound);
 
     width = ui->imageLabel->size().width();
     height = ui->imageLabel->size().height();
@@ -57,6 +63,11 @@ MainWindow::MainWindow(QWidget *parent) :
     treat.setScale(0.25f,0.25f);
     treat.setOrigin(128,128);
 
+    foodTex.loadFromFile("../QtDogs/assets/DogBowl.png");
+    food.setTexture(foodTex);
+    food.setScale(1.0f,1.0f);
+    food.setOrigin(128,128);
+
     //dogTex.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     dog.setTexture(dogTex);
     dog.setScale(4.0,4.0);
@@ -74,6 +85,18 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(1000/30);
 
     enableUi(false);
+   // playMusic();//this will play the music when the game is started
+    musicBuffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg");
+    //all of these are awufl but they were the best i could find on soundbible
+    whistleBuffer.loadFromFile("../QtDogs/assets/Whistle.wav");
+    eatBuffer.loadFromFile("../QtDogs/assets/Eat.wav");
+    bounceBuffer.loadFromFile("../QtDogs/assets/Bounce2.wav");
+
+    musicSound.setBuffer(musicBuffer);
+    whistleSound.setBuffer(whistleBuffer);
+    eatSound.setBuffer(eatBuffer);
+    bounceSound.setBuffer(bounceBuffer);
+
 
 }
 
@@ -190,6 +213,7 @@ void MainWindow::startGame()
 {
     enableUi(true);
     backgroundAnimation = "Daytime";
+    //sound.stop();
     //backgroundFrameNumber = 32;
 }
 
@@ -236,6 +260,12 @@ void MainWindow::update()
         treat.setPosition(model.treatX()*width/2.0f,model.treatY()*height/2.0f);
         treat.setRotation(model.treatR()*180.0f/3.14159f);
         frame.draw(treat);
+    }
+    else if(model.getFoodExists())
+    {
+        food.setPosition(model.foodX()*width/2.0f,model.foodY()*height/2.0f);
+        food.setRotation(model.foodR()*180.0f/3.1459f);
+        frame.draw(food);
     }
 
     dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
@@ -291,14 +321,14 @@ void MainWindow::updateHungerBar()
 void MainWindow::playMusic()
 {
 
-    if(!buffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg"))
-    {
-        std::cout << "Error loading music file";
-    }
+//    if(!buffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg"))
+//    {
+//        std::cout << "Error loading music file";
+//    }
 
-    sound.setBuffer(buffer);
-    sound.setVolume(100.f);
-    sound.play();
+//    sound.setBuffer(buffer);
+//    sound.setVolume(100.f);
+//    sound.play();
 }
 
 void MainWindow::changeTimeOfDay()
@@ -314,3 +344,24 @@ void MainWindow::on_instructionsButton_clicked()
     msgBox.setStandardButtons(QMessageBox::Cancel);
     msgBox.exec();
 }
+
+void MainWindow::playBounceSound()
+{
+    if(bounceSound.Playing)
+        bounceSound.stop();
+    bounceSound.play();
+}
+
+void MainWindow::playWhistleSound()
+{
+  if(whistleSound.Playing)
+      whistleSound.stop();
+  whistleSound.play();
+}
+void MainWindow::playEatSound()
+{
+    if(eatSound.Playing)
+        eatSound.stop();
+    eatSound.play();
+}
+

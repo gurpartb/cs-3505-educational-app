@@ -30,8 +30,15 @@ public:
 
 private:
     Model model;
-    sf::Sound sound;
-    sf::SoundBuffer buffer;
+    sf::Sound musicSound;
+    sf::Sound eatSound;
+    sf::Sound whistleSound;
+    sf::Sound bounceSound;
+
+    sf::SoundBuffer musicBuffer;
+    sf::SoundBuffer eatBuffer;
+    sf::SoundBuffer whistleBuffer;
+    sf::SoundBuffer bounceBuffer;
 
     sf::RenderTexture frame;
 
@@ -44,6 +51,7 @@ private:
     sf::Sprite treat;
     sf::Sprite dog;
     sf::Sprite background;
+    sf::Sprite food;
 
     std::string dogAnimation;
     std::string prevDogAnimation;
@@ -54,6 +62,7 @@ private:
     sf::Texture daytimePath;
     sf::Texture eveningPath;
     sf::Texture nightPath;
+    sf::Texture foodTex;
 
     int width;
     int height;
@@ -90,6 +99,9 @@ private slots:
     void startGame();
 
     void on_instructionsButton_clicked();
+    void playBounceSound();
+    void playWhistleSound();
+    void playEatSound();
 
 signals:
     void dogWalkLeft();

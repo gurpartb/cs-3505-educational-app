@@ -152,20 +152,20 @@ void Model::createFood()
     foodExists = true;
 
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(1.0f,0.1f);
+    BodyDef.position = b2Vec2(0.5f,1.3f);
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX),0.0f);
-    treat = world->CreateBody(&BodyDef);
+    food = world->CreateBody(&BodyDef);
 
     b2PolygonShape shape;
-    shape.SetAsBox(0.01f,0.02f);
+    shape.SetAsBox(SCALE*4.0f,SCALE*4.0f);
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 2.f;
     FixtureDef.friction = 0.7f;
     FixtureDef.shape = &shape;
 
-    treat->CreateFixture(&FixtureDef);
+    food->CreateFixture(&FixtureDef);
     emit treatOnScreen(treatExists);
 }
 
@@ -267,11 +267,15 @@ void Model::dogCollisions()
                 treat->SetActive(false);
                 treatExists = false;
                 dog->feedTreat();
+                emit playEatSound();
             }
             if (edge->contact->GetFixtureB()->GetBody() == food)
             {
                 //emit eating sound
                 //make food disappear
+                food->SetActive(false);
+                foodExists = false;
+                emit playEatSound();
                 //change state to idle
                 dog->feedFood();
             }
@@ -285,21 +289,25 @@ void Model::ballCollisions()
     {
         if (edge->contact->IsTouching())
         {
-            if (edge->contact->GetFixtureB()->GetBody() == rightWall)
+
+            if (edge->contact->GetFixtureA()->GetBody() == rightWall)
             {
                 //emit bounce sound
+                emit playBounceSound();
             }
-            if (edge->contact->GetFixtureB()->GetBody() == leftWall)
+            else if (edge->contact->GetFixtureA()->GetBody() == leftWall)
             {
                 //emit bounce sound
+                emit playBounceSound();
             }
-            if (edge->contact->GetFixtureB()->GetBody() == ground)
+            else if (edge->contact->GetFixtureA()->GetBody() == ground)
             {
-                //emit bounce sound
+                emit playBounceSound();
             }
-            if (edge->contact->GetFixtureB()->GetBody() == ceiling)
+            else if (edge->contact->GetFixtureA()->GetBody() == ceiling)
             {
                 //emit bounce sound
+                emit playBounceSound();
             }
         }
     }
@@ -322,8 +330,28 @@ void Model::treatCollisions()
 void Model::dogTrick()
 {
     //emit dog flip
+    emit playWhistleSound();
 }
 
+void Model::dogTreat()
+{
+    if(ballExists)
+    {
+        ball->SetActive(false);
+        ballExists = false;
+    }
+    if(treatExists)
+    {
+        treat->SetActive(false);
+        treatExists = false;
+    }
+    if(foodExists)
+    {
+        food->SetActive(false);
+        foodExists = false;
+    }
+    createTreat();
+}
 void Model::dogFed()
 {
     if(ballExists)
@@ -336,9 +364,13 @@ void Model::dogFed()
         treat->SetActive(false);
         treatExists = false;
     }
-    createTreat();
+    if(foodExists)
+    {
+        food->SetActive(false);
+        foodExists = false;
+    }
+    createFood();
 }
-
 void Model::dogPlayedWithBall()
 {
     if(ballExists)
@@ -383,13 +415,15 @@ void Model::checkCollisions()
         dogCollisions();
         ballCollisions();
     }
-    if(treatExists)
+    else if(treatExists)
     {
         dogCollisions();
         treatCollisions();
     }
-    if(foodExists)
+    else if(foodExists)
     {
+        //this causes the dog to no longer collide with the ball
+       // dogCollisions();
 
     }
 }
