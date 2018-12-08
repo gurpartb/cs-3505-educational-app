@@ -232,8 +232,8 @@ void Model::dogCollisions()
               if (edge->contact->GetFixtureB()->GetBody() == ball)
               {
                   //emit ball sound
-                  world->DestroyBody(ball);
-                  ballExists = false;
+//                  world->DestroyBody(ball);
+//                  ballExists = false;
               }
               if (edge->contact->GetFixtureB()->GetUserData() == treat->GetUserData())
               {
