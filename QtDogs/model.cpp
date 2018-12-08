@@ -26,6 +26,7 @@ Model::Model(){
     connect(this, &Model::currentDogPosX, dog, &Dog::DogPositionX);
     connect(this, &Model::currentFoodPosX, dog, &Dog::FoodPositionX);
     connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
+
 }
 
 Model::~Model(){
@@ -241,7 +242,7 @@ void Model::dogWalkLeft()
 
 void Model::dogWalkRight()
 {
-    b2Vec2 vec(0.05f,0.0f);
+    b2Vec2 vec(0.05f, 0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 

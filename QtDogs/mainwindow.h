@@ -67,6 +67,9 @@ private:
     Ui::MainWindow *ui;
     SpriteSheetTool spriteSheetTool;
 
+    void startSplashScreen();
+    void startGame();
+
     int frameNumber = 0;
 signals:
     void getDogAnimationSignal(std::string, int);

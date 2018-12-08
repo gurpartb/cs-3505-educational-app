@@ -10,7 +10,9 @@
 
 class Dog: public QObject
 {
+
     Q_OBJECT
+
 private:
     bool ballExists;
     bool foodExists;
@@ -45,15 +47,10 @@ public:
 
 private:
     bool getDogDirectionLeft();
-
     bool increaseHunger();
     void resetHunger();
-
-
     bool increaseBathroom();
     void resetBathroom();
-
-
     void increaseTrustLevel();
     void increaseTrustProgress();
     void decreaseTrustProgress();

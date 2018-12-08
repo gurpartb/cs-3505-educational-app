@@ -30,14 +30,12 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(timeOfDayChange, SIGNAL(timeout()), this, SLOT(changeTimeOfDay()));
         timeOfDayChange->start(180000);
 
-        connect(this, SIGNAL(getDogAnimationSignal(std::string, int)), &spriteSheetTool, SLOT(getAnimationFrame(std::string, int)));
-        connect(&spriteSheetTool, SIGNAL(imageSendSignal(sf::Texture&)), this, SLOT(playDogAnimation(sf::Texture&)));
-
         updateAnimation = 0;
         numFrames = 0;
         dogX = 100;
         dogY = 500;
-         //adding animation frames
+
+        //adding animation frames
         std::string dogPath = "../QtDogs/assets/DogSpriteSheetFinal.png";
         spriteSheetTool.addAnimation(0,   0,    36, 26,  3, "Dog_Idle",       dogPath);
         spriteSheetTool.addAnimation(0,   28,   36, 26, 14, "Dog_Sitting",    dogPath);
@@ -109,31 +107,42 @@ MainWindow::MainWindow(QWidget *parent) :
 
         atHouse = true;
 
-        //model connection
+        //Connections:
+        connect(this, &MainWindow::getDogAnimationSignal, &spriteSheetTool, &SpriteSheetTool::getAnimationFrame);
+        connect(&spriteSheetTool, &SpriteSheetTool::imageSendSignal, this, &MainWindow::playDogAnimation);
+
+        //Model connections
         connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
         connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
         connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
         connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
         connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
         connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
-        connect(&model, SIGNAL(updateTrustLevel(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
-        connect(&model, SIGNAL(updateHungerLevel(int)), this, SLOT(on_hungerProgressBar_valueChanged(int)));
-        connect(&model, SIGNAL(updateBathroomLevel(int)), this, SLOT(on_bathroomProgressBar_valueChanged(int)));
-
-        connect(this, SIGNAL(dogWalkLeft()),&model,SLOT(dogWalkLeft()));
-        connect(this, SIGNAL(dogWalkRight()),&model,SLOT(dogWalkRight()));
-
+        connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustProgressBar_valueChanged);
+        connect(&model, &Model::updateHungerLevel, this, &MainWindow::on_hungerProgressBar_valueChanged);
         connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
 
-        connect(&model, SIGNAL(updateTrustProgress(int)), this, SLOT(on_trustProgressBar_valueChanged(int)));
-        //connect(&model, SIGNAL(updateLevels(int)), this, SLOT(on_trustLevel_valueChanged(int)));
+        connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
+        connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
+
+        connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
+        connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
 
 }
 
+void MainWindow::startSplashScreen()
+{
+
+}
+
+void MainWindow::startGame()
+{
+
+}
 
 void MainWindow::playDogAnimation(sf::Texture& texture)
 {
-    dog.setTextureRect(sf::IntRect(0,0,texture.getSize().x,texture.getSize().y));
+    dog.setTextureRect(sf::IntRect(0, 0, texture.getSize().x, texture.getSize().y));
     dogTex = texture;
 }
 
@@ -142,8 +151,8 @@ void MainWindow::update()
    model.update();
    if(updateAnimation >= 4)
    {
-       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Walking");
-       emit getDogAnimationSignal("Dog_Walking", frameNumber);
+       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Idle");
+       emit getDogAnimationSignal("Dog_Idle", frameNumber);
 
        if(frameNumber >= numFrames)
        {
@@ -165,7 +174,7 @@ void MainWindow::update()
        ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
        ball.setRotation(model.ballR()*180.0f/3.14159f);
 
-       if(model.ballX()*width/2.0f - model.dogX()*width/2.0f > 0)
+       if (model.ballX()*width/2.0f - model.dogX()*width/2.0f > 0)
        {
            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
            emit dogWalkRight();
