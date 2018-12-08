@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
     //Model connections
     connect(ui->trickButton, &QPushButton::pressed, &model, &Model::dogTrick);
     connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
@@ -191,7 +190,7 @@ void MainWindow::startGame()
 {
     enableUi(true);
     backgroundAnimation = "Daytime";
-    backgroundFrameNumber = 32;
+    //backgroundFrameNumber = 32;
 }
 
 void MainWindow::update()
