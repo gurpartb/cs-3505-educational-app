@@ -35,10 +35,14 @@ Model::~Model(){
 void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
+    if(ballExists)
     emit currentBallPosX(ballX());
     emit currentDogPosX(dogX());
+    if(foodExists){
     emit currentFoodPosX(foodX());
+
     emit currentTreatPosX(treatX());
+    }
     emit updateTrustLevel(dog->getTrustLevel());
     emit updateHungerLevel(dog->getHunger());
     emit updateBathroomLevel(dog->getBathroom());
