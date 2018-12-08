@@ -423,8 +423,7 @@ void Model::checkCollisions()
     }
     else if(foodExists)
     {
-        //this causes the dog to no longer collide with the ball
-       // dogCollisions();
+        dogCollisions();
 
     }
 }
