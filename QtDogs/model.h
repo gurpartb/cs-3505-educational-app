@@ -42,7 +42,7 @@ public:
     Model();
     virtual ~Model();
 
-    void update();    
+    void update();
 
     float ballX(){return ball->GetPosition().x;}
     float ballY(){return ball->GetPosition().y;}
@@ -82,7 +82,7 @@ private:
     void checkCollisions();
 
 public slots:
-    void dogPetted();
+    void dogTrick();
     void dogFed();
     void dogPlayedWithBall();
     void dogWentToThePark();

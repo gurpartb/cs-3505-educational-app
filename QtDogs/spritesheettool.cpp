@@ -10,20 +10,19 @@ void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, st
 {
     sf::Image img;
     img.loadFromFile(path);
-    addAnimation(x,y,w,h,numFrames,name,img);
+    //addAnimation(x,y,w,h,numFrames,name,img);
 }
 
-void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, std::string name, sf::Image& img)
+void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, std::string name, sf::Texture& img)
 {
-    std::vector<sf::Texture> frames;
+
+    std::vector<sf::IntRect> frames;
 
     //Add as many frames as numFrames, changing the initial x coordinate by adding the width.
     for(int i = 0; i < numFrames; ++i)
     {
         sf::IntRect rectSourceSprite = sf::IntRect(x, y, w, h);
-        sf::Texture temp;
-        temp.loadFromImage(img, rectSourceSprite);
-        frames.push_back(temp);
+        frames.push_back(rectSourceSprite);
         x += w;
     }
 
@@ -31,10 +30,13 @@ void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, st
     //Otherwise insert it into our dictionary.
     if(dict.contains(name))
     {
-        std::vector<sf::Texture>* framesMappedToDictionary = &dict[name];
+        std::vector<sf::IntRect>* framesMappedToDictionary = &dict[name];
         for(auto& frame : frames)
             framesMappedToDictionary->push_back(frame);
     }
     else
+    {
         dict.insert(name, frames);
+        sheetDict.insert(name,&img);
+    }
 }

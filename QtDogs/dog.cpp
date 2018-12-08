@@ -6,7 +6,7 @@
 /// \brief Dog::Dog:
 /// Dog constructor.
 ///
- Dog::Dog()
+Dog::Dog()
 {
     currentBallPositionX = 0;
     currentDogPositionX = 0;
@@ -19,6 +19,11 @@
 }
 
 Dog::~Dog()
+{
+
+}
+
+int Dog::updateDogAnimation()
 {
 
 }
@@ -45,13 +50,13 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             srand(static_cast <unsigned int> (time(nullptr)));
             float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
 
-            std::string stateFlag = currentStateFlag[2];
-            if(stateFlagChoice < 0.1f)
+            std::string stateFlag = currentStateFlag[3];
+            if(stateFlagChoice < 0.50f)
                 stateFlag = currentStateFlag[0];
-            else if(stateFlagChoice < 0.15f)
+            else if(stateFlagChoice < 0.85f)
                 stateFlag = currentStateFlag[1];
-
-
+            else if(stateFlagChoice < 0.95f)
+                stateFlag = currentStateFlag[2];
 
 
             if(isHungry && hunger >= 0)
@@ -99,11 +104,8 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             //Random change of behavior to running or idle
             srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 10)
-            {
-                currentState = "Running";
-            }
-            else if(behaviorChangeChance >= 10)
+
+            if(behaviorChangeChance < 20)
             {
                 currentState = "Idle";
             }
@@ -119,7 +121,14 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "Sitting")
         {
             currentForce = b2Vec2_zero;
-            currentState = "Idle";
+            //Random change of behavior to idle
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            if(behaviorChangeChance < 50)
+            {
+                currentState = "Idle";
+            }
+
         }
         else if(currentState == "Running")
         {
@@ -157,7 +166,13 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "Flipping")
         {
             currentForce = b2Vec2_zero;
-            currentState = "Idle";
+            //Random change of behavior to idle
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            if(behaviorChangeChance < 50)
+            {
+                currentState = "Idle";
+            }
         }
         else if(currentState == "Barking")
         {
@@ -174,6 +189,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "BeginSleeping")
         {
             currentForce = b2Vec2_zero;
+
             currentState = "Sleeping";
         }
         else if(currentState == "Sleeping")
@@ -389,7 +405,7 @@ std::string Dog::getDogState()
 bool Dog::getRandomDogDirectionLeft()
 {
     srand(static_cast <unsigned int> (time(nullptr)));
-    int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX)+0.5);
+    int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX)*2.0f);
     if(dogDirectionChance == 0)
     {
         return true;
@@ -574,7 +590,7 @@ void Dog::increaseTrustProgress()
 ///
 /// \brief Dog::decreaseTrustLevel
 /// decreases the trust level if the you do something to distrust the dog. 0 to 10 value.
-/// \return
+/// \returnEnabled
 /// New value of the trust level.
 ///
 void Dog::decreaseTrustLevel()
