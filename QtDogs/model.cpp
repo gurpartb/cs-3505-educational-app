@@ -60,12 +60,12 @@ void Model::createBall()
     ball = world->CreateBody(&BodyDef);
     //ball->ApplyAngularImpulse(32.0f, 32.0f);
     b2CircleShape shape;
-    shape.m_radius = SCALE * 15.0f;
+    shape.m_radius = SCALE * 64.0f;
 
     b2FixtureDef FixtureDef;
-    FixtureDef.density = 0.1f;
+    FixtureDef.density = 0.05f;
     FixtureDef.friction = 0.7f;
-    FixtureDef.restitution = 0.4f;
+    FixtureDef.restitution = 0.7f;
     FixtureDef.shape = &shape;
 
     ball->CreateFixture(&FixtureDef);
@@ -75,16 +75,26 @@ void Model::createBall()
 void Model::createDog()
 {
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(0.05f,0.05f);
+    BodyDef.position = b2Vec2(0.4f,0.4f);
     BodyDef.type = b2_dynamicBody;
     dogBody = world->CreateBody(&BodyDef);
+
+    b2Vec2 vertices[4];
+    vertices[0].Set(SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
+    vertices[1].Set(SCALE*36.0f*1.0f,-SCALE*26.0f*2.0f);
+    vertices[2].Set(-SCALE*36.0f*1.0f,-SCALE*26.0f*2.0f);
+    vertices[3].Set(-SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
+
+
     b2PolygonShape rect;
-    rect.SetAsBox(0.2f,0.2f);
-//    b2CircleShape rect;
-//    rect.m_radius = SCALE * 18.0f;
+
+
+    rect.Set(vertices,4);
+    //rect.SetAsBox(SCALE*36*2.0,SCALE*26*2.0);
 
     b2FixtureDef FixtureDef;
-    FixtureDef.density = 3.f;
+    FixtureDef.density = 1.f;
+    FixtureDef.restitution = 0.1;
     FixtureDef.friction = 0.4f;
     FixtureDef.shape = &rect;
 
@@ -139,7 +149,7 @@ void Model::createScene()
     //ground
     {
         b2BodyDef BodyDef;
-        BodyDef.position = b2Vec2(0.0,2.7);
+        BodyDef.position = b2Vec2(0.0,2.9);
         BodyDef.type = b2_staticBody;
         ground = world->CreateBody(&BodyDef);
 
@@ -317,13 +327,13 @@ void Model::dogLetOut(){
 
 void Model::dogWalkLeft()
 {
-    b2Vec2 vec(-0.04f,0.0f);
+    b2Vec2 vec(-0.01f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
 void Model::dogWalkRight()
 {
-    b2Vec2 vec(0.04f,0.0f);
+    b2Vec2 vec(0.01f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 

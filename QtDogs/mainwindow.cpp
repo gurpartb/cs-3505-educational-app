@@ -100,6 +100,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
         frame.create(unsigned(width), unsigned(height));
 
+        dogAnimation = "Dog_Running";
+
         backgroundTex.loadFromFile("../QtDogs/assets/pixelartparkfinal.png");
         background.setTexture(backgroundTex);
         background.setScale(2.4f,2.4f);
@@ -143,7 +145,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::playDogAnimation(sf::Texture& texture)
 {
-    dog.setOrigin(0,texture.getSize().y);
+    dog.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
     dog.setTextureRect(sf::IntRect(0,0,texture.getSize().x,texture.getSize().y));
     dogTex = texture;
 }
@@ -153,8 +155,8 @@ void MainWindow::update()
    model.update();
    if(updateAnimation >= 4)
    {
-       numFrames = spriteSheetTool.getAnimationFrameCount("Dog_Walking");
-       emit getDogAnimationSignal("Dog_Walking", frameNumber);
+       numFrames = spriteSheetTool.getAnimationFrameCount(dogAnimation);
+       emit getDogAnimationSignal(dogAnimation, frameNumber);
 
        if(frameNumber >= numFrames)
        {
