@@ -20,7 +20,8 @@ public:
 
 private:
     QMap<std::string, std::vector<sf::Texture>> dict;
-private slots:
+
+public slots:
     void getAnimationFrame(std::string name, int frameCount);
 
 signals:
