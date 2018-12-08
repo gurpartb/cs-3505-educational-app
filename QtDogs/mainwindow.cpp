@@ -22,14 +22,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
         connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
         connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
+        connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
 
         connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
         connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
 
-
         width = ui->imageLabel->size().width();
         height = ui->imageLabel->size().height();
-
 
         ui->hungerProgressBar->setValue(0);
         ui->bathroomProgressBar->setValue(0);
@@ -56,7 +55,6 @@ MainWindow::MainWindow(QWidget *parent) :
         treat.setScale(0.25f,0.25f);
         treat.setOrigin(128,128);
 
-
         dog.setTexture(dogTex);
         dog.setScale(4.0,4.0);
         dog.setOrigin(18,0);
@@ -74,7 +72,6 @@ MainWindow::MainWindow(QWidget *parent) :
         enableUi(false);
 
 }
-
 
 void MainWindow::loadAnimations()
 {
@@ -153,17 +150,27 @@ void MainWindow::updateBackgroundAnimation()
 
 void MainWindow::enableUi(bool enabled)
 {
+    gameStarted = enabled;
     ui->trickButton->setEnabled(enabled);
     ui->ballButton->setEnabled(enabled);
     ui->foodButton->setEnabled(enabled);
+    ui->treatButton->setEnabled(enabled);
     ui->ballButton->setEnabled(enabled);
     ui->parkButton->setEnabled(enabled);
     ui->letOutButton->setEnabled(enabled);
     ui->playButton->setEnabled(!enabled); //Reverse so Play button is disabled.
 
+    ui->trustProgressBar->setEnabled(enabled);
+    ui->hungerProgressBar->setEnabled(enabled);
+    ui->bathroomProgressBar->setEnabled(enabled);
+
+    ui->levelLabel->setVisible(enabled);
+    ui->levelNumber->setVisible(enabled);
+
     ui->trickButton->setVisible(enabled);
     ui->ballButton->setVisible(enabled);
     ui->foodButton->setVisible(enabled);
+    ui->treatButton->setVisible(enabled);
     ui->ballButton->setVisible(enabled);
     ui->parkButton->setVisible(enabled);
     ui->letOutButton->setVisible(enabled);
@@ -177,7 +184,10 @@ void MainWindow::startGame()
 
 void MainWindow::update()
 {
-    model.update();
+    if (gameStarted)
+    {
+        model.update();
+    }
 
     std::string tmp =  model.getDogState();
     if(tmp == "Playing" || tmp == "Eating")tmp = "Running";
@@ -218,7 +228,6 @@ void MainWindow::update()
     frame.draw(dog);
 
     frame.display();
-
 
     //draw the sfml canvas
     sf::Texture rt = frame.getTexture();
@@ -270,7 +279,7 @@ void MainWindow::playMusic()
 
     if(!buffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg"))
     {
-        std::cout << "ERRRRROR";
+        std::cout << "Error loading music file";
     }
 
     sound.setBuffer(buffer);

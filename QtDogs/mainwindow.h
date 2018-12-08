@@ -56,6 +56,7 @@ private:
     int dogFrameNumber = 0;
     int backgroundAnimationLength;
     int backgroundFrameNumber = 0;
+    bool gameStarted;
 
     Ui::MainWindow *ui;
     QTimer* timer;
