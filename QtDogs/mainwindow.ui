@@ -378,7 +378,7 @@
             <string notr="true">background-color: #bfbfbf;</string>
            </property>
            <property name="text">
-            <string>Park</string>
+            <string>Go To Park</string>
            </property>
           </widget>
          </item>
