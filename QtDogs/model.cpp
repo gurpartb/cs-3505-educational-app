@@ -64,6 +64,7 @@ void Model::update()
 void Model::createBall()
 {
     ballExists = true;
+    ballplayCount = 0;
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(0.1f,1.0f);
     BodyDef.type = b2_dynamicBody;
@@ -222,11 +223,11 @@ void Model::dogCollisions()
     {
           if (edge->contact->IsTouching())
           {
-              if (edge->contact->GetFixtureB()->GetUserData() == rightWall->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == rightWall)
               {
                   //emit pan right background
               }
-              if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == leftWall)
               {
                   //emit pan left background
 
@@ -234,16 +235,22 @@ void Model::dogCollisions()
               if (edge->contact->GetFixtureB()->GetBody() == ball)
               {
                   //emit ball sound
-//                  world->DestroyBody(ball);
-//                  ballExists = false;
+                  if (ballplayCount == 100){
+                      ball->SetActive(false);
+                      ballExists = false;
+                  }
+                  else
+                  {
+                      ballplayCount++;
+                  }
               }
-              if (edge->contact->GetFixtureB()->GetUserData() == treat->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == treat)
               {
-                  //emit eating sound
-                  //make treat disappear
-                  //change state to idl
+                  treat->SetActive(false);
+                  treatExists = false;
+                  //change state to idle
               }
-              if (edge->contact->GetFixtureB()->GetUserData() == food->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == food)
               {
                   //emit eating sound
                   //make food disappear
@@ -259,19 +266,19 @@ void Model::ballCollisions()
     {
           if (edge->contact->IsTouching())
           {
-              if (edge->contact->GetFixtureB()->GetUserData() == rightWall->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == rightWall)
               {
                   //emit bounce sound
               }
-              if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == leftWall)
               {
                   //emit bounce sound
               }
-              if (edge->contact->GetFixtureB()->GetUserData() == ground->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == ground)
               {
                   //emit bounce sound
               }
-              if (edge->contact->GetFixtureB()->GetUserData() == ceiling->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == ceiling)
               {
                   //emit bounce sound
               }
@@ -285,7 +292,7 @@ void Model::treatCollisions()
     {
           if (edge->contact->IsTouching())
           {
-              if (edge->contact->GetFixtureB()->GetUserData() == ground->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == ground)
               {
                   //emit falling sound
               }
@@ -301,12 +308,12 @@ void Model::dogFed()
 {
     if(ballExists)
     {
-        world->DestroyBody(ball);
+        ball->SetActive(false);
         ballExists = false;
     }
     if(treatExists)
     {
-        world->DestroyBody(treat);
+        treat->SetActive(false);
         treatExists = false;
     }
     createTreat();
@@ -316,12 +323,14 @@ void Model::dogPlayedWithBall()
 {
     if(ballExists)
     {
-        world->DestroyBody(ball);
+        ball->SetActive(false);
+        //world->DestroyBody(ball);
         ballExists = false;
     }
     if(treatExists)
     {
-        world->DestroyBody(treat);
+        treat->SetActive(false);
+//        world->DestroyBody(treat);
         treatExists = false;
     }
     createBall();

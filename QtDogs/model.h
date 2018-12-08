@@ -26,6 +26,8 @@ private:
     b2Body* rightWall;
     b2Body* leftWall;
 
+    int ballplayCount;
+
     int bathroomProgress;
     int hungerProgress;
     int trustProgress;
