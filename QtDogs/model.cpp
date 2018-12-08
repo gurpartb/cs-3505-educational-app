@@ -9,6 +9,7 @@ Model::Model(){
     ballExists = false;
     treatExists = false;
     foodExists = false;
+    isNight = false;
 
     createScene();
     createDog();

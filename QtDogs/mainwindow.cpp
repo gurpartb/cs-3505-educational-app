@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //connections for sound effects
     connect(&model, &Model::playBounceSound, this, &MainWindow::playBounceSound);
     connect(&model, &Model::playWhistleSound, this, &MainWindow::playWhistleSound);
+    connect(&model, &Model::playEatSound, this, &MainWindow::playEatSound);
 
     width = ui->imageLabel->size().width();
     height = ui->imageLabel->size().height();
@@ -320,15 +321,7 @@ void MainWindow::updateHungerBar()
 
 void MainWindow::playMusic()
 {
-
-//    if(!buffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg"))
-//    {
-//        std::cout << "Error loading music file";
-//    }
-
-//    sound.setBuffer(buffer);
-//    sound.setVolume(100.f);
-//    sound.play();
+    musicSound.play();
 }
 
 void MainWindow::changeTimeOfDay()
@@ -347,21 +340,15 @@ void MainWindow::on_instructionsButton_clicked()
 
 void MainWindow::playBounceSound()
 {
-    if(bounceSound.Playing)
-        bounceSound.stop();
     bounceSound.play();
 }
 
 void MainWindow::playWhistleSound()
 {
-  if(whistleSound.Playing)
-      whistleSound.stop();
   whistleSound.play();
 }
 void MainWindow::playEatSound()
 {
-    if(eatSound.Playing)
-        eatSound.stop();
     eatSound.play();
 }
 
