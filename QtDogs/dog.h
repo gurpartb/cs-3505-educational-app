@@ -14,6 +14,7 @@ class Dog: public QObject
     Q_OBJECT
 
 private:
+    bool isDogInPark;
     bool ballExists;
     bool foodExists;
     bool treatExists;
@@ -58,6 +59,7 @@ private:
     void resetTrustLevel();
 
 public slots:
+    void DogInPark(bool);
     void doesBallExist(bool);
     void doesFoodExist(bool);
     void doesTreatExist(bool);
