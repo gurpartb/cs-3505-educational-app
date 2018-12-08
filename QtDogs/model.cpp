@@ -193,7 +193,7 @@ void Model::createFood()
     shape.SetAsBox(SCALE*4.0f,SCALE*4.0f);
 
     b2FixtureDef FixtureDef;
-    FixtureDef.density = 2.f;
+    FixtureDef.density = 2.0f;
     FixtureDef.friction = 0.7f;
     FixtureDef.shape = &shape;
 
@@ -313,6 +313,7 @@ void Model::dogCollisions()
             {
                 //emit eating sound
                 //make food disappear
+
                 food->SetActive(false);
                 foodExists = false;
                 emit playEatSound();
