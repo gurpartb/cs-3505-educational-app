@@ -32,7 +32,7 @@
       <x>-10</x>
       <y>0</y>
       <width>898</width>
-      <height>892</height>
+      <height>840</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -205,7 +205,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0,0">
+        <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0,0,0,0,0">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -328,25 +328,6 @@
            </property>
            <property name="text">
             <string>Food</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="treatButton">
-           <property name="minimumSize">
-            <size>
-             <width>55</width>
-             <height>55</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>55</width>
-             <height>55</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>Treat</string>
            </property>
           </widget>
          </item>

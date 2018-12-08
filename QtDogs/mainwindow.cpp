@@ -215,6 +215,7 @@ void MainWindow::update()
     QImage qi(pp,width,height,QImage::Format_ARGB32);
     qi = qi.rgbSwapped();
     ui->imageLabel->setPixmap(QPixmap::fromImage(qi));
+
 }
 
 MainWindow::~MainWindow()
