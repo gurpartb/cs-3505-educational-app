@@ -79,10 +79,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             if(getDogDirectionLeft())
             {
+                dogDirectionLeft = true;
                 currentForce.x = -walkSpeed;
             }
             else
             {
+                dogDirectionLeft = false;
                 currentForce.x = walkSpeed;
             }
 
@@ -115,10 +117,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             if(getDogDirectionLeft())
             {
+                dogDirectionLeft = true;
                 currentForce.x = -runSpeed;
             }
             else
             {
+                dogDirectionLeft = false;
                 currentForce.x = runSpeed;
             }
             srand(static_cast <unsigned int> (time(nullptr)));
@@ -187,10 +191,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 if(currentBallPositionX > currentDogPositionX)
                 {
+                    dogDirectionLeft = false;
                     currentForce.x = runSpeed;
                 }
                 else if(currentBallPositionX < currentDogPositionX)
                 {
+                    dogDirectionLeft = true;
                     currentForce.x = -runSpeed;
                 }
                 else
@@ -209,10 +215,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 if(currentFoodPositionX > currentDogPositionX)
                 {
+                    dogDirectionLeft = false;
                     currentForce.x = runSpeed;
                 }
                 else if(currentFoodPositionX < currentDogPositionX)
                 {
+                    dogDirectionLeft = true;
                     currentForce.x = -runSpeed;
                 }
             }
@@ -220,10 +228,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 if(currentTreatPositionX > currentDogPositionX)
                 {
+                    dogDirectionLeft = false;
                     currentForce.x = runSpeed;
                 }
                 else if(currentTreatPositionX < currentDogPositionX)
                 {
+                    dogDirectionLeft = true;
                     currentForce.x = -runSpeed;
                 }
             }
@@ -244,10 +254,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             if(getDogDirectionLeft())
             {
+                dogDirectionLeft = true;
                 currentForce.x = -walkSpeed;
             }
             else
             {
+                dogDirectionLeft = false;
                 currentForce.x = walkSpeed;
             }
 
@@ -275,10 +287,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 if(currentFoodPositionX > currentDogPositionX)
                 {
+                    dogDirectionLeft = false;
                     currentForce.x = runSpeed;
                 }
                 else if(currentFoodPositionX < currentDogPositionX)
                 {
+                    dogDirectionLeft = true;
                     currentForce.x = -runSpeed;
                 }
             }
@@ -286,10 +300,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 if(currentTreatPositionX > currentDogPositionX)
                 {
+                    dogDirectionLeft = false;
                     currentForce.x = runSpeed;
                 }
                 else if(currentTreatPositionX < currentDogPositionX)
                 {
+                    dogDirectionLeft = true;
                     currentForce.x = -runSpeed;
                 }
             }
@@ -304,10 +320,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 if(currentBallPositionX > currentDogPositionX)
                 {
+                    dogDirectionLeft = false;
                     currentForce.x = runSpeed;
                 }
                 else if(currentBallPositionX < currentDogPositionX)
                 {
+                    dogDirectionLeft = true;
                     currentForce.x = -runSpeed;
                 }
                 else
@@ -357,10 +375,10 @@ std::string Dog::getDogState()
 }
 
 ///
-/// \brief Dog::getDogDirectionLeft
+/// \brief Dog::getRandomDogDirectionLeft
 /// \return returns true if dog is heading left. False otherwise.
 ///
-bool Dog::getDogDirectionLeft()
+bool Dog::getRandomDogDirectionLeft()
 {
     srand(static_cast <unsigned int> (time(nullptr)));
     int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
@@ -372,6 +390,15 @@ bool Dog::getDogDirectionLeft()
     {
         return false;
     }
+}
+
+///
+/// \brief Dog::getDogDirectionLeft
+/// \return returns true if dog is heading left. False otherwise.
+///
+bool Dog::getDogDirectionLeft()
+{
+    return dogDirectionLeft;
 }
 
 ///
