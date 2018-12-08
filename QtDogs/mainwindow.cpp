@@ -61,7 +61,6 @@ MainWindow::MainWindow(QWidget *parent) :
         dog.setOrigin(18,0);
         dogAnimation = "Dog_Idle";
 
-
         //create timers
         timeOfDayChange = new QTimer(this);
         connect(timeOfDayChange, SIGNAL(timeout()), this, SLOT(changeTimeOfDay()));
@@ -166,34 +165,30 @@ void MainWindow::update()
 {
     model.update();
 
-
-
     //TODO: move this somewhere else
     if(model.getBallExists())
     {
-
         if (model.ballX()*width/2.0f - model.dogX()*width/2.0f > 0)
         {
-            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
+            dog.setScale(4.0,4.0);
             emit dogWalkRight();
         }
         else
         {
-            dog.setTextureRect(sf::IntRect(dogTex.getSize().x, 0, -dogTex.getSize().x, dogTex.getSize().y));
+            dog.setScale(-4.0,4.0);
             emit dogWalkLeft();
         }
     }
     else if(model.getTreatExists())
     {
-
         if(model.treatX()*width/2.0f - model.dogX()*width/2.0f > 0)
         {
-            dog.setTextureRect(sf::IntRect(0, 0, dogTex.getSize().x, dogTex.getSize().y));
+            dog.setScale(4.0,4.0);
             emit dogWalkRight();
         }
         else
         {
-            dog.setTextureRect(sf::IntRect(dogTex.getSize().x, 0, -dogTex.getSize().x, dogTex.getSize().y));
+            dog.setScale(-4.0,4.0);
             emit dogWalkLeft();
         }
     }

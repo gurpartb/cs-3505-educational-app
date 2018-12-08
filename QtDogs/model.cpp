@@ -117,7 +117,7 @@ void Model::createTreat()
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(1.0f,0.1f);
     BodyDef.type = b2_dynamicBody;
-    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX),0.0f);
+    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0-1.0,0.0f);
     treat = world->CreateBody(&BodyDef);
 
     b2PolygonShape shape;
@@ -217,6 +217,9 @@ void Model::createScene()
     }
 }
 
+///
+/// \brief Model::dogCollisions
+///
 void Model::dogCollisions()
 {
     for (b2ContactEdge* edge = dogBody->GetContactList() ; edge; edge = edge->next)
@@ -235,7 +238,7 @@ void Model::dogCollisions()
               if (edge->contact->GetFixtureB()->GetBody() == ball)
               {
                   //emit ball sound
-                  if (ballplayCount == 100){
+                  if (ballplayCount == 50){
                       ball->SetActive(false);
                       ballExists = false;
                   }
@@ -260,6 +263,9 @@ void Model::dogCollisions()
     }
 }
 
+///
+/// \brief Model::ballCollisions
+///
 void Model::ballCollisions()
 {
     for (b2ContactEdge* edge = ball->GetContactList() ; edge; edge = edge->next)
@@ -286,6 +292,9 @@ void Model::ballCollisions()
     }
 }
 
+///
+/// \brief Model::treatCollisions
+///
 void Model::treatCollisions()
 {
     for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
@@ -324,13 +333,11 @@ void Model::dogPlayedWithBall()
     if(ballExists)
     {
         ball->SetActive(false);
-        //world->DestroyBody(ball);
         ballExists = false;
     }
     if(treatExists)
     {
         treat->SetActive(false);
-//        world->DestroyBody(treat);
         treatExists = false;
     }
     createBall();
@@ -358,6 +365,9 @@ void Model::dogWalkRight()
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
+///
+/// \brief Model::checkCollisions
+///
 void Model::checkCollisions()
 {
     if(ballExists)
