@@ -353,7 +353,7 @@ bool Dog::increaseBathroom()
 {
     if (bathroom < 90)
     {
-        bathroom += 1;
+        bathroom += 0.0055555f;
         if ((bathroom > 60 && trustLevel < 6) || (bathroom > 80 && trustLevel < 7))
         {
             return true;

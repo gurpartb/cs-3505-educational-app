@@ -84,8 +84,8 @@ public slots:
 signals:
     void updateLevels(int);
     void updateTrustLevel(int);
-    void updateHungerLevel(int);
-    void updateBathroomLevel(int);
+    void updateHungerLevel(float);
+    void updateBathroomLevel(float);
     void updateTrustProgress(int);
     void ballOnScreen(bool);
     void foodOnScreen(bool);
