@@ -26,6 +26,8 @@ private:
     b2Body* rightWall;
     b2Body* leftWall;
 
+    int ballplayCount;
+
     int bathroomProgress;
     int hungerProgress;
     int trustProgress;
@@ -34,12 +36,13 @@ private:
     bool ballExists;
     bool treatExists;
     bool foodExists;
+    bool isNight;
 
 public:
-
     Model();
     virtual ~Model();
-    void update();
+
+    void update();    
 
     float ballX(){return ball->GetPosition().x;}
     float ballY(){return ball->GetPosition().y;}
@@ -58,8 +61,13 @@ public:
 
     float dogX(){return dogBody->GetPosition().x;}
     float dogY(){return dogBody->GetPosition().y;}
+    std::string getDogState(){return dog->getDogState();}
 
-
+    float getDogHunger(){return dog->getHunger();}
+    float getDogBathroom(){return dog->getBathroom();}
+    int getDogTrustLevel(){return dog->getTrustLevel();}
+    int getDogTrustProgress(){return dog->getTrustProgress();}
+    bool getDogDirectionLeft(){return dog->getDogDirectionLeft();}
 
 private:
     void createBall();
@@ -67,6 +75,7 @@ private:
     void createFood();
     void createScene();
     void createDog();
+
     void dogCollisions();
     void ballCollisions();
     void treatCollisions();

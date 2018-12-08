@@ -14,6 +14,7 @@ class Dog: public QObject
     Q_OBJECT
 
 private:
+    bool isDogInPark;
     bool ballExists;
     bool foodExists;
     bool treatExists;
@@ -27,8 +28,8 @@ private:
     int trustLevel;
     int trustProgress;
     bool dogDirectionLeft;
-    float walkSpeed = 5.0f;
-    float runSpeed = 7.0f;
+    float walkSpeed = 0.015f;
+    float runSpeed = 0.017f;
     b2Vec2 currentForce;
     std::vector<std::string> currentStateFlag = {"Sit", "Flip", "Walk"};
     std::string currentState;
@@ -36,28 +37,20 @@ private:
 public:
     Dog();
     virtual ~Dog();
+
     b2Vec2 UpdateDogState(bool);
     std::string getDogState();
-    void feedTreat();
+
     float getHunger();
     float getBathroom();
     int getTrustLevel();
     int getTrustProgress();
-    void feedFood();
-
-private:
     bool getDogDirectionLeft();
-    bool increaseHunger();
-    void resetHunger();
-    bool increaseBathroom();
-    void resetBathroom();
-    void increaseTrustLevel();
-    void increaseTrustProgress();
-    void decreaseTrustProgress();
-    void decreaseTrustLevel();
-    void resetTrustLevel();
 
-public slots:
+    void feedFood();
+    void feedTreat();
+    void resetBathroom();
+    void DogInPark(bool);
     void doesBallExist(bool);
     void doesFoodExist(bool);
     void doesTreatExist(bool);
@@ -65,6 +58,19 @@ public slots:
     void DogPositionX(float);
     void FoodPositionX(float);
     void TreatPositionX(float);
+
+private:
+    bool getRandomDogDirectionLeft();
+    bool increaseHunger();
+    void resetHunger();
+    bool increaseBathroom();
+
+    void increaseTrustLevel();
+    void increaseTrustProgress();
+    void decreaseTrustProgress();
+    void decreaseTrustLevel();
+    void resetTrustLevel();
+
 };
 
 #endif // DOG_H
