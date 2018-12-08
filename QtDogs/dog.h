@@ -1,3 +1,10 @@
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
+
 #ifndef DOG_H
 #define DOG_H
 
@@ -10,7 +17,10 @@
 #include <math.h>
 #include <QDebug>
 
-
+///
+/// \brief The Dog class
+/// Provides all implementation of the dog, holds dog's AI and positioning.
+///
 class Dog: public QObject
 {
 

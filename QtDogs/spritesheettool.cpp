@@ -1,18 +1,25 @@
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
+
 #include "spritesheettool.h"
 #include <iostream>
 
+///
+/// \brief SpriteSheetTool::SpriteSheetTool
+/// SpriteSheet tool constructor.
 SpriteSheetTool::SpriteSheetTool()
 {
 
 }
 
-void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, std::string name, std::string path)
-{
-    sf::Image img;
-    img.loadFromFile(path);
-    //addAnimation(x,y,w,h,numFrames,name,img);
-}
-
+///
+/// \brief SpriteSheetTool::addAnimation
+/// Generic method to add animations to the spritesheet.
+///
 void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, std::string name, sf::Texture& img)
 {
 

@@ -1,3 +1,10 @@
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -20,6 +27,10 @@ namespace Ui {
 class MainWindow;
 }
 
+///
+/// \brief The MainWindow class
+/// Proivdes UI display of the QT Dogs application along with handling button presses and any UI.
+///
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -30,8 +41,15 @@ public:
 
 private:
     Model model;
-    sf::Sound sound;
-    sf::SoundBuffer buffer;
+    sf::Sound musicSound;
+    sf::Sound eatSound;
+    sf::Sound whistleSound;
+    sf::Sound bounceSound;
+
+    sf::SoundBuffer musicBuffer;
+    sf::SoundBuffer eatBuffer;
+    sf::SoundBuffer whistleBuffer;
+    sf::SoundBuffer bounceBuffer;
 
     sf::RenderTexture frame;
 
@@ -44,6 +62,7 @@ private:
     sf::Sprite treat;
     sf::Sprite dog;
     sf::Sprite background;
+    sf::Sprite food;
 
     std::string dogAnimation;
     std::string prevDogAnimation;
@@ -54,6 +73,7 @@ private:
     sf::Texture daytimePath;
     sf::Texture eveningPath;
     sf::Texture nightPath;
+    sf::Texture foodTex;
 
     int width;
     int height;
@@ -90,6 +110,9 @@ private slots:
     void startGame();
 
     void on_instructionsButton_clicked();
+    void playBounceSound();
+    void playWhistleSound();
+    void playEatSound();
 
 signals:
     void dogWalkLeft();
