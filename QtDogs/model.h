@@ -100,7 +100,7 @@ public slots:
     void dogLetOut();
     void dogWalkLeft();
     void dogWalkRight();
-
+    void dogTreat();
 signals:
     void updateLevels(int);
     void updateTrustLevel(int);
@@ -114,6 +114,9 @@ signals:
     void currentDogPosX(float);
     void currentFoodPosX(float);
     void currentTreatPosX(float);
+    void playBounceSound();
+    void playWhistleSound();
+    void playEatSound();
 
 };
 
