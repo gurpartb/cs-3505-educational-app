@@ -240,42 +240,42 @@ void Model::dogCollisions()
 {
     for (b2ContactEdge* edge = dogBody->GetContactList() ; edge; edge = edge->next)
     {
-          if (edge->contact->IsTouching())
-          {
-              if (edge->contact->GetFixtureB()->GetBody() == rightWall)
-              {
-                  //emit pan right background
-              }
-              if (edge->contact->GetFixtureB()->GetBody() == leftWall)
-              {
-                  //emit pan left background
-              }
-              if (edge->contact->GetFixtureB()->GetBody() == ball)
-              {
-                  //emit ball sound
-                  if (ballplayCount == 30){
-                      ball->SetActive(false);
-                      ballExists = false;
-                  }
-                  else
-                  {
-                      ballplayCount++;
-                  }
-              }
-              if (edge->contact->GetFixtureB()->GetBody() == treat)
-              {
-                  treat->SetActive(false);
-                  treatExists = false;
-                  dog->feedTreat();
-              }
-              if (edge->contact->GetFixtureB()->GetBody() == food)
-              {
-                  //emit eating sound
-                  //make food disappear
-                  //change state to idle
-                  dog->feedFood();
-              }
-          }
+        if (edge->contact->IsTouching())
+        {
+            if (edge->contact->GetFixtureB()->GetBody() == rightWall)
+            {
+                //emit pan right background
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == leftWall)
+            {
+                //emit pan left background
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == ball)
+            {
+                //emit ball sound
+                if (ballplayCount == 30){
+                    ball->SetActive(false);
+                    ballExists = false;
+                }
+                else
+                {
+                    ballplayCount++;
+                }
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == treat)
+            {
+                treat->SetActive(false);
+                treatExists = false;
+                dog->feedTreat();
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == food)
+            {
+                //emit eating sound
+                //make food disappear
+                //change state to idle
+                dog->feedFood();
+            }
+        }
     }
 }
 
@@ -283,25 +283,25 @@ void Model::ballCollisions()
 {
     for (b2ContactEdge* edge = ball->GetContactList() ; edge; edge = edge->next)
     {
-          if (edge->contact->IsTouching())
-          {
-              if (edge->contact->GetFixtureB()->GetBody() == rightWall)
-              {
-                  //emit bounce sound
-              }
-              if (edge->contact->GetFixtureB()->GetBody() == leftWall)
-              {
-                  //emit bounce sound
-              }
-              if (edge->contact->GetFixtureB()->GetBody() == ground)
-              {
-                  //emit bounce sound
-              }
-              if (edge->contact->GetFixtureB()->GetBody() == ceiling)
-              {
-                  //emit bounce sound
-              }
-          }
+        if (edge->contact->IsTouching())
+        {
+            if (edge->contact->GetFixtureB()->GetBody() == rightWall)
+            {
+                //emit bounce sound
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == leftWall)
+            {
+                //emit bounce sound
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == ground)
+            {
+                //emit bounce sound
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == ceiling)
+            {
+                //emit bounce sound
+            }
+        }
     }
 }
 
@@ -309,13 +309,13 @@ void Model::treatCollisions()
 {
     for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
     {
-          if (edge->contact->IsTouching())
-          {
-              if (edge->contact->GetFixtureB()->GetBody() == ground)
-              {
-                  //emit falling sound
-              }
-          }
+        if (edge->contact->IsTouching())
+        {
+            if (edge->contact->GetFixtureB()->GetBody() == ground)
+            {
+                //emit falling sound
+            }
+        }
     }
 }
 

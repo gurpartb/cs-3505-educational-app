@@ -7,73 +7,73 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-        ui->setupUi(this);
+    ui->setupUi(this);
 
-        //Model connections
-        connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
-        connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
-        connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
-        connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
-        connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
-        connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
-        connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustProgressBar_valueChanged);
-        connect(&model, &Model::updateHungerLevel, this, &MainWindow::on_hungerProgressBar_valueChanged);
-        connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
+    //Model connections
+    connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
+    connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
+    connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
+    connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
+    connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
+    connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
+    connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustProgressBar_valueChanged);
+    connect(&model, &Model::updateHungerLevel, this, &MainWindow::on_hungerProgressBar_valueChanged);
+    connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
 
-        connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
-        connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
+    connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
+    connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
 
-        connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
-        connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
-
-
-        width = ui->imageLabel->size().width();
-        height = ui->imageLabel->size().height();
+    connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
+    connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
 
 
-        ui->hungerProgressBar->setValue(0);
-        ui->bathroomProgressBar->setValue(0);
-        ui->trustProgressBar->setValue(0);
-        ui->levelNumber->display(1);
-
-        animationDelayCounter = 0;
-
-        //setup sfml stuff
-        loadAnimations();
-        frame.create(unsigned(width), unsigned(height));
-
-        backgroundTex.loadFromFile("../QtDogs/assets/Splash_Screen.png");
-        background.setTexture(backgroundTex);
-        background.setScale(1.0f,1.0f);
-        backgroundAnimation = "Splash_Screen";
-
-        ballTex.loadFromFile("../QtDogs/assets/Beach_Ball.png");
-        ball.setTexture(ballTex);
-        ball.setOrigin(64,64);
-
-        treatTex.loadFromFile("../QtDogs/assets/Dog_biscuit.png");
-        treat.setTexture(treatTex);
-        treat.setScale(0.25f,0.25f);
-        treat.setOrigin(128,128);
+    width = ui->imageLabel->size().width();
+    height = ui->imageLabel->size().height();
 
 
-        dog.setTexture(dogTex);
-        dog.setScale(4.0,4.0);
-        dog.setOrigin(18,0);
-        dogAnimation = "Dog_Idle";
+    ui->hungerProgressBar->setValue(0);
+    ui->bathroomProgressBar->setValue(0);
+    ui->trustProgressBar->setValue(0);
+    ui->levelNumber->display(1);
 
-        //create timers
-        timeOfDayChange = new QTimer(this);
-        connect(timeOfDayChange, SIGNAL(timeout()), this, SLOT(changeTimeOfDay()));
-        timeOfDayChange->start(180000);
+    animationDelayCounter = 0;
 
-        timer = new QTimer(this);
-        connect(timer,SIGNAL(timeout()),this,SLOT(update()));
-        timer->start(1000/30);
+    //setup sfml stuff
+    loadAnimations();
+    frame.create(unsigned(width), unsigned(height));
+
+    backgroundTex.loadFromFile("../QtDogs/assets/Splash_Screen.png");
+    background.setTexture(backgroundTex);
+    background.setScale(1.0f,1.0f);
+    backgroundAnimation = "Splash_Screen";
+
+    ballTex.loadFromFile("../QtDogs/assets/Beach_Ball.png");
+    ball.setTexture(ballTex);
+    ball.setOrigin(64,64);
+
+    treatTex.loadFromFile("../QtDogs/assets/Dog_biscuit.png");
+    treat.setTexture(treatTex);
+    treat.setScale(0.25f,0.25f);
+    treat.setOrigin(128,128);
 
 
-        //start
-        startSplashScreen();
+    dog.setTexture(dogTex);
+    dog.setScale(4.0,4.0);
+    dog.setOrigin(18,0);
+    dogAnimation = "Dog_Idle";
+
+    //create timers
+    timeOfDayChange = new QTimer(this);
+    connect(timeOfDayChange, SIGNAL(timeout()), this, SLOT(changeTimeOfDay()));
+    timeOfDayChange->start(180000);
+
+    timer = new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(update()));
+    timer->start(1000/30);
+
+
+    //start
+    startSplashScreen();
 }
 
 void MainWindow::loadAnimations()
@@ -97,14 +97,14 @@ void MainWindow::loadAnimations()
     sf::Image splashScreenPath;
     splashScreenPath.loadFromFile("../QtDogs/assets/Splash_Screen.png");
     for(int i = 0; i < 7; ++i)
-           spriteSheetTool.addAnimation(0, i*768, 768, 768,  8, "Splash_Screen", splashScreenPath);
+        spriteSheetTool.addAnimation(0, i*768, 768, 768,  8, "Splash_Screen", splashScreenPath);
     spriteSheetTool.addAnimation(0,   5376,  768, 768,  7, "Splash_Screen",    splashScreenPath);
 
 
     sf::Image daytimePath;
     daytimePath.loadFromFile("../QtDogs/assets/Daytime.png");
     for(int i = 0; i < 5; ++i)
-         spriteSheetTool.addAnimation(0,   768*i,   768, 768,  5, "Daytime",    daytimePath);
+        spriteSheetTool.addAnimation(0,   768*i,   768, 768,  5, "Daytime",    daytimePath);
     spriteSheetTool.addAnimation(0,   3840,  768, 768,  1, "Daytime",    daytimePath);
 
 
@@ -124,31 +124,31 @@ void MainWindow::loadAnimations()
 
 void MainWindow::updateDogAnimation()
 {
-    dogAnimationLength = spriteSheetTool.getAnimationFrameCount(dogAnimation);
-    sf::Texture* texture = spriteSheetTool.getAnimationFrame(dogAnimation, dogFrameNumber);
-
-    dog.setOrigin(texture->getSize().x/2,texture->getSize().y - 12);
-    dog.setTextureRect(sf::IntRect(0,0,texture->getSize().x,texture->getSize().y));
-    dog.setTexture(*texture);
+    ++dogFrameNumber;
 
     if(dogFrameNumber >= dogAnimationLength)
         dogFrameNumber = 0;
 
-    ++dogFrameNumber;
+    dogAnimationLength = spriteSheetTool.getAnimationFrameCount(dogAnimation);
+    sf::Texture* texture = spriteSheetTool.getAnimationFrame(dogAnimation, dogFrameNumber);
+
+    dog.setOrigin(texture->getSize().x/2,texture->getSize().y - 12);
+    dog.setTextureRect(sf::IntRect(0,0,int(texture->getSize().x),int(texture->getSize().y)));
+    dog.setTexture(*texture);
 }
 
 void MainWindow::updateBackgroundAnimation()
 {
-    backgroundAnimationLength = spriteSheetTool.getAnimationFrameCount(backgroundAnimation);
-    sf::Texture* texture = spriteSheetTool.getAnimationFrame(backgroundAnimation, backgroundFrameNumber);
-
-    background.setTextureRect(sf::IntRect(0,0,texture->getSize().x,texture->getSize().y));
-    background.setTexture(*texture);
+    ++backgroundFrameNumber;
 
     if(backgroundFrameNumber >= backgroundAnimationLength)
         backgroundFrameNumber = 0;
 
-    ++backgroundFrameNumber;
+    backgroundAnimationLength = spriteSheetTool.getAnimationFrameCount(backgroundAnimation);
+    sf::Texture* texture = spriteSheetTool.getAnimationFrame(backgroundAnimation, backgroundFrameNumber);
+
+    background.setTextureRect(sf::IntRect(0,0,int(texture->getSize().x),int(texture->getSize().y)));
+    background.setTexture(*texture);
 }
 
 void MainWindow::startSplashScreen()
@@ -179,12 +179,12 @@ void MainWindow::update()
     {
         updateDogAnimation();
         updateBackgroundAnimation();
-        animationDelayCounter = 4;
+        animationDelayCounter = 6;
     }
     else --animationDelayCounter;
 
 
-    frame.clear(sf::Color::White);
+    frame.clear(sf::Color::Transparent);
     frame.draw(background);
 
     if(model.getBallExists())

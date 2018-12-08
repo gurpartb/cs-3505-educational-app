@@ -27,6 +27,7 @@ private:
     float bathroom;
     int trustLevel;
     int trustProgress;
+    int animationFrameNumber;
     bool dogDirectionLeft;
     float walkSpeed = 0.015f;
     float runSpeed = 0.017f;

@@ -11,7 +11,7 @@
 
 class SpriteSheetTool : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     SpriteSheetTool();
     void addAnimation(int x, int y, int w, int h, int numFrames, std::string name, std::string path);
