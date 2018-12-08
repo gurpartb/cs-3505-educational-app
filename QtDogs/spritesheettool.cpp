@@ -83,7 +83,7 @@ void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, st
 /// \param name
 /// \param frameCount
 ///
-void SpriteSheetTool::getAnimationFrame(std::string name, int frameCount){
-    //sf::Texture texture = ;
+void SpriteSheetTool::getAnimationFrame(std::string name, int frameCount)
+{
     emit imageSendSignal(dict[name][frameCount]);
 }

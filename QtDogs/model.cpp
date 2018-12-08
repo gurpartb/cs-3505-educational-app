@@ -35,7 +35,7 @@ Model::~Model(){
 void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
-    //checkCollisions();
+    checkCollisions();
     if (ballExists)
     {
         emit currentBallPosX(ballX());
@@ -220,18 +220,19 @@ void Model::dogCollisions()
               if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
               {
                   //emit pan left background
+
               }
-              if (edge->contact->GetFixtureB()->GetUserData() == ball->GetUserData())
+              if (edge->contact->GetFixtureB()->GetBody() == ball)
               {
                   //emit ball sound
-//                  world->DestroyBody(ball);
-//                  ballExists = false;
+                  world->DestroyBody(ball);
+                  ballExists = false;
               }
               if (edge->contact->GetFixtureB()->GetUserData() == treat->GetUserData())
               {
                   //emit eating sound
                   //make treat disappear
-                  //change state to idle
+                  //change state to idl
               }
               if (edge->contact->GetFixtureB()->GetUserData() == food->GetUserData())
               {
