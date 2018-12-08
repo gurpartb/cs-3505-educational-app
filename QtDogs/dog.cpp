@@ -12,7 +12,7 @@
     currentDogPositionX = 0;
     currentFoodPositionX = 0;
     currentTreatPositionX = 0;
-    hunger = 0;
+    hunger = 100;
     bathroom = 0;
     trustLevel = 0;
     currentState = "Idle";
@@ -43,12 +43,20 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             srand(static_cast <unsigned int> (time(nullptr)));
-            unsigned long stateFlagChoice = (unsigned long)((static_cast<float>(rand()) * 3.0f) / static_cast<float>(RAND_MAX));
-            std::string stateFlag = currentStateFlag[stateFlagChoice];
+            float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
+
+            std::string stateFlag = currentStateFlag[2];
+            if(stateFlagChoice < 0.1f)
+                stateFlag = currentStateFlag[0];
+            else if(stateFlagChoice < 0.15f)
+                stateFlag = currentStateFlag[1];
+
+
+
 
             if(isHungry && hunger >= 0)
             {
-                currentState = "Bark";
+                currentState = "Barking";
             }
             else if(needsToGo)
             {
@@ -68,7 +76,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             }
             else if(stateFlag == "Flip")
             {
-                currentState = "Flip";
+                currentState = "Flipping";
             }
             else if(stateFlag == "Walk")
             {
@@ -77,7 +85,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         }
         else if(currentState == "Walking")
         {
-            if(getDogDirectionLeft())
+            if(getRandomDogDirectionLeft())
             {
                 dogDirectionLeft = true;
                 currentForce.x = -walkSpeed;
@@ -91,11 +99,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             //Random change of behavior to running or idle
             srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 33)
+            if(behaviorChangeChance < 10)
             {
                 currentState = "Running";
             }
-            else if(behaviorChangeChance >= 33)
+            else if(behaviorChangeChance >= 10)
             {
                 currentState = "Idle";
             }
@@ -146,12 +154,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             resetBathroom();
             currentState = "Idle";
         }
-        else if(currentState == "Flip")
+        else if(currentState == "Flipping")
         {
             currentForce = b2Vec2_zero;
             currentState = "Idle";
         }
-        else if(currentState == "Bark")
+        else if(currentState == "Barking")
         {
             currentForce = b2Vec2_zero;
             //Bark at random intervals
@@ -381,7 +389,7 @@ std::string Dog::getDogState()
 bool Dog::getRandomDogDirectionLeft()
 {
     srand(static_cast <unsigned int> (time(nullptr)));
-    int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+    int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX)+0.5);
     if(dogDirectionChance == 0)
     {
         return true;

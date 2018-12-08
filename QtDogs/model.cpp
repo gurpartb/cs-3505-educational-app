@@ -35,6 +35,21 @@ Model::~Model(){
 void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
+
+    dog->doesBallExist(ballExists);
+    dog->doesFoodExist(foodExists);
+    dog->doesTreatExist(treatExists);
+
+    if(ballExists)
+        dog->BallPositionX(ballX());
+    if(foodExists)
+        dog->FoodPositionX(foodX());
+    if(treatExists)
+        dog->TreatPositionX(treatX());
+    dog->DogPositionX(dogX());
+
+    dogBody->ApplyLinearImpulse(dog->UpdateDogState(isNight), dogBody->GetWorldCenter(),true);
+
     checkCollisions();
 
     if (ballExists)
@@ -238,7 +253,7 @@ void Model::dogCollisions()
               if (edge->contact->GetFixtureB()->GetBody() == ball)
               {
                   //emit ball sound
-                  if (ballplayCount == 50){
+                  if (ballplayCount == 30){
                       ball->SetActive(false);
                       ballExists = false;
                   }
@@ -251,18 +266,18 @@ void Model::dogCollisions()
               {
                   treat->SetActive(false);
                   treatExists = false;
-                  //change state to idle
+                  dog->feedTreat();
               }
               if (edge->contact->GetFixtureB()->GetBody() == food)
               {
                   //emit eating sound
                   //make food disappear
                   //change state to idle
+                  dog->feedFood();
               }
           }
     }
 }
-
 
 void Model::ballCollisions()
 {
@@ -290,7 +305,6 @@ void Model::ballCollisions()
     }
 }
 
-
 void Model::treatCollisions()
 {
     for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
@@ -305,7 +319,8 @@ void Model::treatCollisions()
     }
 }
 
-void Model::dogPetted(){
+void Model::dogPetted()
+{
 
 }
 
@@ -339,12 +354,14 @@ void Model::dogPlayedWithBall()
     createBall();
 }
 
-void Model::dogWentToThePark(){
-
+void Model::dogWentToThePark()
+{
+    dog->DogInPark(true);
 }
 
-void Model::dogLetOut(){
-
+void Model::dogLetOut()
+{
+    dog->resetBathroom();
 }
 
 void Model::dogWalkLeft()

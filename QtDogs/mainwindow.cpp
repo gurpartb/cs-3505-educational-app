@@ -89,9 +89,8 @@ void MainWindow::loadAnimations()
     spriteSheetTool.addAnimation(0,   189,  36, 26, 9, "Dog_BeginSleep", dogPath);
     spriteSheetTool.addAnimation(360, 189,  36, 26, 13, "Dog_Sleeping",   dogPath);
     spriteSheetTool.addAnimation(122, 215,  36, 24, 9, "Dog_WakeUp",     dogPath);
-    spriteSheetTool.addAnimation(0, 240, 36, 26, 11,    "Dog_Walking",    dogPath);
-    spriteSheetTool.addAnimation(0, 263, 36, 26, 4,     "Dog_Running",    dogPath);
-    spriteSheetTool.addAnimation(0, 265, 36, 26, 4,     "Dog_Walking",    dogPath);
+    spriteSheetTool.addAnimation(0, 240, 36, 24, 11,    "Dog_Walking",    dogPath);
+    spriteSheetTool.addAnimation(0, 263, 36, 25, 4,     "Dog_Running",    dogPath);
     spriteSheetTool.addAnimation(0, 316, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
 
@@ -126,11 +125,11 @@ void MainWindow::loadAnimations()
 void MainWindow::updateDogAnimation()
 {
     dogAnimationLength = spriteSheetTool.getAnimationFrameCount(dogAnimation);
-    sf::Texture texture = spriteSheetTool.getAnimationFrame(dogAnimation, dogFrameNumber);
+    sf::Texture* texture = spriteSheetTool.getAnimationFrame(dogAnimation, dogFrameNumber);
 
-    dog.setOrigin(texture.getSize().x/2,texture.getSize().y/2);
-    dog.setTextureRect(sf::IntRect(0,0,texture.getSize().x,texture.getSize().y));
-    dogTex = texture;
+    dog.setOrigin(texture->getSize().x/2,texture->getSize().y - 12);
+    dog.setTextureRect(sf::IntRect(0,0,texture->getSize().x,texture->getSize().y));
+    dog.setTexture(*texture);
 
     if(dogFrameNumber >= dogAnimationLength)
         dogFrameNumber = 0;
@@ -141,10 +140,10 @@ void MainWindow::updateDogAnimation()
 void MainWindow::updateBackgroundAnimation()
 {
     backgroundAnimationLength = spriteSheetTool.getAnimationFrameCount(backgroundAnimation);
-    sf::Texture texture = spriteSheetTool.getAnimationFrame(backgroundAnimation, backgroundFrameNumber);
+    sf::Texture* texture = spriteSheetTool.getAnimationFrame(backgroundAnimation, backgroundFrameNumber);
 
-    background.setTextureRect(sf::IntRect(0,0,texture.getSize().x,texture.getSize().y));
-    backgroundTex = texture;
+    background.setTextureRect(sf::IntRect(0,0,texture->getSize().x,texture->getSize().y));
+    background.setTexture(*texture);
 
     if(backgroundFrameNumber >= backgroundAnimationLength)
         backgroundFrameNumber = 0;
@@ -166,35 +165,16 @@ void MainWindow::update()
 {
     model.update();
 
-    //TODO: move this somewhere else
-    if(model.getBallExists())
-    {
-        if (model.ballX()*width/2.0f - model.dogX()*width/2.0f > 0)
-        {
-            dog.setScale(4.0,4.0);
-            emit dogWalkRight();
-        }
-        else
-        {
-            dog.setScale(-4.0,4.0);
-            emit dogWalkLeft();
-        }
-    }
-    else if(model.getTreatExists())
-    {
-        if(model.treatX()*width/2.0f - model.dogX()*width/2.0f > 0)
-        {
-            dog.setScale(4.0,4.0);
-            emit dogWalkRight();
-        }
-        else
-        {
-            dog.setScale(-4.0,4.0);
-            emit dogWalkLeft();
-        }
-    }
+    std::string tmp =  model.getDogState();
+    if(tmp == "Playing" || tmp == "Eating")tmp = "Running";
+    dogAnimation = "Dog_" + tmp;
 
+    if(model.getDogDirectionLeft())
+        dog.setScale(-4.0,4.0);
+    else
+        dog.setScale(4.0,4.0);
 
+    //update animations
     if(animationDelayCounter <= 1)
     {
         updateDogAnimation();
@@ -240,28 +220,17 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-///
-/// \brief MainWindow::on_trustProgressBar_valueChanged
-/// \param value
-///
+
 void MainWindow::on_trustProgressBar_valueChanged(int value)
 {
     ui->trustProgressBar->setValue(value);
 }
 
-///
-/// \brief MainWindow::on_hungerProgressBar_valueChanged
-/// \param value
-///
 void MainWindow::on_hungerProgressBar_valueChanged(int value)
 {
     ui->hungerProgressBar->setValue(value);
 }
 
-///
-/// \brief MainWindow::on_bathroomProgressBar_valueChanged
-/// \param value
-///
 void MainWindow::on_bathroomProgressBar_valueChanged(int value)
 {
     ui->bathroomProgressBar->setValue(value);
@@ -272,20 +241,14 @@ void MainWindow::on_trustLevel_valueChanged(int value)
     ui->levelNumber->display(value);
 }
 
-///
-/// \brief MainWindow::updatePoopBar
-///
 void MainWindow::updatePoopBar()
 {
-    emit updateBathroomProgressBar();
+
 }
 
-///
-/// \brief MainWindow::updateHungerBar
-///
 void MainWindow::updateHungerBar()
 {
-    emit updateHungerProgressBar();
+
 }
 
 void MainWindow::playMusic()
