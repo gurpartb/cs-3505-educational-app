@@ -24,6 +24,9 @@ public:
     ~MainWindow();
     int dogX, dogY;
 
+
+    std::string dogAnimation;
+
     Model model;
     sf::Sound sound;
     sf::SoundBuffer buffer;

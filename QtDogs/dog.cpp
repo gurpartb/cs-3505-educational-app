@@ -6,7 +6,7 @@
 /// \brief Dog::Dog:
 /// Dog constructor.
 ///
-Dog::Dog()
+ Dog::Dog()
 {
     currentBallPositionX = 0;
     currentDogPositionX = 0;
@@ -27,7 +27,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
 
     bool isHungry = increaseHunger();
     bool needsToGo = false;
-
 
     if(hunger >= 50) {
         needsToGo = increaseBathroom();
