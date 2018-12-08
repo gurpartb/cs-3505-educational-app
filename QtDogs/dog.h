@@ -45,9 +45,10 @@ public:
     int getTrustLevel();
     int getTrustProgress();
     void feedFood();
+    bool getDogDirectionLeft();
 
 private:
-    bool getDogDirectionLeft();
+    bool getRandomDogDirectionLeft();
     bool increaseHunger();
     void resetHunger();
     bool increaseBathroom();
