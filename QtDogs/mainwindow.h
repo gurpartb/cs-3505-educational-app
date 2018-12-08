@@ -1,3 +1,10 @@
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -20,6 +27,10 @@ namespace Ui {
 class MainWindow;
 }
 
+///
+/// \brief The MainWindow class
+/// Proivdes UI display of the QT Dogs application along with handling button presses and any UI.
+///
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

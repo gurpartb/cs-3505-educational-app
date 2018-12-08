@@ -1,5 +1,16 @@
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
+
 #include "model.h"
 
+///
+/// \brief Model::Model
+/// Model constructor to initalize objects and set connections.
+///
 Model::Model(){
     gravity = new b2Vec2(0.0f,9.81f);
     world = new b2World(*gravity);
@@ -28,10 +39,18 @@ Model::Model(){
     connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
 }
 
+///
+/// \brief Model::~Model
+/// Model destructor
+///
 Model::~Model(){
 
 }
 
+///
+/// \brief Model::update
+/// Update function to handle all of the Box-2d updating and to emit signals back to the MainWindow.
+///
 void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
@@ -72,6 +91,10 @@ void Model::update()
     emit updateTrustProgress(dog->getTrustProgress());
 }
 
+///
+/// \brief Model::createBall
+/// Craetes the Ball object using Box-2D
+///
 void Model::createBall()
 {
     ballExists = true;
@@ -98,6 +121,10 @@ void Model::createBall()
     emit ballOnScreen(ballExists);
 }
 
+///
+/// \brief Model::createDog
+/// Creates the dog object using Box-2D
+///
 void Model::createDog()
 {
     b2BodyDef BodyDef;
@@ -125,6 +152,10 @@ void Model::createDog()
     dog = new Dog();
 }
 
+///
+/// \brief Model::createTreat
+/// Creates the treat object using Box-2D
+///
 void Model::createTreat()
 {
     treatExists = true;
@@ -169,6 +200,10 @@ void Model::createFood()
     emit treatOnScreen(treatExists);
 }
 
+///
+/// \brief Model::createScene
+/// Creates the scene borders using Box-2d
+///
 void Model::createScene()
 {
     //ground
@@ -236,6 +271,10 @@ void Model::createScene()
     }
 }
 
+///
+/// \brief Model::dogCollisions
+/// Sets up all collisions of the dog with objects whether it be the walls or other objects like the ball using Box-2D.
+///
 void Model::dogCollisions()
 {
     for (b2ContactEdge* edge = dogBody->GetContactList() ; edge; edge = edge->next)
@@ -279,6 +318,10 @@ void Model::dogCollisions()
     }
 }
 
+///
+/// \brief Model::ballCollisions
+/// Handles all ball collisions with the walls and dog using Box-2D
+///
 void Model::ballCollisions()
 {
     for (b2ContactEdge* edge = ball->GetContactList() ; edge; edge = edge->next)
@@ -305,6 +348,10 @@ void Model::ballCollisions()
     }
 }
 
+///
+/// \brief Model::treatCollisions
+/// Handles all treat collisions on the walls and the dog using Box-2D
+///
 void Model::treatCollisions()
 {
     for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
@@ -319,11 +366,19 @@ void Model::treatCollisions()
     }
 }
 
+///
+/// \brief Model::dogTrick
+/// Allows for the dog to do a flip when user presses the button.
+///
 void Model::dogTrick()
 {
     //emit dog flip
 }
 
+///
+/// \brief Model::dogFed
+/// Drops food for the dog and handles eating.
+///
 void Model::dogFed()
 {
     if(ballExists)
@@ -339,6 +394,10 @@ void Model::dogFed()
     createTreat();
 }
 
+///
+/// \brief Model::dogPlayedWithBall
+/// Handles when the user clicks the ball button to let the dog play with the ball.
+///
 void Model::dogPlayedWithBall()
 {
     if(ballExists)
@@ -354,28 +413,48 @@ void Model::dogPlayedWithBall()
     createBall();
 }
 
+///
+/// \brief Model::dogWentToThePark
+/// Changes the scenery and allows the dog to go to the park and handles park information.
+///
 void Model::dogWentToThePark()
 {
     dog->DogInPark(true);
 }
 
+///
+/// \brief Model::dogLetOut
+/// Handles letting the dog go outside to use the restroom.
+///
 void Model::dogLetOut()
 {
     dog->resetBathroom();
 }
 
+///
+/// \brief Model::dogWalkLeft
+/// Information for the dog to walk left using Box-2D forces.
+///
 void Model::dogWalkLeft()
 {
     b2Vec2 vec(-0.01f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
+///
+/// \brief Model::dogWalkRight
+/// Information for the dog to walk right using Box-2D forces.
+///
 void Model::dogWalkRight()
 {
     b2Vec2 vec(0.01f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
+///
+/// \brief Model::checkCollisions
+/// Checks if the dog collides with any active object on screen.
+///
 void Model::checkCollisions()
 {
     if(ballExists)

@@ -1,5 +1,11 @@
-#include "dog.h"
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
 
+#include "dog.h"
 
 ///
 /// \brief Dog::Dog:
@@ -18,11 +24,21 @@ Dog::Dog()
     isDogInPark = false;
 }
 
+///
+/// \brief Dog::~Dog
+/// Dog Destructor
+///
 Dog::~Dog()
 {
 
 }
 
+///
+/// \brief Dog::UpdateDogState
+/// Updates the current dog state, main AI for the entire project.
+/// \param isNight - Determines if the dog should be sleeping or not.
+/// \return Vector of moving positions.
+///
 b2Vec2 Dog::UpdateDogState(bool isNight){
 
     bool isHungry = increaseHunger();
@@ -393,7 +409,7 @@ std::string Dog::getDogState()
 bool Dog::getRandomDogDirectionLeft()
 {
     float dogDirectionChance = (static_cast<float>(rand())*1.0f / static_cast<float>(RAND_MAX));
-    qDebug() << (dogDirectionLeft);
+    //qDebug() << (dogDirectionLeft);
     return (dogDirectionChance < 0.05f);
 }
 
@@ -425,7 +441,7 @@ bool Dog::increaseHunger()
 {
     if (hunger < 100)
     {
-        hunger-= 0.0055555555555555555;
+        hunger -= 0.0055555555555555555f;
         if (hunger > 70)
         {
             return false;
@@ -607,41 +623,73 @@ void Dog::resetTrustLevel()
     trustLevel = 0;
 }
 
+///
+/// \brief Dog::DogInPark
+/// Sets if the dog is currently in the park.
+///
 void Dog::DogInPark(bool inPark)
 {
     isDogInPark = inPark;
 }
 
+///
+/// \brief Dog::doesBallExist
+/// Setter for showing that the ball is existing on screen.
+///
 void Dog::doesBallExist(bool exists)
 {
     ballExists = exists;
 }
 
+///
+/// \brief Dog::doesFoodExist
+/// Setter for showing if the food is existing on screen.
+///
 void Dog::doesFoodExist(bool exists)
 {
     foodExists = exists;
 }
 
+///
+/// \brief Dog::doesTreatExist
+/// Setter for showing if the treat is existing on screen.
+///
 void Dog::doesTreatExist(bool exists)
 {
     treatExists = exists;
 }
 
+///
+/// \brief Dog::BallPositionX
+/// Setter for setting the Ball position X direction.
+///
 void Dog::BallPositionX(float position)
 {
     currentBallPositionX = position;
 }
 
+///
+/// \brief Dog::DogPositionX
+/// Setter for setting the Dog position X direction.
+///
 void Dog::DogPositionX(float position)
 {
     currentDogPositionX = position;
 }
 
+///
+/// \brief Dog::FoodPositionX
+///  Setter for setting the Foods position X direction.
+///
 void Dog::FoodPositionX(float position)
 {
     currentFoodPositionX = position;
 }
 
+///
+/// \brief Dog::TreatPositionX
+///  Setter for setting the Treat position X direction.
+///
 void Dog::TreatPositionX(float position)
 {
     currentTreatPositionX = position;
