@@ -101,7 +101,7 @@ void Model::createBall()
 void Model::createDog()
 {
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(0.5f,0.5f);
+    BodyDef.position = b2Vec2(0.4f, 1.75f);
     BodyDef.type = b2_dynamicBody;
     dogBody = world->CreateBody(&BodyDef);
 
@@ -319,9 +319,9 @@ void Model::treatCollisions()
     }
 }
 
-void Model::dogPetted()
+void Model::dogTrick()
 {
-
+    //emit dog flip
 }
 
 void Model::dogFed()
