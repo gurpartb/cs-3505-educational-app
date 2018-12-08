@@ -81,7 +81,6 @@ signals:
     void updateBathroomProgressBar();
     void updateHungerProgressBar();
 
-
 };
 
 #endif // MAINWINDOW_H
