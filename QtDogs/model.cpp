@@ -40,9 +40,15 @@ void Model::update()
     {
         emit currentBallPosX(ballX());
     }
+    if (treatExists)
+    {
+        emit currentTreatPosX(treatX());
+    }
+    if (foodExists)
+    {
+        emit currentFoodPosX(foodX());
+    }
     emit currentDogPosX(dogX());
-    emit currentFoodPosX(foodX());
-    emit currentTreatPosX(treatX());
     emit updateTrustLevel(dog->getTrustLevel());
     emit updateHungerLevel(dog->getHunger());
     emit updateBathroomLevel(dog->getBathroom());
@@ -348,7 +354,11 @@ void Model::checkCollisions()
     if(treatExists)
     {
         dogCollisions();
-        ballCollisions();
+        treatCollisions();
+    }
+    if(foodExists)
+    {
+
     }
 }
 
