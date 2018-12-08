@@ -6,7 +6,7 @@
 /// \brief Dog::Dog:
 /// Dog constructor.
 ///
-Dog::Dog()
+ Dog::Dog()
 {
     currentBallPositionX = 0;
     currentDogPositionX = 0;
