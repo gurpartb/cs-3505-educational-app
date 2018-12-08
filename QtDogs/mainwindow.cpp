@@ -53,8 +53,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
         treatTex.loadFromFile("../QtDogs/assets/Dog_biscuit.png");
         treat.setTexture(treatTex);
-        treat.setOrigin(64,64);
-        treat.setScale(0.2f,0.2f);
+        treat.setScale(0.25f,0.25f);
+        treat.setOrigin(128,128);
+
 
         dog.setTexture(dogTex);
         dog.setScale(4.0,4.0);

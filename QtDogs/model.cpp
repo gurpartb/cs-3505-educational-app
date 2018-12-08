@@ -5,15 +5,13 @@ Model::Model(){
     world = new b2World(*gravity);
 
     srand(uint32_t(time(nullptr)));
+
     ballExists = false;
     treatExists = false;
     foodExists = false;
 
     createScene();
-    //createBall();
     createDog();
-
-    dog = new Dog();
 
     bathroomProgress = 0;
     hungerProgress = 0;
@@ -28,7 +26,6 @@ Model::Model(){
     connect(this, &Model::currentDogPosX, dog, &Dog::DogPositionX);
     connect(this, &Model::currentFoodPosX, dog, &Dog::FoodPositionX);
     connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
-
 }
 
 Model::~Model(){
@@ -58,19 +55,21 @@ void Model::update()
     emit updateHungerLevel(dog->getHunger());
     emit updateBathroomLevel(dog->getBathroom());
     emit updateTrustProgress(dog->getTrustProgress());
-
 }
 
 void Model::createBall()
 {
     ballExists = true;
     ballplayCount = 0;
+
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(0.1f,1.0f);
     BodyDef.type = b2_dynamicBody;
-    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0f+1.0,-float(rand()) / float(RAND_MAX)*2.0-1.0 );
+    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0f+1.0f,-float(rand()) / float(RAND_MAX)*2.0f-1.0f );
+    BodyDef.angularVelocity = float(rand()) / float(RAND_MAX)*40.0f-20.0f;
+
     ball = world->CreateBody(&BodyDef);
-    //ball->ApplyAngularImpulse(32.0f, 32.0f);
+
     b2CircleShape shape;
     shape.m_radius = SCALE * 64.0f;
 
@@ -98,30 +97,31 @@ void Model::createDog()
     vertices[3].Set(-SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
 
     b2PolygonShape rect;
-
     rect.Set(vertices,4);
-    //rect.SetAsBox(SCALE*36*2.0,SCALE*26*2.0);
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
-    FixtureDef.restitution = 0.1;
+    FixtureDef.restitution = 0.1f;
     FixtureDef.friction = 0.4f;
     FixtureDef.shape = &rect;
 
     dogBody->CreateFixture(&FixtureDef);
+
+    dog = new Dog();
 }
 
 void Model::createTreat()
 {
     treatExists = true;
+
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(1.0f,0.1f);
     BodyDef.type = b2_dynamicBody;
-    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0-1.0,0.0f);
+    BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0f-1.0f,0.0f);
     treat = world->CreateBody(&BodyDef);
 
     b2PolygonShape shape;
-    shape.SetAsBox(0.01f,0.02f);
+    shape.SetAsBox(SCALE*16.0f,SCALE*16.0f);
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
@@ -130,12 +130,12 @@ void Model::createTreat()
 
     treat->CreateFixture(&FixtureDef);
     emit treatOnScreen(treatExists);
-
 }
 
 void Model::createFood()
 {
     foodExists = true;
+
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(1.0f,0.1f);
     BodyDef.type = b2_dynamicBody;
@@ -159,12 +159,13 @@ void Model::createScene()
     //ground
     {
         b2BodyDef BodyDef;
-        BodyDef.position = b2Vec2(0.0,2.9);
+        BodyDef.position = b2Vec2(0.0f,2.9f);
         BodyDef.type = b2_staticBody;
         ground = world->CreateBody(&BodyDef);
 
         b2PolygonShape shape;
         shape.SetAsBox(2.0,1.0);
+
         b2FixtureDef FixtureDef;
         FixtureDef.density = 0.0f;
         FixtureDef.shape = &shape;
@@ -180,6 +181,7 @@ void Model::createScene()
 
         b2PolygonShape shape;
         shape.SetAsBox(2.0,1.0);
+
         b2FixtureDef FixtureDef;
         FixtureDef.density = 0.f;
         FixtureDef.shape = &shape;
@@ -195,6 +197,7 @@ void Model::createScene()
 
         b2PolygonShape shape;
         shape.SetAsBox(1.0,2.0);
+
         b2FixtureDef FixtureDef;
         FixtureDef.density = 0.f;
         FixtureDef.shape = &shape;
@@ -210,6 +213,7 @@ void Model::createScene()
 
         b2PolygonShape shape;
         shape.SetAsBox(1.0,2.0);
+
         b2FixtureDef FixtureDef;
         FixtureDef.density = 0.f;
         FixtureDef.shape = &shape;
@@ -217,9 +221,6 @@ void Model::createScene()
     }
 }
 
-///
-/// \brief Model::dogCollisions
-///
 void Model::dogCollisions()
 {
     for (b2ContactEdge* edge = dogBody->GetContactList() ; edge; edge = edge->next)
@@ -233,7 +234,6 @@ void Model::dogCollisions()
               if (edge->contact->GetFixtureB()->GetBody() == leftWall)
               {
                   //emit pan left background
-
               }
               if (edge->contact->GetFixtureB()->GetBody() == ball)
               {
@@ -263,9 +263,7 @@ void Model::dogCollisions()
     }
 }
 
-///
-/// \brief Model::ballCollisions
-///
+
 void Model::ballCollisions()
 {
     for (b2ContactEdge* edge = ball->GetContactList() ; edge; edge = edge->next)
@@ -292,9 +290,7 @@ void Model::ballCollisions()
     }
 }
 
-///
-/// \brief Model::treatCollisions
-///
+
 void Model::treatCollisions()
 {
     for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
@@ -359,15 +355,10 @@ void Model::dogWalkLeft()
 
 void Model::dogWalkRight()
 {
-
     b2Vec2 vec(0.01f,0.0f);
-
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
-///
-/// \brief Model::checkCollisions
-///
 void Model::checkCollisions()
 {
     if(ballExists)

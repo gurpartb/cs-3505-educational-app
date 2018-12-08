@@ -66,6 +66,7 @@ private:
     void createFood();
     void createScene();
     void createDog();
+
     void dogCollisions();
     void ballCollisions();
     void treatCollisions();
