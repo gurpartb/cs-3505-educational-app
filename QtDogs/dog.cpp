@@ -11,7 +11,7 @@ Dog::Dog()
     currentDogPositionX = 0;
     currentFoodPositionX = 0;
     currentTreatPositionX = 0;
-    hunger = 100;
+    hunger = 99;
     bathroom = 0;
     trustLevel = 0;
     currentState = "Idle";
@@ -53,7 +53,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 stateFlag = currentStateFlag[2];
 
 
-            if(isHungry && hunger >= 0)
+            if(isHungry && hunger >= 0 && stateFlagChoice < 0.05)
             {
                 currentState = "Barking";
             }
@@ -65,7 +65,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if((foodExists || treatExists) && hunger < 100)
+            else if((foodExists || treatExists) && isHungry)
             {
                 currentState = "Eating";
             }
@@ -105,7 +105,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if((foodExists || treatExists) && hunger < 100)
+            else if((foodExists || treatExists) && isHungry)
             {
                 currentState = "Eating";
             }
@@ -142,7 +142,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if((foodExists || treatExists) && hunger < 100)
+            else if((foodExists || treatExists) && isHungry)
             {
                 currentState = "Eating";
             }
@@ -170,7 +170,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             //Bark at random intervals
             int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
             decreaseTrustProgress();
-            if(!(barkChance % 100))
+            if(barkChance < 5)
             {
                 currentState = "Idle";
             }
@@ -423,9 +423,9 @@ float Dog::getHunger()
 ///
 bool Dog::increaseHunger()
 {
+    hunger-= 0.0555555555555555555;
     if (hunger < 100)
     {
-        hunger-= 0.0055555555555555555;
         if (hunger > 70)
         {
             return false;

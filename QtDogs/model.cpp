@@ -56,11 +56,11 @@ void Model::update()
     {
         emit currentBallPosX(ballX());
     }
-    if (treatExists)
+    if (treatExists && dog->getDogState() == "Eating")
     {
         emit currentTreatPosX(treatX());
     }
-    if (foodExists)
+    if (foodExists && dog->getDogState() == "Eating")
     {
         emit currentFoodPosX(foodX());
     }
@@ -116,7 +116,7 @@ void Model::createDog()
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
-    FixtureDef.restitution = 0.1f;
+    FixtureDef.restitution = 0.3f;
     FixtureDef.friction = 0.4f;
     FixtureDef.shape = &rect;
 
@@ -140,8 +140,9 @@ void Model::createTreat()
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
-    FixtureDef.friction = 0.7f;
+    FixtureDef.friction = 0.1f;
     FixtureDef.shape = &shape;
+    FixtureDef.restitution = 0.3f;
 
     treat->CreateFixture(&FixtureDef);
     emit treatOnScreen(treatExists);
@@ -262,13 +263,13 @@ void Model::dogCollisions()
                     ballplayCount++;
                 }
             }
-            if (edge->contact->GetFixtureB()->GetBody() == treat)
+            if (edge->contact->GetFixtureB()->GetBody() == treat && dog->getDogState() == "Eating")
             {
                 treat->SetActive(false);
                 treatExists = false;
                 dog->feedTreat();
             }
-            if (edge->contact->GetFixtureB()->GetBody() == food)
+            if (edge->contact->GetFixtureB()->GetBody() == food && dog->getDogState() == "Eating")
             {
                 //emit eating sound
                 //make food disappear
