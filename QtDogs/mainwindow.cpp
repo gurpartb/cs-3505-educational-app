@@ -18,14 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(timer,SIGNAL(timeout()),this,SLOT(update()));
         timer->start(1000/30);
 
-        poopTimer = new QTimer(this);
-        connect(poopTimer, SIGNAL(timeout()), this, SLOT(updatePoopBar()));
-        poopTimer->start(1000);
-
-        hungerTimer = new QTimer(this);
-        connect(hungerTimer, SIGNAL(timeout()), this, SLOT(updateHungerBar()));
-        hungerTimer->start(2000);
-
         timeOfDayChange = new QTimer(this);
         connect(timeOfDayChange, SIGNAL(timeout()), this, SLOT(changeTimeOfDay()));
         timeOfDayChange->start(180000);
@@ -100,9 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
         dogAnimation = "Dog_Running";
 
-        backgroundTex.loadFromFile("../QtDogs/assets/pixelartparkfinal.png");
-        background.setTexture(backgroundTex);
-        background.setScale(2.4f,2.4f);
+        startSplashScreen();
 
         ballTex.loadFromFile("../QtDogs/assets/Beach_Ball.png");
         ball.setTexture(ballTex);
@@ -144,7 +134,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::startSplashScreen()
 {
-
+    backgroundTex.loadFromFile("../QtDogs/assets/Splash_Screen.png");
+    background.setTexture(backgroundTex);
+    background.setScale(1.0f,1.0f);
 }
 
 void MainWindow::startGame()
@@ -161,7 +153,9 @@ void MainWindow::playDogAnimation(sf::Texture& texture)
 
 void MainWindow::update()
 {
+
    model.update();
+
    if(updateAnimation >= 4)
    {
 
@@ -216,6 +210,7 @@ void MainWindow::update()
            emit dogWalkLeft();
        }
    }
+
    frame.clear(sf::Color::White);
    frame.draw(background);
    if(model.getBallExists())
