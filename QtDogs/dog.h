@@ -7,6 +7,9 @@
 #include <Box2D/Box2D.h>
 #include <vector>
 #include <QObject>
+#include <math.h>
+#include <QDebug>
+
 
 class Dog: public QObject
 {

@@ -1,6 +1,5 @@
 #include "dog.h"
-#include <math.h>
-#include "model.h"
+
 
 ///
 /// \brief Dog::Dog:
@@ -16,14 +15,10 @@ Dog::Dog()
     bathroom = 0;
     trustLevel = 0;
     currentState = "Idle";
+    isDogInPark = false;
 }
 
 Dog::~Dog()
-{
-
-}
-
-int Dog::updateDogAnimation()
 {
 
 }
@@ -47,7 +42,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         if(currentState == "Idle")
         {
             currentForce = b2Vec2_zero;
-            srand(static_cast <unsigned int> (time(nullptr)));
             float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
 
             std::string stateFlag = currentStateFlag[3];
@@ -92,23 +86,21 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             if(getRandomDogDirectionLeft())
             {
-                dogDirectionLeft = true;
+                dogDirectionLeft = (dogDirectionLeft) ? false : true;
+            }
+            if(dogDirectionLeft)
                 currentForce.x = -walkSpeed;
-            }
             else
-            {
-                dogDirectionLeft = false;
                 currentForce.x = walkSpeed;
-            }
 
             //Random change of behavior to running or idle
-            srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
 
-            if(behaviorChangeChance < 20)
+            if(behaviorChangeChance < 10)
             {
                 currentState = "Idle";
             }
+
             if(ballExists)
             {
                 currentState = "Playing";
@@ -122,9 +114,8 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             //Random change of behavior to idle
-            srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 50)
+            if(behaviorChangeChance < 20)
             {
                 currentState = "Idle";
             }
@@ -142,7 +133,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 dogDirectionLeft = false;
                 currentForce.x = runSpeed;
             }
-            srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
             if(behaviorChangeChance < 50)
             {
@@ -169,7 +159,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             //Random change of behavior to idle
             srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 50)
+            if(behaviorChangeChance < 80)
             {
                 currentState = "Idle";
             }
@@ -178,7 +168,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             //Bark at random intervals
-            srand(static_cast <unsigned int> (time(nullptr)));
             int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
             decreaseTrustProgress();
             if(!(barkChance % 100))
@@ -366,7 +355,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             //Bark at random intervals
-            srand(static_cast <unsigned int> (time(nullptr)));
             int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
             decreaseTrustProgress();
             if(!(barkChance % 100))
@@ -404,16 +392,9 @@ std::string Dog::getDogState()
 ///
 bool Dog::getRandomDogDirectionLeft()
 {
-    srand(static_cast <unsigned int> (time(nullptr)));
-    int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX)*2.0f);
-    if(dogDirectionChance == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    float dogDirectionChance = (static_cast<float>(rand())*1.0f / static_cast<float>(RAND_MAX));
+    qDebug() << (dogDirectionLeft);
+    return (dogDirectionChance < 0.05f);
 }
 
 ///
@@ -469,7 +450,6 @@ void Dog::feedTreat()
         hunger += 10;
         //Clamp hunger to set interval
         hunger = fmin(fmax(hunger, 0.0f), 100.0f);
-        srand(static_cast <unsigned int> (time(nullptr)));
         int rng = rand();
         if (rng % 2 == 0)
         {
