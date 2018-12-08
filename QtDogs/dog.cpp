@@ -570,7 +570,7 @@ void Dog::increaseTrustProgress()
 ///
 /// \brief Dog::decreaseTrustLevel
 /// decreases the trust level if the you do something to distrust the dog. 0 to 10 value.
-/// \return
+/// \returnEnabled
 /// New value of the trust level.
 ///
 void Dog::decreaseTrustLevel()

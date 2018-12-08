@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Model connections
-    connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
+    connect(ui->trickButton, &QPushButton::pressed, &model, &Model::dogTrick);
     connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
     connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
     connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
@@ -22,10 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
     connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
+    connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
 
     connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
     connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
-
 
     width = ui->imageLabel->size().width();
     height = ui->imageLabel->size().height();
@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->bathroomProgressBar->setValue(0);
     ui->trustProgressBar->setValue(0);
     ui->levelNumber->display(1);
+
 
     animationDelayCounter = 0;
 
@@ -67,13 +68,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timeOfDayChange, SIGNAL(timeout()), this, SLOT(changeTimeOfDay()));
     timeOfDayChange->start(180000);
 
+
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(update()));
     timer->start(1000/30);
 
+    enableUi(false);
 
-    //start
-    startSplashScreen();
 }
 
 void MainWindow::loadAnimations()
@@ -156,19 +157,48 @@ void MainWindow::updateBackgroundAnimation()
     background.setTexture(*texture);
 }
 
-void MainWindow::startSplashScreen()
+void MainWindow::enableUi(bool enabled)
 {
+    gameStarted = enabled;
+    ui->trickButton->setEnabled(enabled);
+    ui->ballButton->setEnabled(enabled);
+    ui->foodButton->setEnabled(enabled);
+    ui->treatButton->setEnabled(enabled);
+    ui->ballButton->setEnabled(enabled);
+    ui->parkButton->setEnabled(enabled);
+    ui->letOutButton->setEnabled(enabled);
+    ui->playButton->setEnabled(!enabled); //Reverse so Play button is disabled.
 
+    ui->trustProgressBar->setEnabled(enabled);
+    ui->hungerProgressBar->setEnabled(enabled);
+    ui->bathroomProgressBar->setEnabled(enabled);
+
+    ui->levelLabel->setVisible(enabled);
+    ui->levelNumber->setVisible(enabled);
+
+    ui->trickButton->setVisible(enabled);
+    ui->ballButton->setVisible(enabled);
+    ui->foodButton->setVisible(enabled);
+    ui->treatButton->setVisible(enabled);
+    ui->ballButton->setVisible(enabled);
+    ui->parkButton->setVisible(enabled);
+    ui->letOutButton->setVisible(enabled);
+    ui->playButton->setVisible(!enabled); //Reverse so Play button is disabled.
 }
 
 void MainWindow::startGame()
 {
-
+    enableUi(true);
+    backgroundAnimation = "Daytime";
+    //backgroundFrameNumber = 32;
 }
 
 void MainWindow::update()
 {
-    model.update();
+    if (gameStarted)
+    {
+        model.update();
+    }
 
     std::string tmp =  model.getDogState();
     if(tmp == "Playing" || tmp == "Eating")tmp = "Running";
@@ -212,7 +242,6 @@ void MainWindow::update()
     frame.draw(dog);
 
     frame.display();
-
 
     //draw the sfml canvas
     sf::Texture rt = frame.getTexture();
@@ -264,17 +293,24 @@ void MainWindow::playMusic()
 
     if(!buffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg"))
     {
-        std::cout << "ERRRRROR";
+        std::cout << "Error loading music file";
     }
 
     sound.setBuffer(buffer);
     sound.setVolume(100.f);
     sound.play();
-
-    //qDebug() << sound.getStatus();
 }
 
 void MainWindow::changeTimeOfDay()
 {
 
+}
+
+void MainWindow::on_instructionsButton_clicked()
+{
+    QMessageBox msgBox;
+    msgBox.setText(tr("Instructions"));
+    msgBox.setInformativeText(tr("About:\nQtDogs in an educational app, intended for kids aged 7 to 14. Our goal is to teach young people the importance of taking care of their own pet. Many children want pets of their own but need to understand responsibility before getting a pet of their own.\n\nPlaying the Game:\nTo start the game press the play button. You will then have a dog of your own!\nProgressing in the Game:\n- Hunger: As time passes, your dog will become hungry, you can use the feed button to fully feed your dog. You always want to have close to 100% hunger so you can keep your dog happy! The longer your dog is happy, the faster your trust level progresses.\n\n- Trust Level: The more things you to do keep your dog happy, the more you progress your Trust Level. Once you reach higher levels you will be able to take your dog out, as you can trust your dog to be good in public places.\n\n- Trick & Ball & Treats: Playing with your dog can help increase your trust level quicker! Giving him treats also help, and he may do cool tricks!\n\n- Bathroom Level & Let Out: Your dog over time will need to use the restroom. Make sure to let him out before he ruins your carpet! The longer you wait to take him out the less your dog can trust you, and he may do something you don’t like. Make sure to take him out often!\n\nTake care of your pet and have fun in QT Dogs!\n\nDeveloped by:\nAndrew Dron\nBrendan Johnston\nCaleb Edwards\nColton Lee\nGurpartap Bhatti\nJared Hansen\nJacob Haydel\nTyler Trombley\n"));
+    msgBox.setStandardButtons(QMessageBox::Cancel);
+    msgBox.exec();
 }
