@@ -319,9 +319,9 @@ void Model::treatCollisions()
     }
 }
 
-void Model::dogPetted()
+void Model::dogTrick()
 {
-
+    //emit dog flip
 }
 
 void Model::dogFed()

@@ -6,6 +6,7 @@
 #include <QTimer>
 #include "model.h"
 #include <QtDebug>
+#include <QMessageBox>
 #include<SFML/Audio.hpp>
 
 
@@ -66,8 +67,7 @@ private:
     void updateDogAnimation();
     void updateBackgroundAnimation();
     void loadAnimations();
-    void startSplashScreen();
-    void startGame();
+    void enableUi(bool);
 
 private slots:
     void update();
@@ -79,6 +79,9 @@ private slots:
     void on_trustLevel_valueChanged(int);
     void playMusic();
     void changeTimeOfDay();
+    void startGame();
+
+    void on_instructionsButton_clicked();
 
 signals:
     void dogWalkLeft();
