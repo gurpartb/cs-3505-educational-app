@@ -4,6 +4,8 @@ Model::Model(){
     gravity = new b2Vec2(0.0f,9.81f);
     world = new b2World(*gravity);
 
+   // world->list
+
     srand(uint32_t(time(nullptr)));
     ballExists = false;
     treatExists = false;
@@ -26,7 +28,6 @@ Model::Model(){
     connect(this, &Model::currentDogPosX, dog, &Dog::DogPositionX);
     connect(this, &Model::currentFoodPosX, dog, &Dog::FoodPositionX);
     connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
-
 }
 
 Model::~Model(){
@@ -204,36 +205,38 @@ void Model::dogCollisions()
 {
     for (b2ContactEdge* edge = dogBody->GetContactList() ; edge; edge = edge->next)
     {
-          if (edge->contact->IsTouching())
-          {
-              if (edge->contact->GetFixtureB()->GetUserData() == rightWall->GetUserData())
-              {
-                  //emit pan right background
-              }
-              if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
-              {
-                  //emit pan left background
+        if (edge->contact->IsTouching())
+        {
+            if (edge->contact->GetFixtureB()->GetUserData() == rightWall->GetUserData())
+            {
+                //emit pan right background
+            }
+            if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
+            {
+                //emit pan left background
 
-              }
-              if (edge->contact->GetFixtureB()->GetBody() == ball)
-              {
-                  //emit ball sound
-//                  world->DestroyBody(ball);
-//                  ballExists = false;
-              }
-              if (edge->contact->GetFixtureB()->GetUserData() == treat->GetUserData())
-              {
-                  //emit eating sound
-                  //make treat disappear
-                  //change state to idl
-              }
-              if (edge->contact->GetFixtureB()->GetUserData() == food->GetUserData())
-              {
-                  //emit eating sound
-                  //make food disappear
-                  //change state to idle
-              }
-          }
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == ball)
+            {
+                //emit ball sound
+                //                  world->DestroyBody(ball);
+                //                  ballExists = false;
+                //ballCollisions();
+            }
+            if (edge->contact->GetFixtureB()->GetUserData() == treat->GetUserData())
+            {
+                //emit eating sound
+                //make treat disappear
+                //change state to idl
+                //dogFed();
+            }
+            if (edge->contact->GetFixtureB()->GetUserData() == food->GetUserData())
+            {
+                //emit eating sound
+                //make food disappear
+                //change state to idle
+            }
+        }
     }
 }
 
@@ -241,25 +244,25 @@ void Model::ballCollisions()
 {
     for (b2ContactEdge* edge = ball->GetContactList() ; edge; edge = edge->next)
     {
-          if (edge->contact->IsTouching())
-          {
-              if (edge->contact->GetFixtureB()->GetUserData() == rightWall->GetUserData())
-              {
-                  //emit bounce sound
-              }
-              if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
-              {
-                  //emit bounce sound
-              }
-              if (edge->contact->GetFixtureB()->GetUserData() == ground->GetUserData())
-              {
-                  //emit bounce sound
-              }
-              if (edge->contact->GetFixtureB()->GetUserData() == ceiling->GetUserData())
-              {
-                  //emit bounce sound
-              }
-          }
+        if (edge->contact->IsTouching())
+        {
+            if (edge->contact->GetFixtureB()->GetUserData() == rightWall->GetUserData())
+            {
+                //emit bounce sound
+            }
+            if (edge->contact->GetFixtureB()->GetUserData() == leftWall->GetUserData())
+            {
+                //emit bounce sound
+            }
+            if (edge->contact->GetFixtureB()->GetUserData() == ground->GetUserData())
+            {
+                //emit bounce sound
+            }
+            if (edge->contact->GetFixtureB()->GetUserData() == ceiling->GetUserData())
+            {
+                //emit bounce sound
+            }
+        }
     }
 }
 
@@ -267,13 +270,13 @@ void Model::treatCollisions()
 {
     for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
     {
-          if (edge->contact->IsTouching())
-          {
-              if (edge->contact->GetFixtureB()->GetUserData() == ground->GetUserData())
-              {
-                  //emit falling sound
-              }
-          }
+        if (edge->contact->IsTouching())
+        {
+            if (edge->contact->GetFixtureB()->GetUserData() == ground->GetUserData())
+            {
+                //emit falling sound
+            }
+        }
     }
 }
 
@@ -327,9 +330,7 @@ void Model::dogWalkLeft()
 
 void Model::dogWalkRight()
 {
-
     b2Vec2 vec(0.01f,0.0f);
-
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 

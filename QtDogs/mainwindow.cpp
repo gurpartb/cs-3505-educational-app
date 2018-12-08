@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <bits/stdc++.h>
+#include <iostream>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -116,6 +117,7 @@ MainWindow::MainWindow(QWidget *parent) :
         //Model connections
         connect(ui->petButton, &QPushButton::pressed, &model, &Model::dogPetted);
         connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
+        connect(ui->treatButton, &QPushButton::pressed, &model, &Model::dogFed);
         connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
         connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
         connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
@@ -155,13 +157,10 @@ void MainWindow::update()
 {
 
    model.update();
-
    if(updateAnimation >= 4)
    {
-
        numFrames = spriteSheetTool.getAnimationFrameCount(dogAnimation);
        emit getDogAnimationSignal(dogAnimation, frameNumber);
-
 
        if(frameNumber >= numFrames)
        {
@@ -178,7 +177,7 @@ void MainWindow::update()
 
     dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
    if(model.getBallExists())
-   {
+   {std::cout <<model.ballX()<<'\n';
 
        ball.setPosition(model.ballX()*width/2.0f,model.ballY()*height/2.0f);
        ball.setRotation(model.ballR()*180.0f/3.14159f);
@@ -224,7 +223,8 @@ void MainWindow::update()
    frame.draw(dog);
    frame.display();
 
-
+   if(model.getBallExists())
+   {std::cout <<model.ballX()<<'\n';}
    sf::Texture rt = frame.getTexture();
    sf::Image irt = rt.copyToImage();
    const uint8_t *pp = irt.getPixelsPtr();
