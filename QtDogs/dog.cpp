@@ -31,200 +31,315 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
     if(hunger >= 50) {
         needsToGo = increaseBathroom();
     }
-    if(isNight && !(currentState == "Dead")) {
-        currentState = "BeginSleeping";
-    }
 
-    //State behavior
-    if(currentState == "Idle")
+    if(!isDogInPark)
     {
-        currentForce = b2Vec2_zero;
-        srand(static_cast <unsigned int> (time(nullptr)));
-        unsigned long stateFlagChoice = (unsigned long)((static_cast<float>(rand()) * 3.0f) / static_cast<float>(RAND_MAX));
-        std::string stateFlag = currentStateFlag[stateFlagChoice];
-
-        if(isHungry && hunger >= 0)
-        {
-            currentState = "Bark";
-        }
-        else if(needsToGo)
-        {
-            currentState = "Peeing";
-        }
-        else if(ballExists)
-        {
-            currentState = "Playing";
-        }
-        else if(foodExists || treatExists)
-        {
-            currentState = "Eating";
-        }
-        else if(stateFlag == "Sit")
-        {
-            currentState = "Sitting";
-        }
-        else if(stateFlag == "Flip")
-        {
-            currentState = "Flip";
-        }
-        else if(stateFlag == "Walk")
-        {
-            currentState = "Walking";
-        }
-    }
-    else if(currentState == "Walking")
-    {
-        if(getDogDirectionLeft())
-        {
-            currentForce.x = -walkSpeed;
-        }
-        else
-        {
-            currentForce.x = walkSpeed;
+        if(isNight && !(currentState == "Dead")) {
+            currentState = "BeginSleeping";
         }
 
-        //Random change of behavior to running or idle
-        srand(static_cast <unsigned int> (time(nullptr)));
-        int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-        if(behaviorChangeChance < 33)
+        //State behavior
+        if(currentState == "Idle")
         {
-            currentState = "Running";
-        }
-        else if(behaviorChangeChance >= 33)
-        {
-            currentState = "Idle";
-        }
-        if(ballExists)
-        {
-            currentState = "Playing";
-        }
-        else if(foodExists || treatExists)
-        {
-            currentState = "Eating";
-        }
-    }
-    else if(currentState == "Sitting")
-    {
-        currentForce = b2Vec2_zero;
-        currentState = "Idle";
-    }
-    else if(currentState == "Running")
-    {
-        if(getDogDirectionLeft())
-        {
-            currentForce.x = -runSpeed;
-        }
-        else
-        {
-            currentForce.x = runSpeed;
-        }
-        srand(static_cast <unsigned int> (time(nullptr)));
-        int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-        if(behaviorChangeChance < 50)
-        {
-            currentState = "Walking";
-        }
-        if(ballExists)
-        {
-            currentState = "Playing";
-        }
-        else if(foodExists || treatExists)
-        {
-            currentState = "Eating";
-        }
-    }
-    else if(currentState == "Peeing")
-    {
-        currentForce = b2Vec2_zero;
-        currentState = "Idle";
-    }
-    else if(currentState == "Flip")
-    {
-        currentForce = b2Vec2_zero;
-        currentState = "Idle";
-    }
-    else if(currentState == "Bark")
-    {
-        currentForce = b2Vec2_zero;
-        //Bark at random intervals
-        srand(static_cast <unsigned int> (time(nullptr)));
-        int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-        decreaseTrustProgress();
-        if(!(barkChance % 100))
-        {
-            currentState = "Idle";
-        }
-    }
-    else if(currentState == "BeginSleeping")
-    {
-        currentForce = b2Vec2_zero;
-        currentState = "Sleeping";
-    }
-    else if(currentState == "Sleeping")
-    {
-        currentForce = b2Vec2_zero;
-        if(!isNight)
-        {
-            currentState = "EndSleeping";
-        }
-    }
-    else if(currentState == "EndSleeping")
-    {
-        currentForce = b2Vec2_zero;
-        currentState = "Idle";
-    }
-    else if(currentState == "Dead")
-    {
-        currentForce = b2Vec2_zero;
-    }
-    else if(currentState == "Playing")
-    {
-        if(ballExists)
-        {
-            if(currentBallPositionX > currentDogPositionX)
+            currentForce = b2Vec2_zero;
+            srand(static_cast <unsigned int> (time(nullptr)));
+            unsigned long stateFlagChoice = (unsigned long)((static_cast<float>(rand()) * 3.0f) / static_cast<float>(RAND_MAX));
+            std::string stateFlag = currentStateFlag[stateFlagChoice];
+
+            if(isHungry && hunger >= 0)
             {
-                currentForce.x = runSpeed;
+                currentState = "Bark";
             }
-            else if(currentBallPositionX < currentDogPositionX)
+            else if(needsToGo)
             {
-               currentForce.x = -runSpeed;
+                currentState = "Peeing";
+            }
+            else if(ballExists)
+            {
+                currentState = "Playing";
+            }
+            else if(foodExists || treatExists)
+            {
+                currentState = "Eating";
+            }
+            else if(stateFlag == "Sit")
+            {
+                currentState = "Sitting";
+            }
+            else if(stateFlag == "Flip")
+            {
+                currentState = "Flip";
+            }
+            else if(stateFlag == "Walk")
+            {
+                currentState = "Walking";
+            }
+        }
+        else if(currentState == "Walking")
+        {
+            if(getDogDirectionLeft())
+            {
+                currentForce.x = -walkSpeed;
             }
             else
             {
-                currentForce = b2Vec2_zero;
+                currentForce.x = walkSpeed;
+            }
+
+            //Random change of behavior to running or idle
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            if(behaviorChangeChance < 33)
+            {
+                currentState = "Running";
+            }
+            else if(behaviorChangeChance >= 33)
+            {
+                currentState = "Idle";
+            }
+            if(ballExists)
+            {
+                currentState = "Playing";
+            }
+            else if(foodExists || treatExists)
+            {
+                currentState = "Eating";
             }
         }
-        else
+        else if(currentState == "Sitting")
         {
+            currentForce = b2Vec2_zero;
             currentState = "Idle";
         }
+        else if(currentState == "Running")
+        {
+            if(getDogDirectionLeft())
+            {
+                currentForce.x = -runSpeed;
+            }
+            else
+            {
+                currentForce.x = runSpeed;
+            }
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            if(behaviorChangeChance < 50)
+            {
+                currentState = "Walking";
+            }
+            if(ballExists)
+            {
+                currentState = "Playing";
+            }
+            else if(foodExists || treatExists)
+            {
+                currentState = "Eating";
+            }
+        }
+        else if(currentState == "Peeing")
+        {
+            currentForce = b2Vec2_zero;
+            resetBathroom();
+            currentState = "Idle";
+        }
+        else if(currentState == "Flip")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Idle";
+        }
+        else if(currentState == "Bark")
+        {
+            currentForce = b2Vec2_zero;
+            //Bark at random intervals
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            decreaseTrustProgress();
+            if(!(barkChance % 100))
+            {
+                currentState = "Idle";
+            }
+        }
+        else if(currentState == "BeginSleeping")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Sleeping";
+        }
+        else if(currentState == "Sleeping")
+        {
+            currentForce = b2Vec2_zero;
+            if(!isNight)
+            {
+                currentState = "EndSleeping";
+            }
+        }
+        else if(currentState == "EndSleeping")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Idle";
+        }
+        else if(currentState == "Dead")
+        {
+            currentForce = b2Vec2_zero;
+        }
+        else if(currentState == "Playing")
+        {
+            if(ballExists)
+            {
+                if(currentBallPositionX > currentDogPositionX)
+                {
+                    currentForce.x = runSpeed;
+                }
+                else if(currentBallPositionX < currentDogPositionX)
+                {
+                    currentForce.x = -runSpeed;
+                }
+                else
+                {
+                    currentForce = b2Vec2_zero;
+                }
+            }
+            else
+            {
+                currentState = "Idle";
+            }
 
+        }
+        else if(currentState == "Eating") {
+            if(foodExists)
+            {
+                if(currentFoodPositionX > currentDogPositionX)
+                {
+                    currentForce.x = runSpeed;
+                }
+                else if(currentFoodPositionX < currentDogPositionX)
+                {
+                    currentForce.x = -runSpeed;
+                }
+            }
+            else if(treatExists)
+            {
+                if(currentTreatPositionX > currentDogPositionX)
+                {
+                    currentForce.x = runSpeed;
+                }
+                else if(currentTreatPositionX < currentDogPositionX)
+                {
+                    currentForce.x = -runSpeed;
+                }
+            }
+            else
+            {
+                currentState = "Idle";
+            }
+        }
     }
-    else if(currentState == "Eating") {
-        if(foodExists)
+    else
+    {
+        if(currentState == "Idle")
         {
-            if(currentFoodPositionX > currentDogPositionX)
+            currentForce = b2Vec2_zero;
+            currentState = "Walking";
+        }
+        else if(currentState == "Walking")
+        {
+            if(getDogDirectionLeft())
             {
-                currentForce.x = runSpeed;
+                currentForce.x = -walkSpeed;
             }
-            else if(currentFoodPositionX < currentDogPositionX)
+            else
             {
-                currentForce.x = -runSpeed;
+                currentForce.x = walkSpeed;
+            }
+
+            if(isHungry && hunger >= 0)
+            {
+                currentState = "Bark";
+            }
+            else if(needsToGo)
+            {
+                currentState = "Peeing";
+            }
+            else if(ballExists)
+            {
+                currentState = "Playing";
+            }
+            else if(foodExists || treatExists)
+            {
+                currentState = "Eating";
+            }
+
+        }
+        else if(currentState == "Eating")
+        {
+            if(foodExists)
+            {
+                if(currentFoodPositionX > currentDogPositionX)
+                {
+                    currentForce.x = runSpeed;
+                }
+                else if(currentFoodPositionX < currentDogPositionX)
+                {
+                    currentForce.x = -runSpeed;
+                }
+            }
+            else if(treatExists)
+            {
+                if(currentTreatPositionX > currentDogPositionX)
+                {
+                    currentForce.x = runSpeed;
+                }
+                else if(currentTreatPositionX < currentDogPositionX)
+                {
+                    currentForce.x = -runSpeed;
+                }
+            }
+            else
+            {
+                currentState = "Idle";
             }
         }
-        else if(treatExists)
+        else if(currentState == "Playing")
         {
-            if(currentTreatPositionX > currentDogPositionX)
+            if(ballExists)
             {
-                currentForce.x = runSpeed;
+                if(currentBallPositionX > currentDogPositionX)
+                {
+                    currentForce.x = runSpeed;
+                }
+                else if(currentBallPositionX < currentDogPositionX)
+                {
+                    currentForce.x = -runSpeed;
+                }
+                else
+                {
+                    currentForce = b2Vec2_zero;
+                }
             }
-            else if(currentTreatPositionX < currentDogPositionX)
+            else
             {
-                currentForce.x = -runSpeed;
+                currentState = "Idle";
             }
         }
-        else
+        else if(currentState == "Bark")
         {
+            currentForce = b2Vec2_zero;
+            //Bark at random intervals
+            srand(static_cast <unsigned int> (time(nullptr)));
+            int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            decreaseTrustProgress();
+            if(!(barkChance % 100))
+            {
+                currentState = "Idle";
+            }
+        }
+        else if(currentState == "Dead")
+        {
+            currentForce = b2Vec2_zero;
+        }
+        else if(currentState == "Peeing")
+        {
+            currentForce = b2Vec2_zero;
+            resetBathroom();
             currentState = "Idle";
         }
     }
@@ -459,6 +574,11 @@ void Dog::decreaseTrustProgress()
 void Dog::resetTrustLevel()
 {
     trustLevel = 0;
+}
+
+void Dog::DogInPark(bool inPark)
+{
+    isDogInPark = inPark;
 }
 
 void Dog::doesBallExist(bool exists)
