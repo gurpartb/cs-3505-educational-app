@@ -125,10 +125,8 @@ signals:
     void currentFoodPosX(float);
     void currentTreatPosX(float);
     void playBounceSound();
-    void playWhistleSound();
     void playEatSound();
     void playBarkSound();
-    //void dogFlip(bool);
     void increaseTrustLevel();
 
 };

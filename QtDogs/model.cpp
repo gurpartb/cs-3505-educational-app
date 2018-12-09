@@ -398,7 +398,6 @@ void Model::dogTrick()
     {
         dog->doesTrickExist(true);
     }
-    emit playWhistleSound();
 }
 
 void Model::dogTreat()
