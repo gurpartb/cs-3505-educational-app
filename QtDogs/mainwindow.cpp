@@ -27,13 +27,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
 
     //connections for updating status bars
-    connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustProgressBar_valueChanged);
+    connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustLevel_valueChanged);
     connect(&model, &Model::updateHungerLevel, this, &MainWindow::on_hungerProgressBar_valueChanged);
     connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
     connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
     connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
 
-    //connections for dog movement
+    //connections for Progressdog movement
     connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
     connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
     //connections for sound effects
@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->hungerProgressBar->setValue(0);
     ui->bathroomProgressBar->setValue(0);
     ui->trustProgressBar->setValue(0);
-    ui->levelNumber->display(1);
+    ui->levelNumber->display(0);
     ui->homeButton->setVisible(false);
 
 

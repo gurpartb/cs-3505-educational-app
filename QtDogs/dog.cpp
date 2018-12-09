@@ -456,6 +456,7 @@ bool Dog::increaseHunger()
 {
     hunger-= 0.00555555555555555555f;
 
+
     if (hunger < 100)
     {
         if (hunger > 70)
@@ -580,6 +581,7 @@ void Dog::increaseTrustLevel()
     if (trustLevel < 10 && (trustProgress == 100))
     {
         trustLevel++;
+
     }
 }
 
