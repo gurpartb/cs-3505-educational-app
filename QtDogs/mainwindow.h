@@ -46,12 +46,14 @@ private:
     sf::Sound whistleSound;
     sf::Sound bounceSound;
     sf::Sound barkSound;
+    sf::Sound ballSound;
 
     sf::SoundBuffer musicBuffer;
     sf::SoundBuffer eatBuffer;
     sf::SoundBuffer whistleBuffer;
     sf::SoundBuffer bounceBuffer;
     sf::SoundBuffer barkBuffer;
+    sf::SoundBuffer ballBuffer;
 
     sf::RenderTexture frame;
 
@@ -89,6 +91,7 @@ private:
     int backgroundFrameNumber = 0;
     int parkPos;
     int barkCounter = 0;
+    int ballSoundCounter = 0;
     bool gameStarted;
 
     Ui::MainWindow *ui;
@@ -121,6 +124,7 @@ private slots:
     void playWhistleSound();
     void playEatSound();
     void playBarkSound();
+    void playBallSound();
 
 
 signals:

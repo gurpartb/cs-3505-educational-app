@@ -127,6 +127,7 @@ signals:
     void playBounceSound();
     void playEatSound();
     void playBarkSound();
+    void playBallSound();
     void increaseTrustLevel();
 
 };

@@ -312,6 +312,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             }
             else if(needsToGo)
             {
+                currentAnimationFrame = 22*6;
                 currentState = "Peeing";
                 resetBathroom();
             }
@@ -393,7 +394,9 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             resetBathroom();
-            currentState = "Idle";
+            if(currentAnimationFrame <= 6)
+                currentState = "Idle";
+            --currentAnimationFrame;
         }
     }
 

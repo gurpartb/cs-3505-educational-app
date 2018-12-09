@@ -307,6 +307,7 @@ void Model::dogCollisions()
                 }
                 else
                 {
+                    emit playBallSound();
                     ballplayCount++;
                 }
             }
@@ -314,6 +315,7 @@ void Model::dogCollisions()
             {
                 treat->SetActive(false);
                 treatExists = false;
+                emit playEatSound();
                 dog->feedTreat();
             }
             if (edge->contact->GetFixtureB()->GetBody() == food)
@@ -323,6 +325,7 @@ void Model::dogCollisions()
                 {
                     dog->feedFood();
                     food->SetActive(false);
+                    emit playEatSound();
                     foodExists = false;
                 }
                 else

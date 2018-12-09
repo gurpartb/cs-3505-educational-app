@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&model, &Model::playBounceSound, this, &MainWindow::playBounceSound);
     connect(&model, &Model::playBarkSound, this, &MainWindow::playBarkSound);
     connect(&model, &Model::playEatSound, this, &MainWindow::playEatSound);
+    connect(&model, &Model::playBallSound, this, &MainWindow::playBallSound);
 
     width = ui->imageLabel->size().width();
     height = ui->imageLabel->size().height();
@@ -100,17 +101,18 @@ MainWindow::MainWindow(QWidget *parent) :
     enableUi(false);
    // playMusic();//this will play the music when the game is started
     musicBuffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg");
-    //all of these are awufl but they were the best i could find on soundbible
     whistleBuffer.loadFromFile("../QtDogs/assets/Whistle.wav");
-    eatBuffer.loadFromFile("../QtDogs/assets/Eat.wav");
+    eatBuffer.loadFromFile("../QtDogs/assets/Chew.ogg");
     bounceBuffer.loadFromFile("../QtDogs/assets/Bounce2.wav");
-    barkBuffer.loadFromFile(("../QtDogs/assets/bark_1.ogg"));
+    barkBuffer.loadFromFile("../QtDogs/assets/bark_1.ogg");
+    ballBuffer.loadFromFile("../QtDogs/assets/Ball.ogg");
 
     musicSound.setBuffer(musicBuffer);
     whistleSound.setBuffer(whistleBuffer);
     eatSound.setBuffer(eatBuffer);
     bounceSound.setBuffer(bounceBuffer);
     barkSound.setBuffer(barkBuffer);
+    ballSound.setBuffer(ballBuffer);
 }
 
 ///
@@ -567,6 +569,18 @@ void MainWindow::playBarkSound()
     }
     else {
         barkCounter++;
+    }
+
+}
+
+void MainWindow::playBallSound()
+{
+    if(ballSoundCounter == 15) {
+        ballSoundCounter = 0;
+        ballSound.play();
+    }
+    else {
+        ballSoundCounter++;
     }
 
 }
