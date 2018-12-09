@@ -26,10 +26,10 @@ Model::Model(){
     createScene();
     createDog();
 
-    bathroomProgress = 0;
-    hungerProgress = 0;
-    trustProgress = 0;
-    level = 1;
+//    bathroomProgress = 0;
+//    hungerProgress = 0;
+//    trustProgress = 0;
+//    level = 1;
 
     //connections to dog class
     connect(this, &Model::ballOnScreen, dog, &Dog::doesBallExist);
@@ -186,13 +186,15 @@ void Model::createFood()
     foodExists = true;
 
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(0.5f,1.3f);
+    BodyDef.position = b2Vec2(1.5f,1.3f);
+   // BodyDef.position = b2Vec2(.7f,1.0f);
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX),0.0f);
     food = world->CreateBody(&BodyDef);
 
     b2PolygonShape shape;
-    shape.SetAsBox(SCALE*4.0f,SCALE*4.0f);
+    //shape.SetAsBox(SCALE*4.0f,SCALE*4.0f);
+    shape.SetAsBox(SCALE*46.0f,SCALE*30.0f);
 
     b2FixtureDef FixtureDef;
     FixtureDef.density = 2.0f;
@@ -299,8 +301,9 @@ void Model::dogCollisions()
             {
                 //emit ball sound
                 if (ballplayCount == 30){
-                    ball->SetActive(false);
+
                     ballExists = false;
+                    ball->SetActive(false);
                 }
                 else
                 {
@@ -393,21 +396,7 @@ void Model::dogTrick()
 
 void Model::dogTreat()
 {
-    if(ballExists)
-    {
-        ball->SetActive(false);
-        ballExists = false;
-    }
-    if(treatExists)
-    {
-        treat->SetActive(false);
-        treatExists = false;
-    }
-    if(foodExists)
-    {
-        food->SetActive(false);
-        foodExists = false;
-    }
+    deactivateAllObjects();
     createTreat();
 }
 
@@ -417,6 +406,15 @@ void Model::dogTreat()
 ///
 void Model::dogFed()
 {
+    deactivateAllObjects();
+    createFood();
+}
+
+///
+/// \brief Model::deactivateAllObjects
+///
+void Model::deactivateAllObjects()
+{
     if(ballExists)
     {
         ball->SetActive(false);
@@ -432,7 +430,6 @@ void Model::dogFed()
         food->SetActive(false);
         foodExists = false;
     }
-    createFood();
 }
 
 ///
@@ -441,16 +438,7 @@ void Model::dogFed()
 ///
 void Model::dogPlayedWithBall()
 {
-    if(ballExists)
-    {
-        ball->SetActive(false);
-        ballExists = false;
-    }
-    if(treatExists)
-    {
-        treat->SetActive(false);
-        treatExists = false;
-    }
+    deactivateAllObjects();
     createBall();
 }
 
@@ -512,7 +500,6 @@ void Model::checkCollisions()
     else if(foodExists)
     {
         dogCollisions();
-
     }
 }
 

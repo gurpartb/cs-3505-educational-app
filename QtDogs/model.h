@@ -39,10 +39,10 @@ private:
 
     int ballplayCount;
 
-    int bathroomProgress;
-    int hungerProgress;
-    int trustProgress;
-    int level;
+//    int bathroomProgress;
+//    int hungerProgress;
+//    int trustProgress;
+//    int level;
 
     bool ballExists;
     bool treatExists;
@@ -93,6 +93,7 @@ private:
     void ballCollisions();
     void treatCollisions();
     void checkCollisions();
+    void deactivateAllObjects();
 
 public slots:
     void dogTrick();

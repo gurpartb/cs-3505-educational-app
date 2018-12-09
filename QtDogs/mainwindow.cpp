@@ -74,7 +74,9 @@ MainWindow::MainWindow(QWidget *parent) :
     foodTex.loadFromFile("../QtDogs/assets/DogBowl.png");
     food.setTexture(foodTex);
     food.setScale(1.0f,1.0f);
-    food.setOrigin(128,128);
+    //food.setScale(.8f,.8f);
+    //food.setOrigin(128,128);
+    food.setOrigin(46,30);
 
     //dogTex.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     dog.setTexture(dogTex);
