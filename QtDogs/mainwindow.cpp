@@ -372,7 +372,7 @@ void MainWindow::update()
             ui->trickButton->setText("Unlock Lv 2");
         }
 
-        if (model.getDogTrustLevel() >= 0)
+        if (model.getDogTrustLevel() >= 3)
         {
             if (!model.isNight){
                 ui->parkButton->setEnabled(true);
