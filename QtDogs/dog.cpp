@@ -61,11 +61,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
 
             std::string stateFlag = currentStateFlag[3];
-            if(stateFlagChoice < 0.50f)
+            if(stateFlagChoice < 0.90f)
                 stateFlag = currentStateFlag[0];
-            else if(stateFlagChoice < 0.85f)
-                stateFlag = currentStateFlag[1];
             else if(stateFlagChoice < 0.95f)
+                stateFlag = currentStateFlag[1];
+            else if(stateFlagChoice < 0.98f)
                 stateFlag = currentStateFlag[2];
 
 
@@ -110,9 +110,9 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 currentForce.x = walkSpeed;
 
             //Random change of behavior to running or idle
-            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            float behaviorChangeChance = (static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX);
 
-            if(behaviorChangeChance < 10)
+            if(behaviorChangeChance < 0.05f)
             {
                 currentState = "Idle";
             }
