@@ -4,6 +4,8 @@ Model::Model(){
     gravity = new b2Vec2(0.0f,9.81f);
     world = new b2World(*gravity);
 
+   // world->list
+
     srand(uint32_t(time(nullptr)));
 
     ballExists = false;
@@ -87,13 +89,11 @@ void Model::createBall()
 
     b2CircleShape shape;
     shape.m_radius = SCALE * 64.0f;
-
     b2FixtureDef FixtureDef;
     FixtureDef.density = 0.05f;
     FixtureDef.friction = 0.7f;
     FixtureDef.restitution = 0.7f;
     FixtureDef.shape = &shape;
-
     ball->CreateFixture(&FixtureDef);
     emit ballOnScreen(ballExists);
 }
@@ -104,22 +104,19 @@ void Model::createDog()
     BodyDef.position = b2Vec2(0.5f,1.75f);
     BodyDef.type = b2_dynamicBody;
     dogBody = world->CreateBody(&BodyDef);
-
     b2Vec2 vertices[4];
     vertices[0].Set(SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
     vertices[1].Set(SCALE*36.0f*1.0f,-SCALE*26.0f*2.0f);
     vertices[2].Set(-SCALE*36.0f*1.0f,-SCALE*26.0f*2.0f);
     vertices[3].Set(-SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
-
     b2PolygonShape rect;
     rect.Set(vertices,4);
-
+    //rect.SetAsBox(SCALE*36*2.0,SCALE*26*2.0);
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
     FixtureDef.restitution = 0.1f;
     FixtureDef.friction = 0.4f;
     FixtureDef.shape = &rect;
-
     dogBody->CreateFixture(&FixtureDef);
 
     dog = new Dog();
@@ -134,15 +131,13 @@ void Model::createTreat()
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0f-1.0f,0.0f);
     treat = world->CreateBody(&BodyDef);
-
     b2PolygonShape shape;
     shape.SetAsBox(SCALE*16.0f,SCALE*16.0f);
-
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
     FixtureDef.friction = 0.7f;
     FixtureDef.shape = &shape;
-
+    FixtureDef.restitution = 0.3f;
     treat->CreateFixture(&FixtureDef);
     emit treatOnScreen(treatExists);
 }

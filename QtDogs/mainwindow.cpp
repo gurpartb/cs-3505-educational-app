@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <bits/stdc++.h>
+#include <iostream>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -126,10 +127,10 @@ void MainWindow::loadAnimations()
 {
     //adding animation frames
     dogPath.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
-    spriteSheetTool.addAnimation(0,   9,    36, 26,  3, "Dog_Idle",       dogPath);
+    spriteSheetTool.addAnimation(0,   7,    36, 26,  3, "Dog_Idle",       dogPath);
     spriteSheetTool.addAnimation(410,   339, 72, 40,  7, "Dog_Dying",   dogPath);
     spriteSheetTool.addAnimation(770, 304, 72, 34,  1, "Dog_Dead",   dogPath);
-    spriteSheetTool.addAnimation(0,   37,   36, 26, 14, "Dog_Sitting",    dogPath);
+    spriteSheetTool.addAnimation(0,   33,   36, 28, 14, "Dog_Sitting",    dogPath);
     spriteSheetTool.addAnimation(0,   68,   36, 26, 12, "Dog_Barking",    dogPath);
     spriteSheetTool.addAnimation(0,   147,  36, 26, 22, "Dog_Peeing",     dogPath);
     spriteSheetTool.addAnimation(15,  175,  36, 26, 4,  "Dog_Peeing",     dogPath);
@@ -137,7 +138,7 @@ void MainWindow::loadAnimations()
     spriteSheetTool.addAnimation(360, 198,  36, 26, 13, "Dog_Sleeping",   dogPath);
     spriteSheetTool.addAnimation(15, 229,  36, 26, 3,   "Dog_Sleeping",   dogPath);
     spriteSheetTool.addAnimation(122, 224,  36, 24, 9,  "Dog_WakeUp",     dogPath);
-    spriteSheetTool.addAnimation(0, 249, 36, 24, 11,    "Dog_Walking",    dogPath);
+    spriteSheetTool.addAnimation(0, 247, 36, 24, 11,    "Dog_Walking",    dogPath);
     spriteSheetTool.addAnimation(0, 272, 36, 25, 4,     "Dog_Running",    dogPath);
     spriteSheetTool.addAnimation(0, 325, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
@@ -370,8 +371,6 @@ void MainWindow::update()
 
     }
 
-
-
     std::string tmp =  model.getDogState();
     if(tmp == "Playing" || tmp == "Eating")tmp = "Running";
     if(tmp == "BeginDeath")tmp = "Death";
@@ -419,6 +418,7 @@ void MainWindow::update()
     }
 
     dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
+
     frame.draw(dog);
 
     frame.display();
@@ -430,6 +430,7 @@ void MainWindow::update()
     QImage qi(pp,width,height,QImage::Format_ARGB32);
     qi = qi.rgbSwapped();
     ui->imageLabel->setPixmap(QPixmap::fromImage(qi));
+
 }
 
 ///
