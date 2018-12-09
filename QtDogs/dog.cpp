@@ -1,6 +1,11 @@
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
+
 #include "dog.h"
-#include <math.h>
-#include "model.h"
 
 ///
 /// \brief Dog::Dog:
@@ -12,22 +17,28 @@ Dog::Dog()
     currentDogPositionX = 0;
     currentFoodPositionX = 0;
     currentTreatPositionX = 0;
-    hunger = 100;
+    hunger = 99;
     bathroom = 0;
     trustLevel = 0;
     currentState = "Idle";
+    isDogInPark = false;
 }
 
+///
+/// \brief Dog::~Dog
+/// Dog Destructor
+///
 Dog::~Dog()
 {
 
 }
 
-int Dog::updateDogAnimation()
-{
-
-}
-
+///
+/// \brief Dog::UpdateDogState
+/// Updates the current dog state, main AI for the entire project.
+/// \param isNight - Determines if the dog should be sleeping or not.
+/// \return Vector of moving positions.
+///
 b2Vec2 Dog::UpdateDogState(bool isNight){
 
     bool isHungry = increaseHunger();
@@ -47,7 +58,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         if(currentState == "Idle")
         {
             currentForce = b2Vec2_zero;
-            srand(static_cast <unsigned int> (time(nullptr)));
             float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
 
             std::string stateFlag = currentStateFlag[3];
@@ -59,7 +69,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 stateFlag = currentStateFlag[2];
 
 
-            if(isHungry && hunger >= 0)
+            if(isHungry && hunger >= 0 && static_cast<double>(stateFlagChoice) < 0.05)
             {
                 currentState = "Barking";
             }
@@ -71,7 +81,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if(foodExists || treatExists)
+            else if((foodExists || treatExists) && isHungry)
             {
                 currentState = "Eating";
             }
@@ -92,28 +102,26 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             if(getRandomDogDirectionLeft())
             {
-                dogDirectionLeft = true;
+                dogDirectionLeft = (dogDirectionLeft) ? false : true;
+            }
+            if(dogDirectionLeft)
                 currentForce.x = -walkSpeed;
-            }
             else
-            {
-                dogDirectionLeft = false;
                 currentForce.x = walkSpeed;
-            }
 
             //Random change of behavior to running or idle
-            srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
 
-            if(behaviorChangeChance < 20)
+            if(behaviorChangeChance < 10)
             {
                 currentState = "Idle";
             }
+
             if(ballExists)
             {
                 currentState = "Playing";
             }
-            else if(foodExists || treatExists)
+            else if((foodExists || treatExists) && isHungry)
             {
                 currentState = "Eating";
             }
@@ -122,9 +130,8 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             //Random change of behavior to idle
-            srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 50)
+            if(behaviorChangeChance < 20)
             {
                 currentState = "Idle";
             }
@@ -142,7 +149,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 dogDirectionLeft = false;
                 currentForce.x = runSpeed;
             }
-            srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
             if(behaviorChangeChance < 50)
             {
@@ -152,7 +158,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if(foodExists || treatExists)
+            else if((foodExists || treatExists) && isHungry)
             {
                 currentState = "Eating";
             }
@@ -169,7 +175,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             //Random change of behavior to idle
             srand(static_cast <unsigned int> (time(nullptr)));
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 50)
+            if(behaviorChangeChance < 80)
             {
                 currentState = "Idle";
             }
@@ -178,10 +184,9 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             //Bark at random intervals
-            srand(static_cast <unsigned int> (time(nullptr)));
             int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
             decreaseTrustProgress();
-            if(!(barkChance % 100))
+            if(barkChance < 5)
             {
                 currentState = "Idle";
             }
@@ -366,7 +371,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             //Bark at random intervals
-            srand(static_cast <unsigned int> (time(nullptr)));
             int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
             decreaseTrustProgress();
             if(!(barkChance % 100))
@@ -404,16 +408,9 @@ std::string Dog::getDogState()
 ///
 bool Dog::getRandomDogDirectionLeft()
 {
-    srand(static_cast <unsigned int> (time(nullptr)));
-    int dogDirectionChance = int(static_cast<float>(rand()) / static_cast<float>(RAND_MAX)*2.0f);
-    if(dogDirectionChance == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    float dogDirectionChance = (static_cast<float>(rand())*1.0f / static_cast<float>(RAND_MAX));
+    //qDebug() << (dogDirectionLeft);
+    return (dogDirectionChance < 0.05f);
 }
 
 ///
@@ -442,9 +439,9 @@ float Dog::getHunger()
 ///
 bool Dog::increaseHunger()
 {
+    hunger -= 0.0555555555555555555f;
     if (hunger < 100)
     {
-        hunger-= 0.0055555555555555555;
         if (hunger > 70)
         {
             return false;
@@ -469,7 +466,6 @@ void Dog::feedTreat()
         hunger += 10;
         //Clamp hunger to set interval
         hunger = fmin(fmax(hunger, 0.0f), 100.0f);
-        srand(static_cast <unsigned int> (time(nullptr)));
         int rng = rand();
         if (rng % 2 == 0)
         {
@@ -627,41 +623,73 @@ void Dog::resetTrustLevel()
     trustLevel = 0;
 }
 
+///
+/// \brief Dog::DogInPark
+/// Sets if the dog is currently in the park.
+///
 void Dog::DogInPark(bool inPark)
 {
     isDogInPark = inPark;
 }
 
+///
+/// \brief Dog::doesBallExist
+/// Setter for showing that the ball is existing on screen.
+///
 void Dog::doesBallExist(bool exists)
 {
     ballExists = exists;
 }
 
+///
+/// \brief Dog::doesFoodExist
+/// Setter for showing if the food is existing on screen.
+///
 void Dog::doesFoodExist(bool exists)
 {
     foodExists = exists;
 }
 
+///
+/// \brief Dog::doesTreatExist
+/// Setter for showing if the treat is existing on screen.
+///
 void Dog::doesTreatExist(bool exists)
 {
     treatExists = exists;
 }
 
+///
+/// \brief Dog::BallPositionX
+/// Setter for setting the Ball position X direction.
+///
 void Dog::BallPositionX(float position)
 {
     currentBallPositionX = position;
 }
 
+///
+/// \brief Dog::DogPositionX
+/// Setter for setting the Dog position X direction.
+///
 void Dog::DogPositionX(float position)
 {
     currentDogPositionX = position;
 }
 
+///
+/// \brief Dog::FoodPositionX
+///  Setter for setting the Foods position X direction.
+///
 void Dog::FoodPositionX(float position)
 {
     currentFoodPositionX = position;
 }
 
+///
+/// \brief Dog::TreatPositionX
+///  Setter for setting the Treat position X direction.
+///
 void Dog::TreatPositionX(float position)
 {
     currentTreatPositionX = position;

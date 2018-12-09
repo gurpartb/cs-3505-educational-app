@@ -1,3 +1,10 @@
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <bits/stdc++.h>
@@ -11,32 +18,37 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     //Model connections
+    //connectios for buttons
     connect(ui->trickButton, &QPushButton::pressed, &model, &Model::dogTrick);
     connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
+    connect(ui->treatButton, &QPushButton::pressed,&model, &Model::dogTreat);
     connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
     connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
     connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
-    connect(ui->ballButton,&QPushButton::pressed,this,&MainWindow::playMusic);
+    connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
+
+    //connections for updating status bars
     connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustProgressBar_valueChanged);
     connect(&model, &Model::updateHungerLevel, this, &MainWindow::on_hungerProgressBar_valueChanged);
     connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
-
-    connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
-    connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
-    connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
-
     connect(&model, &Model::updateBathroomLevel, this, &MainWindow::on_bathroomProgressBar_valueChanged);
     connect(&model, &Model::updateTrustProgress, this, &MainWindow::on_trustProgressBar_valueChanged);
 
+    //connections for dog movement
+    connect(this, &MainWindow::dogWalkLeft,&model, &Model::dogWalkLeft);
+    connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
+    //connections for sound effects
+    connect(&model, &Model::playBounceSound, this, &MainWindow::playBounceSound);
+    connect(&model, &Model::playWhistleSound, this, &MainWindow::playWhistleSound);
+    connect(&model, &Model::playEatSound, this, &MainWindow::playEatSound);
+
     width = ui->imageLabel->size().width();
     height = ui->imageLabel->size().height();
-
 
     ui->hungerProgressBar->setValue(0);
     ui->bathroomProgressBar->setValue(0);
     ui->trustProgressBar->setValue(0);
     ui->levelNumber->display(1);
-
 
     animationDelayCounter = 0;
 
@@ -58,6 +70,11 @@ MainWindow::MainWindow(QWidget *parent) :
     treat.setScale(0.25f,0.25f);
     treat.setOrigin(128,128);
 
+    foodTex.loadFromFile("../QtDogs/assets/DogBowl.png");
+    food.setTexture(foodTex);
+    food.setScale(1.0f,1.0f);
+    food.setOrigin(128,128);
+
     //dogTex.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     dog.setTexture(dogTex);
     dog.setScale(4.0,4.0);
@@ -69,14 +86,37 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timeOfDayChange, SIGNAL(timeout()), this, SLOT(changeTimeOfDay()));
     timeOfDayChange->start(180000);
 
-
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(update()));
     timer->start(1000/30);
 
     enableUi(false);
+   // playMusic();//this will play the music when the game is started
+    musicBuffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg");
+    //all of these are awufl but they were the best i could find on soundbible
+    whistleBuffer.loadFromFile("../QtDogs/assets/Whistle.wav");
+    eatBuffer.loadFromFile("../QtDogs/assets/Eat.wav");
+    bounceBuffer.loadFromFile("../QtDogs/assets/Bounce2.wav");
+
+    musicSound.setBuffer(musicBuffer);
+    whistleSound.setBuffer(whistleBuffer);
+    eatSound.setBuffer(eatBuffer);
+    bounceSound.setBuffer(bounceBuffer);
 }
 
+///
+/// \brief MainWindow::~MainWindow
+/// Main Window destructor.
+///
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+///
+/// \brief MainWindow::loadAnimations
+/// Loads all of the sprite sheets to provide animations for background, splash screen, and dog.
+///
 void MainWindow::loadAnimations()
 {
     //adding animation frames
@@ -94,35 +134,30 @@ void MainWindow::loadAnimations()
     spriteSheetTool.addAnimation(0, 263, 36, 25, 4,     "Dog_Running",    dogPath);
     spriteSheetTool.addAnimation(0, 316, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
-
-
     splashScreenPath.loadFromFile("../QtDogs/assets/Splash_Screen.png");
     for(int i = 0; i < 7; ++i)
         spriteSheetTool.addAnimation(0, i*768, 768, 768,  8, "Splash_Screen", splashScreenPath);
     spriteSheetTool.addAnimation(0,   5376,  768, 768,  7, "Splash_Screen",    splashScreenPath);
-
-
 
     daytimePath.loadFromFile("../QtDogs/assets/Daytime.png");
     for(int i = 0; i < 5; ++i)
         spriteSheetTool.addAnimation(0,   768*i,   768, 768,  5, "Daytime",    daytimePath);
     spriteSheetTool.addAnimation(0,   3840,  768, 768,  1, "Daytime",    daytimePath);
 
-
-
     eveningPath.loadFromFile("../QtDogs/assets/Evening.png");
     for(int i = 0; i < 5; ++i)
         spriteSheetTool.addAnimation(0,   768*i,   768, 768,  5, "Evening",    eveningPath);
     spriteSheetTool.addAnimation(0,   3840,  768, 768,  1, "Evening",    eveningPath);
-
-
 
     nightPath.loadFromFile("../QtDogs/assets/Night.png");
     for(int i = 0; i < 4; ++i)
         spriteSheetTool.addAnimation(0,   768*i,   768, 768,  3, "Night",    nightPath);
 }
 
-
+///
+/// \brief MainWindow::updateDogAnimation
+/// Updates the current displaying animation with the new dog animation at 30FPS.
+///
 void MainWindow::updateDogAnimation()
 {
     ++dogFrameNumber;
@@ -134,12 +169,16 @@ void MainWindow::updateDogAnimation()
     sf::Texture* texture = spriteSheetTool.getTexture(dogAnimation);
 
     dogAnimationLength = spriteSheetTool.getAnimationFrameCount(dogAnimation);
-    dog.setOrigin(rect->width/2.0,rect->height - 12);
+    dog.setOrigin(static_cast<float>(rect->width / 2.0), static_cast<float>(rect->height - 12));
 
     dog.setTextureRect(*rect);
     dog.setTexture(*texture);
 }
 
+///
+/// \brief MainWindow::updateBackgroundAnimation
+/// Updates the background animation for day / evening / night cycles when at the house.
+///
 void MainWindow::updateBackgroundAnimation()
 {
     ++backgroundFrameNumber;
@@ -157,6 +196,11 @@ void MainWindow::updateBackgroundAnimation()
     background.setTexture(*texture);
 }
 
+///
+/// \brief MainWindow::enableUi
+/// Allows for the enabling or disabling of the UI. Sets visibilities and enabling buttons / labels.
+/// \param enabled - True if game is active, false if otherwise.
+///
 void MainWindow::enableUi(bool enabled)
 {
     gameStarted = enabled;
@@ -186,13 +230,21 @@ void MainWindow::enableUi(bool enabled)
     ui->playButton->setVisible(!enabled); //Reverse so Play button is disabled.
 }
 
+///
+/// \brief MainWindow::startGame
+/// Starts the game after a user presses play from the splash screen.
+///
 void MainWindow::startGame()
 {
     enableUi(true);
     backgroundAnimation = "Daytime";
-    //backgroundFrameNumber = 32;
+    //sound.stop();
 }
 
+///
+/// \brief MainWindow::update
+/// Main update function to display SFML objects and call an update to the model if the game is started.
+///
 void MainWindow::update()
 {
     if (gameStarted)
@@ -238,6 +290,12 @@ void MainWindow::update()
         treat.setRotation(model.treatR()*180.0f/3.14159f);
         frame.draw(treat);
     }
+    else if(model.getFoodExists())
+    {
+        food.setPosition(model.foodX()*width/2.0f,model.foodY()*height/2.0f);
+        food.setRotation(model.foodR()*180.0f/3.1459f);
+        frame.draw(food);
+    }
 
     dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
 
@@ -255,60 +313,82 @@ void MainWindow::update()
 
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-
+///
+/// \brief MainWindow::on_trustProgressBar_valueChanged
+/// Sets the value of the trust progression bar.
+///
 void MainWindow::on_trustProgressBar_valueChanged(int value)
 {
     ui->trustProgressBar->setValue(value);
 }
 
+///
+/// \brief MainWindow::on_hungerProgressBar_valueChanged
+/// Sets the value of the hunger progression bar.
+///
 void MainWindow::on_hungerProgressBar_valueChanged(int value)
 {
     ui->hungerProgressBar->setValue(value);
 }
 
+///
+/// \brief MainWindow::on_bathroomProgressBar_valueChanged
+///  Sets the value of the bathroom progression bar.
+///
 void MainWindow::on_bathroomProgressBar_valueChanged(int value)
 {
     ui->bathroomProgressBar->setValue(value);
 }
 
+///
+/// \brief MainWindow::on_trustLevel_valueChanged
+///  Sets the value of the trust level.
+///
 void MainWindow::on_trustLevel_valueChanged(int value)
 {
     ui->levelNumber->display(value);
 }
 
+///
+/// \brief MainWindow::updatePoopBar
+/// Updates the value of the bathroom bar.
+///
 void MainWindow::updatePoopBar()
 {
 
 }
 
+///
+/// \brief MainWindow::updateHungerBar
+/// Updates the value of the hunger bar.
+///
 void MainWindow::updateHungerBar()
 {
 
 }
 
+///
+/// \brief MainWindow::playMusic
+///  Plays the intro music on the splash screen.
+///
 void MainWindow::playMusic()
 {
-
-    if(!buffer.loadFromFile("../QtDogs/assets/who_let_dogs_out.ogg"))
-    {
-        std::cout << "Error loading music file";
-    }
-
-    sound.setBuffer(buffer);
-    sound.setVolume(100.f);
-    sound.play();
+    musicSound.play();
 }
 
+///
+/// \brief MainWindow::changeTimeOfDay
+/// Changes the background depending on the time of day.
+///
 void MainWindow::changeTimeOfDay()
 {
 
 }
 
+///
+/// \brief MainWindow::on_instructionsButton_clicked
+/// Displays a QMessageBox of the instructions and authors of the game. And what the game is about.
+///
 void MainWindow::on_instructionsButton_clicked()
 {
     QMessageBox msgBox;
@@ -317,3 +397,18 @@ void MainWindow::on_instructionsButton_clicked()
     msgBox.setStandardButtons(QMessageBox::Cancel);
     msgBox.exec();
 }
+
+void MainWindow::playBounceSound()
+{
+    bounceSound.play();
+}
+
+void MainWindow::playWhistleSound()
+{
+  whistleSound.play();
+}
+void MainWindow::playEatSound()
+{
+    eatSound.play();
+}
+
