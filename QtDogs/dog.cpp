@@ -69,7 +69,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 stateFlag = currentStateFlag[2];
 
 
-            if(isHungry && hunger >= 0 && stateFlagChoice < 0.05)
+            if(isHungry && hunger >= 0 && static_cast<double>(stateFlagChoice) < 0.05)
             {
                 currentState = "Barking";
             }
@@ -440,6 +440,7 @@ float Dog::getHunger()
 bool Dog::increaseHunger()
 {
     hunger-= 0.00555555555555555555;
+
     if (hunger < 100)
     {
         if (hunger > 70)
