@@ -123,6 +123,7 @@ signals:
     void playBounceSound();
     void playWhistleSound();
     void playEatSound();
+    void playBarkSound();
 
 };
 

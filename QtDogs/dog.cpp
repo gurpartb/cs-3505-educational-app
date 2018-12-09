@@ -273,7 +273,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
 
             if(isHungry && hunger >= 0)
             {
-                currentState = "Bark";
+                currentState = "Barking";
             }
             else if(needsToGo)
             {
@@ -334,7 +334,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 currentState = "Idle";
             }
         }
-        else if(currentState == "Bark")
+        else if(currentState == "Barking")
         {
             currentForce = b2Vec2_zero;
             //Bark at random intervals
@@ -417,7 +417,8 @@ float Dog::getHunger()
 ///
 bool Dog::increaseHunger()
 {
-    hunger-= 0.00555555555555555555f;
+    //hunger-= 0.00555555555555555555f;
+    hunger -= 0.20f;
 
     if (hunger < 100)
     {

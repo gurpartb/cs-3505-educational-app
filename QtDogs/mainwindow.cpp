@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
     //connections for sound effects
     connect(&model, &Model::playBounceSound, this, &MainWindow::playBounceSound);
+    connect(&model, &Model::playBarkSound, this, &MainWindow::playBarkSound);
     connect(&model, &Model::playWhistleSound, this, &MainWindow::playWhistleSound);
     connect(&model, &Model::playEatSound, this, &MainWindow::playEatSound);
 
@@ -103,11 +104,13 @@ MainWindow::MainWindow(QWidget *parent) :
     whistleBuffer.loadFromFile("../QtDogs/assets/Whistle.wav");
     eatBuffer.loadFromFile("../QtDogs/assets/Eat.wav");
     bounceBuffer.loadFromFile("../QtDogs/assets/Bounce2.wav");
+    barkBuffer.loadFromFile(("../QtDogs/assets/bark_1.ogg"));
 
     musicSound.setBuffer(musicBuffer);
     whistleSound.setBuffer(whistleBuffer);
     eatSound.setBuffer(eatBuffer);
     bounceSound.setBuffer(bounceBuffer);
+    barkSound.setBuffer(barkBuffer);
 }
 
 ///
@@ -128,16 +131,16 @@ void MainWindow::loadAnimations()
     //adding animation frames
     dogPath.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     spriteSheetTool.addAnimation(0,   7,    36, 26,  3, "Dog_Idle",       dogPath);
-    spriteSheetTool.addAnimation(410,   339, 72, 40,  7, "Dog_Dying",   dogPath);
-    spriteSheetTool.addAnimation(770, 304, 72, 34,  1, "Dog_Dead",   dogPath);
-    spriteSheetTool.addAnimation(0,   33,   36, 28, 14, "Dog_Sitting",    dogPath);
+    spriteSheetTool.addAnimation(410,   339, 72, 40,  7,"Dog_Dying",   dogPath);
+    spriteSheetTool.addAnimation(770, 304, 72, 34,  1,  "Dog_Dead",   dogPath);
+    spriteSheetTool.addAnimation(0,   35,   36, 28, 14, "Dog_Sitting",    dogPath);
     spriteSheetTool.addAnimation(0,   68,   36, 26, 12, "Dog_Barking",    dogPath);
     spriteSheetTool.addAnimation(0,   147,  36, 26, 22, "Dog_Peeing",     dogPath);
     spriteSheetTool.addAnimation(15,  175,  36, 26, 4,  "Dog_Peeing",     dogPath);
-    spriteSheetTool.addAnimation(0,   198,  36, 26, 9,  "Dog_Sleeping", dogPath);
-    spriteSheetTool.addAnimation(360, 198,  36, 26, 13, "Dog_Sleeping",   dogPath);
-    spriteSheetTool.addAnimation(15, 229,  36, 26, 3,   "Dog_Sleeping",   dogPath);
-    spriteSheetTool.addAnimation(122, 224,  36, 24, 9,  "Dog_WakeUp",     dogPath);
+    spriteSheetTool.addAnimation(0,   195,  36, 26, 9,  "Dog_Sleeping", dogPath);
+    spriteSheetTool.addAnimation(360, 195,  36, 26, 13, "Dog_Sleeping",   dogPath);
+    spriteSheetTool.addAnimation(0, 221,  36, 26, 3,    "Dog_Sleeping",   dogPath);
+    spriteSheetTool.addAnimation(108, 223,  36, 24, 9,  "Dog_WakeUp",     dogPath);
     spriteSheetTool.addAnimation(0, 247, 36, 24, 11,    "Dog_Walking",    dogPath);
     spriteSheetTool.addAnimation(0, 272, 36, 25, 4,     "Dog_Running",    dogPath);
     spriteSheetTool.addAnimation(0, 325, 36, 55, 10,    "Dog_Flipping",   dogPath);
@@ -527,8 +530,17 @@ void MainWindow::playWhistleSound()
 {
   whistleSound.play();
 }
+
 void MainWindow::playEatSound()
 {
     eatSound.play();
+}
+
+void MainWindow::playBarkSound()
+{
+    unsigned int numOfSound = static_cast<unsigned int>((static_cast<float>(rand()) * 5.0f) / static_cast<float>(RAND_MAX)) + 1;
+    barkBuffer.loadFromFile("../QtDogs/assets/bark_" + std::to_string(numOfSound) + ".ogg");
+    barkSound.setBuffer(barkBuffer);
+    barkSound.play();
 }
 
