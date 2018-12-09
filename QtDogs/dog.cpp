@@ -409,8 +409,14 @@ std::string Dog::getDogState()
 bool Dog::getRandomDogDirectionLeft()
 {
     float dogDirectionChance = (static_cast<float>(rand())*1.0f / static_cast<float>(RAND_MAX));
-    //qDebug() << (dogDirectionLeft);
-    return (dogDirectionChance < 0.05f);
+    float chance = 0.0f;
+
+    if(dogDirectionLeft)
+        chance =  (2.0f-(currentDogPositionX))*0.5f;
+    else
+        chance = currentDogPositionX*0.5f;
+
+     return (dogDirectionChance < chance * chance * 0.1f);
 }
 
 ///
