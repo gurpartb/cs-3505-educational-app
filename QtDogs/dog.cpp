@@ -158,7 +158,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if((foodExists || treatExists) && isHungry)
+            else if(foodExists && isHungry)
+            {
+                currentState = "Eating";
+            }
+            else if(treatExists)
             {
                 currentState = "Eating";
             }
@@ -210,7 +214,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             currentForce = b2Vec2_zero;
             currentState = "Idle";
         }
-        else if(currentState == "Dead")
+        else if(currentState == "BeginDeath")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Death";
+        }
+        else if(currentState == "Death")
         {
             currentForce = b2Vec2_zero;
         }
@@ -448,7 +457,7 @@ bool Dog::increaseHunger()
         }
         else if(hunger <= 0)
         {
-            currentState = "Dead";
+            currentState = "BeginDeath";
         }
         return true;
     }
