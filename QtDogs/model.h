@@ -47,6 +47,7 @@ private:
     bool ballExists;
     bool treatExists;
     bool foodExists;
+    bool atPark;
 
 public:
     Model();

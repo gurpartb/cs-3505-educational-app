@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->bathroomProgressBar->setValue(0);
     ui->trustProgressBar->setValue(0);
     ui->levelNumber->display(1);
+    ui->homeButton->setVisible(false);
+
 
     animationDelayCounter = 0;
 
@@ -132,6 +134,9 @@ void MainWindow::loadAnimations()
     spriteSheetTool.addAnimation(0, 240, 36, 24, 11,    "Dog_Walking",    dogPath);
     spriteSheetTool.addAnimation(0, 263, 36, 25, 4,     "Dog_Running",    dogPath);
     spriteSheetTool.addAnimation(0, 316, 36, 55, 10,    "Dog_Flipping",   dogPath);
+
+    parkPath.loadFromFile("../QtDogs/assets/pixelartparkfinal.png");
+    spriteSheetTool.addAnimation(0, 0, 7680, 768, 1, "Park_Screen", parkPath);
 
     splashScreenPath.loadFromFile("../QtDogs/assets/Splash_Screen.png");
     for(int i = 0; i < 10; ++i)
@@ -236,7 +241,6 @@ void MainWindow::enableUi(bool enabled)
 void MainWindow::startGame()
 {
     enableUi(true);
-   // backgroundAnimation = "Daytime";
     //sound.stop();
 }
 
