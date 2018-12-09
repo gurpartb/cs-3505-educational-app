@@ -375,7 +375,7 @@ void MainWindow::update()
             ui->trickButton->setEnabled(false);
         }
 
-        if (model.getDogTrustLevel() >= 0)
+        if (model.getDogTrustLevel() >= 3)
         {
             if (!model.isNight){
                 ui->parkButton->setEnabled(true);
