@@ -180,10 +180,11 @@ void Model::createFood()
     foodExists = true;
 
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(1.5f,1.3f);
+    BodyDef.position = b2Vec2(1.5f,1.7f);
    // BodyDef.position = b2Vec2(.7f,1.0f);
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX),0.0f);
+    BodyDef.fixedRotation = true;
     food = world->CreateBody(&BodyDef);
 
     b2PolygonShape shape;
@@ -191,8 +192,8 @@ void Model::createFood()
     shape.SetAsBox(SCALE*46.0f,SCALE*30.0f);
 
     b2FixtureDef FixtureDef;
-    FixtureDef.density = 2.0f;
-    FixtureDef.friction = 0.7f;
+    FixtureDef.density = .80f;
+    FixtureDef.friction = 0.2f;
     FixtureDef.shape = &shape;
 
     food->CreateFixture(&FixtureDef);
