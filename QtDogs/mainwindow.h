@@ -70,6 +70,7 @@ private:
 
     sf::Texture dogPath;
     sf::Texture splashScreenPath;
+    sf::Texture parkPath;
     sf::Texture daytimePath;
     sf::Texture eveningPath;
     sf::Texture nightPath;

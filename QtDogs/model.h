@@ -48,6 +48,8 @@ private:
     bool treatExists;
     bool foodExists;
     bool isNight;
+    bool atPark;
+
 
 public:
     Model();

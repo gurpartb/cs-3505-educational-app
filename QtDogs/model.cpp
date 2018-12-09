@@ -21,6 +21,7 @@ Model::Model(){
     treatExists = false;
     foodExists = false;
     isNight = false;
+    atPark = false;
 
     createScene();
     createDog();
@@ -61,6 +62,7 @@ void Model::update()
     dog->doesTreatExist(treatExists);
 
     if(ballExists)
+
         dog->BallPositionX(ballX());
     if(foodExists)
         dog->FoodPositionX(foodX());
@@ -283,13 +285,16 @@ void Model::dogCollisions()
     {
         if (edge->contact->IsTouching())
         {
-            if (edge->contact->GetFixtureB()->GetBody() == rightWall)
+            if (atPark)
             {
-                //emit pan right background
-            }
-            if (edge->contact->GetFixtureB()->GetBody() == leftWall)
-            {
-                //emit pan left background
+                if (edge->contact->GetFixtureB()->GetBody() == rightWall)
+                {
+                    //emit pan right background
+                }
+                if (edge->contact->GetFixtureB()->GetBody() == leftWall)
+                {
+                    //emit pan left background
+                }
             }
             if (edge->contact->GetFixtureB()->GetBody() == ball)
             {
@@ -457,6 +462,7 @@ void Model::dogPlayedWithBall()
 void Model::dogWentToThePark()
 {
     dog->DogInPark(true);
+    atPark = true;
 }
 
 ///
