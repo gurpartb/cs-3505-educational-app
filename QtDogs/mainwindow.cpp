@@ -22,9 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
     connect(ui->treatButton, &QPushButton::pressed,&model, &Model::dogTreat);
     connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
-    connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
+    connect(ui->parkButton, &QPushButton::pressed, this, &MainWindow::goToPark);
     connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
     connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
+    connect(ui->homeButton, &QPushButton::pressed, this, &MainWindow::goHome);
 
     //connections for updating status bars
     connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustProgressBar_valueChanged);
@@ -47,8 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->hungerProgressBar->setValue(0);
     ui->bathroomProgressBar->setValue(0);
     ui->trustProgressBar->setValue(0);
-    ui->levelNumber->display(1);
-    //ui->homeButton->setVisible(false);
+    ui->levelNumber->display(0);
+    ui->homeButton->setVisible(false);
     parkPos = 0;
 
 
@@ -212,7 +213,6 @@ void MainWindow::updateDogAnimation()
 ///
 void MainWindow::updateBackgroundAnimation()
 {
-
     if(backgroundAnimation != "Park_Screen")
     {
         ++backgroundFrameNumber;
@@ -231,7 +231,6 @@ void MainWindow::updateBackgroundAnimation()
     sf::Texture* texture = spriteSheetTool.getTexture(backgroundAnimation);
 
     backgroundAnimationLength = spriteSheetTool.getAnimationFrameCount(backgroundAnimation);
-    background.setOrigin(0,0);
 
     background.setTextureRect(*rect);
     background.setTexture(*texture);
@@ -307,6 +306,25 @@ void MainWindow::updateTimeOfDay()
 }
 
 ///
+/// \brief MainWindow::goToPark
+/// Change background and emit signals to display the park
+///
+void MainWindow::goToPark()
+{
+    backgroundAnimation = "Park_Screen";
+    model.dogWentToThePark(true);
+}
+
+///
+/// \brief MainWindow::goHome
+/// sets the scene for the dog to go home.
+///
+void MainWindow::goHome()
+{
+    model.dogWentToThePark(false);
+}
+
+///
 /// \brief MainWindow::update
 /// Main update function to display SFML objects and call an update to the model if the game is started.
 ///
@@ -314,15 +332,40 @@ void MainWindow::update()
 {
     if (gameStarted)
     {
+
         model.update();
 
-        if(isInPark)
+        if(model.isDogInPark())
         {
            backgroundAnimation = "Park_Screen";
+           ui->parkButton->setVisible(false);
+           ui->homeButton->setVisible(true);
         }
         else
         {
             updateTimeOfDay();
+            ui->parkButton->setVisible(true);
+            ui->homeButton->setVisible(false);
+        }
+
+        if (model.getDogTrustLevel() >= 3)
+        {
+            if (!model.isNight){
+                ui->parkButton->setEnabled(true);
+                ui->parkButton->setText("Go To Park");
+            }
+            else
+            {
+                ui->parkButton->setEnabled(true);
+                ui->parkButton->setText("Park Is Closed");
+            }
+
+        }
+        else
+        {
+            ui->parkButton->setEnabled(false);
+            ui->parkButton->setText("Unlock Lv 3");
+
         }
 
     }

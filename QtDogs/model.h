@@ -56,6 +56,7 @@ public:
     bool isNight;
 
     void update();
+    void dogWentToThePark(bool);
 
     float ballX(){return ball->GetPosition().x;}
     float ballY(){return ball->GetPosition().y;}
@@ -82,6 +83,8 @@ public:
     int getDogTrustProgress(){return dog->getTrustProgress();}
     bool getDogDirectionLeft(){return dog->getDogDirectionLeft();}
 
+    bool isDogInPark(){return dog->isInPark();}
+
 private:
     void createBall();
     void createTreat();
@@ -99,7 +102,7 @@ public slots:
     void dogTrick();
     void dogFed();
     void dogPlayedWithBall();
-    void dogWentToThePark();
+
     void dogLetOut();
     void dogWalkLeft();
     void dogWalkRight();

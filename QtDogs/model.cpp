@@ -378,9 +378,9 @@ void Model::dogPlayedWithBall()
     createBall();
 }
 
-void Model::dogWentToThePark()
+void Model::dogWentToThePark(bool wentToPark)
 {
-    dog->DogInPark(true);
+    dog->DogInPark(wentToPark);
 }
 
 void Model::dogLetOut()
