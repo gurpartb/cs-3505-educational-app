@@ -538,9 +538,16 @@ void MainWindow::playEatSound()
 
 void MainWindow::playBarkSound()
 {
-    unsigned int numOfSound = static_cast<unsigned int>((static_cast<float>(rand()) * 5.0f) / static_cast<float>(RAND_MAX)) + 1;
-    barkBuffer.loadFromFile("../QtDogs/assets/bark_" + std::to_string(numOfSound) + ".ogg");
-    barkSound.setBuffer(barkBuffer);
-    barkSound.play();
+    if(barkCounter == 30) {
+        barkCounter = 0;
+        unsigned int numOfSound = static_cast<unsigned int>((static_cast<float>(rand()) * 5.0f) / static_cast<float>(RAND_MAX)) + 1;
+        barkBuffer.loadFromFile("../QtDogs/assets/bark_" + std::to_string(numOfSound) + ".ogg");
+        barkSound.setBuffer(barkBuffer);
+        barkSound.play();
+    }
+    else {
+        barkCounter++;
+    }
+
 }
 

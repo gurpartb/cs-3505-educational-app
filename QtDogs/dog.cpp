@@ -618,7 +618,7 @@ void Dog::decreaseTrustProgress()
 {
     if(trustProgress > 0)
     {
-        trustProgress -= 10;
+        trustProgress -= 0.05;
     }
     else
     {
