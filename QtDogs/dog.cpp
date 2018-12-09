@@ -17,7 +17,7 @@ Dog::Dog()
     currentDogPositionX = 0;
     currentFoodPositionX = 0;
     currentTreatPositionX = 0;
-    hunger = 99;
+    hunger = 100;
     bathroom = 0;
     trustLevel = 0;
     currentState = "Idle";
@@ -61,11 +61,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
 
             std::string stateFlag = currentStateFlag[3];
-            if(stateFlagChoice < 0.50f)
+            if(stateFlagChoice < 0.90f)
                 stateFlag = currentStateFlag[0];
-            else if(stateFlagChoice < 0.85f)
-                stateFlag = currentStateFlag[1];
             else if(stateFlagChoice < 0.95f)
+                stateFlag = currentStateFlag[1];
+            else if(stateFlagChoice < 0.98f)
                 stateFlag = currentStateFlag[2];
 
 
@@ -81,7 +81,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if((foodExists || treatExists) && isHungry)
+            else if(foodExists && isHungry)
+            {
+                currentState = "Eating";
+            }
+            else if(treatExists)
             {
                 currentState = "Eating";
             }
@@ -110,9 +114,9 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 currentForce.x = walkSpeed;
 
             //Random change of behavior to running or idle
-            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            float behaviorChangeChance = (static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX);
 
-            if(behaviorChangeChance < 10)
+            if(behaviorChangeChance < 0.05f)
             {
                 currentState = "Idle";
             }
@@ -121,7 +125,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if((foodExists || treatExists) && isHungry)
+            else if(foodExists && isHungry)
+            {
+                currentState = "Eating";
+            }
+            else if(treatExists)
             {
                 currentState = "Eating";
             }
@@ -136,32 +144,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 currentState = "Idle";
             }
 
-        }
-        else if(currentState == "Running")
-        {
-            if(getDogDirectionLeft())
-            {
-                dogDirectionLeft = true;
-                currentForce.x = -runSpeed;
-            }
-            else
-            {
-                dogDirectionLeft = false;
-                currentForce.x = runSpeed;
-            }
-            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 50)
-            {
-                currentState = "Walking";
-            }
-            if(ballExists)
-            {
-                currentState = "Playing";
-            }
-            else if((foodExists || treatExists) && isHungry)
-            {
-                currentState = "Eating";
-            }
         }
         else if(currentState == "Peeing")
         {
@@ -210,7 +192,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             currentForce = b2Vec2_zero;
             currentState = "Idle";
         }
-        else if(currentState == "Dead")
+        else if(currentState == "BeginDeath")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Death";
+        }
+        else if(currentState == "Death")
         {
             currentForce = b2Vec2_zero;
         }
@@ -281,16 +268,8 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         }
         else if(currentState == "Walking")
         {
-            if(getDogDirectionLeft())
-            {
-                dogDirectionLeft = true;
-                currentForce.x = -walkSpeed;
-            }
-            else
-            {
-                dogDirectionLeft = false;
-                currentForce.x = walkSpeed;
-            }
+            dogDirectionLeft = false;
+            currentForce.x = walkSpeed;
 
             if(isHungry && hunger >= 0)
             {
@@ -299,12 +278,13 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             else if(needsToGo)
             {
                 currentState = "Peeing";
+                resetBathroom();
             }
             else if(ballExists)
             {
                 currentState = "Playing";
             }
-            else if(foodExists || treatExists)
+            else if(treatExists)
             {
                 currentState = "Eating";
             }
@@ -312,20 +292,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         }
         else if(currentState == "Eating")
         {
-            if(foodExists)
-            {
-                if(currentFoodPositionX > currentDogPositionX)
-                {
-                    dogDirectionLeft = false;
-                    currentForce.x = runSpeed;
-                }
-                else if(currentFoodPositionX < currentDogPositionX)
-                {
-                    dogDirectionLeft = true;
-                    currentForce.x = -runSpeed;
-                }
-            }
-            else if(treatExists)
+            if(treatExists)
             {
                 if(currentTreatPositionX > currentDogPositionX)
                 {
@@ -378,7 +345,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 currentState = "Idle";
             }
         }
-        else if(currentState == "Dead")
+        else if(currentState == "BeginDeath")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Death";
+        }
+        else if(currentState == "Death")
         {
             currentForce = b2Vec2_zero;
         }
@@ -409,8 +381,14 @@ std::string Dog::getDogState()
 bool Dog::getRandomDogDirectionLeft()
 {
     float dogDirectionChance = (static_cast<float>(rand())*1.0f / static_cast<float>(RAND_MAX));
-    //qDebug() << (dogDirectionLeft);
-    return (dogDirectionChance < 0.05f);
+    float chance = 0.0f;
+
+    if(dogDirectionLeft)
+        chance =  (2.0f-(currentDogPositionX))*0.5f;
+    else
+        chance = currentDogPositionX*0.5f;
+
+     return (dogDirectionChance < chance * chance * 0.1f);
 }
 
 ///
@@ -439,7 +417,8 @@ float Dog::getHunger()
 ///
 bool Dog::increaseHunger()
 {
-    hunger -= 0.0555555555555555555f;
+    hunger-= 0.00555555555555555555f;
+
     if (hunger < 100)
     {
         if (hunger > 70)
@@ -448,7 +427,7 @@ bool Dog::increaseHunger()
         }
         else if(hunger <= 0)
         {
-            currentState = "Dead";
+            currentState = "BeginDeath";
         }
         return true;
     }
