@@ -313,6 +313,7 @@ void MainWindow::updateTimeOfDay()
 ///
 void MainWindow::goToPark()
 {
+    ui->letOutButton->setEnabled(false);
     backgroundAnimation = "Park_Screen";
     model.dogWentToThePark(true);
 }
@@ -324,6 +325,7 @@ void MainWindow::goToPark()
 void MainWindow::goHome()
 {
     model.dogWentToThePark(false);
+    ui->letOutButton->setEnabled(true);
 }
 
 ///
@@ -370,6 +372,7 @@ void MainWindow::update()
         else
         {
             ui->trickButton->setText("Unlock Lv 2");
+            ui->trickButton->setEnabled(false);
         }
 
         if (model.getDogTrustLevel() >= 3)

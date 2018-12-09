@@ -323,7 +323,24 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Eating";
             }
+            else if(trickExists)
+            {
+                currentState = "Flipping";
+                currentAnimationFrame = 6*10;
+                int rng = rand();
+                if (rng % 2 == 0)
+                    increaseTrustProgress();
+            }
 
+        }
+        else if(currentState == "Flipping")
+        {
+            currentForce = b2Vec2_zero;
+            if(currentAnimationFrame <= 6)
+            {
+                currentState = "Idle";
+            }
+            --currentAnimationFrame;
         }
         else if(currentState == "Eating")
         {
@@ -528,7 +545,7 @@ float Dog::getBathroom()
 ///
 bool Dog::increaseBathroom()
 {
-    bathroom += 0.1111111f;
+    bathroom += 0.02f;
     if (bathroom < 90)
     {
 
