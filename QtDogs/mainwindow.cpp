@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->bathroomProgressBar->setValue(0);
     ui->trustProgressBar->setValue(0);
     ui->levelNumber->display(1);
+    ui->homeButton->setVisible(false);
+
 
     animationDelayCounter = 0;
 
@@ -72,7 +74,9 @@ MainWindow::MainWindow(QWidget *parent) :
     foodTex.loadFromFile("../QtDogs/assets/DogBowl.png");
     food.setTexture(foodTex);
     food.setScale(1.0f,1.0f);
-    food.setOrigin(128,128);
+    //food.setScale(.8f,.8f);
+    //food.setOrigin(128,128);
+    food.setOrigin(46,30);
 
     //dogTex.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     dog.setTexture(dogTex);
@@ -136,10 +140,13 @@ void MainWindow::loadAnimations()
     spriteSheetTool.addAnimation(0, 272, 36, 25, 4,     "Dog_Running",    dogPath);
     spriteSheetTool.addAnimation(0, 325, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
+    parkPath.loadFromFile("../QtDogs/assets/pixelartparkfinal.png");
+    spriteSheetTool.addAnimation(0, 0, 7680, 768, 1, "Park_Screen", parkPath);
+
     splashScreenPath.loadFromFile("../QtDogs/assets/Splash_Screen.png");
-    for(int i = 0; i < 7; ++i)
+    for(int i = 0; i < 10; ++i)
         spriteSheetTool.addAnimation(0, i*768, 768, 768,  8, "Splash_Screen", splashScreenPath);
-    spriteSheetTool.addAnimation(0,   5376,  768, 768,  7, "Splash_Screen",    splashScreenPath);
+   /// spriteSheetTool.addAnimation(0,   5376,  768, 768,  7, "Splash_Screen",    splashScreenPath);
 
     daytimePath.loadFromFile("../QtDogs/assets/Daytime.png");
     for(int i = 0; i < 5; ++i)
@@ -239,8 +246,32 @@ void MainWindow::enableUi(bool enabled)
 void MainWindow::startGame()
 {
     enableUi(true);
-    backgroundAnimation = "Daytime";
     //sound.stop();
+}
+
+
+void MainWindow::updateTimeOfDay()
+{
+    timeOfDay++;
+    if(timeOfDay < 30*60)
+    {
+        backgroundAnimation = "Daytime";
+        model.isNight = false;
+    }
+    else if(timeOfDay < 30*120)
+    {
+         backgroundAnimation = "Evening";
+         model.isNight = false;
+    }
+    else if(timeOfDay < 30*180)
+    {
+        backgroundAnimation = "Night";
+        model.isNight = true;
+    }
+    else
+    {
+        timeOfDay = 0;
+    }
 }
 
 ///
@@ -252,6 +283,7 @@ void MainWindow::update()
     if (gameStarted)
     {
         model.update();
+        updateTimeOfDay();
     }
 
     std::string tmp =  model.getDogState();

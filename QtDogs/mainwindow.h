@@ -70,6 +70,7 @@ private:
 
     sf::Texture dogPath;
     sf::Texture splashScreenPath;
+    sf::Texture parkPath;
     sf::Texture daytimePath;
     sf::Texture eveningPath;
     sf::Texture nightPath;
@@ -77,6 +78,7 @@ private:
 
     int width;
     int height;
+    int timeOfDay;
     int animationDelayCounter;
     int gameState;
     int dogAnimationLength;
@@ -96,6 +98,7 @@ private:
     void updateBackgroundAnimation();
     void loadAnimations();
     void enableUi(bool);
+    void updateTimeOfDay();
 
 private slots:
     void update();
