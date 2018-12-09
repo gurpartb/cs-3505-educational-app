@@ -131,19 +131,19 @@ void MainWindow::loadAnimations()
     //adding animation frames
     dogPath.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     spriteSheetTool.addAnimation(0,   7,    36, 26,  3, "Dog_Idle",       dogPath);
-    spriteSheetTool.addAnimation(410,   339, 72, 40,  7,"Dog_Dying",   dogPath);
-    spriteSheetTool.addAnimation(770, 304, 72, 34,  1,  "Dog_Dead",   dogPath);
-    spriteSheetTool.addAnimation(0,   35,   36, 28, 14, "Dog_Sitting",    dogPath);
-    spriteSheetTool.addAnimation(0,   68,   36, 26, 12, "Dog_Barking",    dogPath);
+    spriteSheetTool.addAnimation(410,   337, 72, 40,  6,"Dog_Dead",   dogPath);
+    spriteSheetTool.addAnimation(770, 302, 72, 34,  1,  "Dog_Dead",   dogPath);
+    spriteSheetTool.addAnimation(0,   34,   36, 28, 14, "Dog_Sitting",    dogPath);
+    spriteSheetTool.addAnimation(0,   62,   36, 30, 12, "Dog_Barking",    dogPath);
     spriteSheetTool.addAnimation(0,   147,  36, 26, 22, "Dog_Peeing",     dogPath);
     spriteSheetTool.addAnimation(15,  175,  36, 26, 4,  "Dog_Peeing",     dogPath);
     spriteSheetTool.addAnimation(0,   195,  36, 26, 9,  "Dog_Sleeping", dogPath);
     spriteSheetTool.addAnimation(360, 195,  36, 26, 13, "Dog_Sleeping",   dogPath);
     spriteSheetTool.addAnimation(0, 221,  36, 26, 3,    "Dog_Sleeping",   dogPath);
     spriteSheetTool.addAnimation(108, 223,  36, 24, 9,  "Dog_WakeUp",     dogPath);
-    spriteSheetTool.addAnimation(0, 247, 36, 24, 11,    "Dog_Walking",    dogPath);
-    spriteSheetTool.addAnimation(0, 272, 36, 25, 4,     "Dog_Running",    dogPath);
-    spriteSheetTool.addAnimation(0, 325, 36, 55, 10,    "Dog_Flipping",   dogPath);
+    spriteSheetTool.addAnimation(0, 246, 36, 24, 11,    "Dog_Walking",    dogPath);
+    spriteSheetTool.addAnimation(0, 270, 36, 25, 4,     "Dog_Running",    dogPath);
+    spriteSheetTool.addAnimation(0, 322, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
     parkPath.loadFromFile("../QtDogs/assets/pixelartparkfinal.png");
     spriteSheetTool.addAnimation(0, 0, 7680, 768, 1, "Park_Screen", parkPath);
@@ -184,17 +184,11 @@ void MainWindow::updateDogAnimation()
         if(dogFrameNumber >= dogAnimationLength)
         {
             if(dogAnimation == "Dog_Sitting")
-            {
                 dogFrameNumber = 4;
-            }
             else if(dogAnimation == "Dog_Sleeping")
-            {
                 dogFrameNumber = 9;
-            }
             else
-            {
                 dogFrameNumber--;
-            }
         }
     }
 
@@ -224,7 +218,9 @@ void MainWindow::updateBackgroundAnimation()
     }
     else
     {
-        parkPos = (parkPos + 24) % 3840;
+        if(dogAnimation == "Dog_Walking")
+            parkPos = (parkPos + 24) % 3840;
+
         background.setOrigin(parkPos,0);
     }
 
@@ -352,7 +348,7 @@ void MainWindow::update()
             ui->homeButton->setVisible(false);
         }
 
-        if (model.getDogTrustLevel() >= 3)
+        if (model.getDogTrustLevel() >= 0)
         {
             if (!model.isNight){
                 ui->parkButton->setEnabled(true);
@@ -369,15 +365,14 @@ void MainWindow::update()
         {
             ui->parkButton->setEnabled(false);
             ui->parkButton->setText("Unlock Lv 3");
-
         }
-
     }
 
     std::string tmp =  model.getDogState();
     if(tmp == "Playing" || tmp == "Eating")tmp = "Running";
     if(tmp == "BeginDeath")tmp = "Death";
     if(tmp == "BeginSleeping" || tmp == "EndSleeping")tmp = "Sleeping";
+    if(tmp == "Death" || tmp == "BeginDeath")tmp = "Dead";
     dogAnimation = "Dog_" + tmp;
 
     if(model.getDogDirectionLeft())
@@ -538,9 +533,16 @@ void MainWindow::playEatSound()
 
 void MainWindow::playBarkSound()
 {
-    unsigned int numOfSound = static_cast<unsigned int>((static_cast<float>(rand()) * 5.0f) / static_cast<float>(RAND_MAX)) + 1;
-    barkBuffer.loadFromFile("../QtDogs/assets/bark_" + std::to_string(numOfSound) + ".ogg");
-    barkSound.setBuffer(barkBuffer);
-    barkSound.play();
+    if(barkCounter == 30) {
+        barkCounter = 0;
+        unsigned int numOfSound = static_cast<unsigned int>((static_cast<float>(rand()) * 5.0f) / static_cast<float>(RAND_MAX)) + 1;
+        barkBuffer.loadFromFile("../QtDogs/assets/bark_" + std::to_string(numOfSound) + ".ogg");
+        barkSound.setBuffer(barkBuffer);
+        barkSound.play();
+    }
+    else {
+        barkCounter++;
+    }
+
 }
 

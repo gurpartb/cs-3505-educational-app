@@ -62,11 +62,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
 
             std::string stateFlag = currentStateFlag[3];
+
             if(stateFlagChoice < 0.90f)
                 stateFlag = currentStateFlag[0];
             else if(stateFlagChoice < 0.95f)
                 stateFlag = currentStateFlag[1];
-            else if(stateFlagChoice < 0.98f)
+            else if(stateFlagChoice < 0.99f)
                 stateFlag = currentStateFlag[2];
 
 
@@ -85,6 +86,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             else if(needsToGo)
             {
                 currentState = "Peeing";
+                currentAnimationFrame = 22*6;
             }
             else if(ballExists)
             {
@@ -126,7 +128,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             //Random change of behavior to running or idle
             float behaviorChangeChance = (static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX);
 
-            if(behaviorChangeChance < 0.05f)
+            if(behaviorChangeChance < 0.04f)
             {
                 currentState = "Idle";
             }
@@ -178,17 +180,18 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             resetBathroom();
-            currentState = "Idle";
+            if(currentAnimationFrame <= 6)
+                currentState = "Idle";
+            --currentAnimationFrame;
         }
         else if(currentState == "Flipping")
         {
             currentForce = b2Vec2_zero;
-
             if(currentAnimationFrame <= 6)
             {
                 currentState = "Idle";
             }
-            currentAnimationFrame --;
+            --currentAnimationFrame;
         }
         else if(currentState == "Barking")
         {
@@ -290,6 +293,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
     else
     {
         if(currentState == "Idle")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Walking";
+        }
+        if(currentState == "Sitting")
         {
             currentForce = b2Vec2_zero;
             currentState = "Walking";
@@ -521,9 +529,10 @@ float Dog::getBathroom()
 ///
 bool Dog::increaseBathroom()
 {
+    bathroom += 0.1111111f;
     if (bathroom < 90)
     {
-        bathroom += 0.01111111f;
+
         if ((bathroom > 60 && trustLevel < 6) || (bathroom > 80 && trustLevel < 7))
         {
             return true;
@@ -614,7 +623,7 @@ void Dog::decreaseTrustProgress()
 {
     if(trustProgress > 0)
     {
-        trustProgress -= 10;
+        trustProgress -= 0.05;
     }
     else
     {

@@ -88,6 +88,7 @@ private:
     int backgroundAnimationLength;
     int backgroundFrameNumber = 0;
     int parkPos;
+    int barkCounter = 0;
     bool gameStarted;
 
     Ui::MainWindow *ui;

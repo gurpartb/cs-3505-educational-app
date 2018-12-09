@@ -29,7 +29,7 @@ class SpriteSheetTool : public QLabel
 public:
     SpriteSheetTool();
     void addAnimation(int x, int y, int w, int h, int numFrames, std::string name, sf::Texture& img);
-    int getAnimationFrameCount(std::string name){return static_cast<int>(dict[name].size()-1);}
+    int getAnimationFrameCount(std::string name){return static_cast<int>(dict[name].size());}
     sf::IntRect* getAnimationFrame(std::string name, int frameCount){return &dict[name][static_cast<unsigned int>(frameCount)];}
     sf::Texture* getTexture(std::string name){return sheetDict[name];}
 
