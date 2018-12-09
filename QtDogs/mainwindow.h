@@ -78,6 +78,7 @@ private:
 
     int width;
     int height;
+    int timeOfDay;
     int animationDelayCounter;
     int gameState;
     int dogAnimationLength;
@@ -97,6 +98,7 @@ private:
     void updateBackgroundAnimation();
     void loadAnimations();
     void enableUi(bool);
+    void updateTimeOfDay();
 
 private slots:
     void update();

@@ -47,13 +47,13 @@ private:
     bool ballExists;
     bool treatExists;
     bool foodExists;
-    bool isNight;
     bool atPark;
-
 
 public:
     Model();
     virtual ~Model();
+
+    bool isNight;
 
     void update();
 

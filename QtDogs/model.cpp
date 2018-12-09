@@ -62,7 +62,6 @@ void Model::update()
     dog->doesTreatExist(treatExists);
 
     if(ballExists)
-
         dog->BallPositionX(ballX());
     if(foodExists)
         dog->FoodPositionX(foodX());
