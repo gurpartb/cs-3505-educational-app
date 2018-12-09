@@ -31,6 +31,7 @@ private:
     bool ballExists;
     bool foodExists;
     bool treatExists;
+    bool trickExists;
     float currentBallPositionX;
     float currentDogPositionX;
     float currentTreatPositionX;
@@ -67,6 +68,7 @@ public:
     void DogInPark(bool);
     void doesBallExist(bool);
     void doesFoodExist(bool);
+    void doesTrickExist(bool);
     void doesTreatExist(bool);
     void BallPositionX(float);
     void DogPositionX(float);
