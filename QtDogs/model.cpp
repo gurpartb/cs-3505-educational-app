@@ -23,7 +23,6 @@ Model::Model(){
     connect(this, &Model::currentDogPosX, dog, &Dog::DogPositionX);
     connect(this, &Model::currentFoodPosX, dog, &Dog::FoodPositionX);
     connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
-   // connect(this, &Model::dogFlip, dog, &Dog::doesTrickExist);
 }
 
 Model::~Model(){
@@ -32,6 +31,7 @@ Model::~Model(){
 
 void Model::update()
 {
+
     world->Step(1.0f/30.0f,8,3);
 
     dog->doesBallExist(ballExists);
@@ -149,6 +149,7 @@ void Model::createTreat()
 void Model::createFood()
 {
     foodExists = true;
+    foodEatCount = 0;
 
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(1.5f,1.7f);
@@ -277,7 +278,17 @@ void Model::dogCollisions()
                 //emit eating sound
                 //make food disappear
                 //change state to idle
-                dog->feedFood();
+                if (foodEatCount == 20)
+                {
+                    dog->feedFood();
+                    food->SetActive(false);
+                    foodExists = false;
+                }
+                else
+                {
+                    foodEatCount++;
+                }
+
             }
         }
     }

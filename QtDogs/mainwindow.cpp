@@ -52,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->trustProgressBar->setValue(0);
     ui->levelNumber->display(0);
     ui->homeButton->setVisible(false);
+    ui->trickButton->setEnabled(false);
     parkPos = 0;
 
 
@@ -248,7 +249,6 @@ void MainWindow::updateBackgroundAnimation()
 void MainWindow::enableUi(bool enabled)
 {
     gameStarted = enabled;
-    ui->trickButton->setEnabled(enabled);
     ui->ballButton->setEnabled(enabled);
     ui->foodButton->setEnabled(enabled);
     ui->treatButton->setEnabled(enabled);
@@ -344,12 +344,34 @@ void MainWindow::update()
            backgroundAnimation = "Park_Screen";
            ui->parkButton->setVisible(false);
            ui->homeButton->setVisible(true);
+           ui->foodButton->setEnabled(false);
         }
         else
         {
             updateTimeOfDay();
             ui->parkButton->setVisible(true);
             ui->homeButton->setVisible(false);
+            ui->foodButton->setEnabled(true);
+        }
+
+        if (model.getDogTrustLevel() >= 2)
+        {
+
+            if (!model.isNight)
+            {
+                ui->trickButton->setText("Trick");
+                ui->trickButton->setEnabled(true);
+            }
+            else
+            {
+                ui->trickButton->setText("It's Too Late");
+                ui->trickButton->setEnabled(false);
+            }
+
+        }
+        else
+        {
+            ui->trickButton->setText("Unlock Lv 2");
         }
 
         if (model.getDogTrustLevel() >= 3)

@@ -38,7 +38,7 @@ private:
     b2Body* leftWall;
 
     int ballplayCount;
-    int trickCount;
+    int foodEatCount;
 
     bool ballExists;
     bool treatExists;
