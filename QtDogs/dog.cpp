@@ -419,7 +419,6 @@ bool Dog::increaseHunger()
 {
     hunger-= 0.00555555555555555555f;
 
-
     if (hunger < 100)
     {
         if (hunger > 70)
