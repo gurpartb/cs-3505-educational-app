@@ -135,7 +135,7 @@ void MainWindow::loadAnimations()
     spriteSheetTool.addAnimation(0,   7,    36, 26,  3, "Dog_Idle",       dogPath);
     spriteSheetTool.addAnimation(410,   337, 72, 40,  6,"Dog_Dead",   dogPath);
     spriteSheetTool.addAnimation(770, 302, 72, 34,  1,  "Dog_Dead",   dogPath);
-    spriteSheetTool.addAnimation(0,   34,   36, 28, 14, "Dog_Sitting",    dogPath);
+    spriteSheetTool.addAnimation(0,   34,   36, 28, 13, "Dog_Sitting",    dogPath);
     spriteSheetTool.addAnimation(0,   62,   36, 30, 12, "Dog_Barking",    dogPath);
     spriteSheetTool.addAnimation(0,   147,  36, 26, 22, "Dog_Peeing",     dogPath);
     spriteSheetTool.addAnimation(15,  175,  36, 26, 4,  "Dog_Peeing",     dogPath);
@@ -143,7 +143,7 @@ void MainWindow::loadAnimations()
     spriteSheetTool.addAnimation(360, 195,  36, 26, 13, "Dog_Sleeping",   dogPath);
     spriteSheetTool.addAnimation(0, 221,  36, 26, 3,    "Dog_Sleeping",   dogPath);
     spriteSheetTool.addAnimation(108, 223,  36, 24, 9,  "Dog_WakeUp",     dogPath);
-    spriteSheetTool.addAnimation(0, 246, 36, 24, 11,    "Dog_Walking",    dogPath);
+    spriteSheetTool.addAnimation(0, 247, 36, 23, 11,    "Dog_Walking",    dogPath);
     spriteSheetTool.addAnimation(0, 270, 36, 25, 4,     "Dog_Running",    dogPath);
     spriteSheetTool.addAnimation(0, 322, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
@@ -221,7 +221,7 @@ void MainWindow::updateBackgroundAnimation()
     else
     {
         if(dogAnimation == "Dog_Walking")
-            parkPos = (parkPos + 24) % 3840;
+            parkPos = (parkPos + 16) % 3840;
 
         background.setOrigin(parkPos,0);
     }
@@ -315,6 +315,7 @@ void MainWindow::updateTimeOfDay()
 ///
 void MainWindow::goToPark()
 {
+    ui->letOutButton->setEnabled(false);
     backgroundAnimation = "Park_Screen";
     model.dogWentToThePark(true);
 }
@@ -326,6 +327,7 @@ void MainWindow::goToPark()
 void MainWindow::goHome()
 {
     model.dogWentToThePark(false);
+    ui->letOutButton->setEnabled(true);
 }
 
 ///
@@ -372,6 +374,7 @@ void MainWindow::update()
         else
         {
             ui->trickButton->setText("Unlock Lv 2");
+            ui->trickButton->setEnabled(false);
         }
 
         if (model.getDogTrustLevel() >= 3)

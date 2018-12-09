@@ -64,7 +64,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
 
             if(stateFlagChoice < 0.90f)
                 stateFlag = currentStateFlag[0];
-            else if(stateFlagChoice < 0.95f)
+            else if(stateFlagChoice < 0.97f)
                 stateFlag = currentStateFlag[1];
             else if(stateFlagChoice < 0.99f)
                 stateFlag = currentStateFlag[2];
@@ -102,6 +102,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             else if(stateFlag == "Sit")
             {
                 currentState = "Sitting";
+                currentAnimationFrame = 6*13;
             }
             else if(stateFlag == "Flip")
             {
@@ -157,22 +158,26 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "Sitting")
         {
             currentForce = b2Vec2_zero;
-            //Random change of behavior to idle
-            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 2)
+            if(currentAnimationFrame <= 6)
             {
-                currentState = "Idle";
-            }
+                //Random change of behavior to idle
+                float behaviorChangeChance = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+                if(behaviorChangeChance < 0.02f)
+                {
+                    currentState = "Idle";
+                }
 
-            if(trickExists)
-            {
-                currentState = "Flipping";
-                currentForce = b2Vec2_zero;
-                currentAnimationFrame = 6*10;
-                int rng = rand();
-                if (rng % 2 == 0)
-                    increaseTrustProgress();
+                if(trickExists)
+                {
+                    currentState = "Flipping";
+                    currentForce = b2Vec2_zero;
+                    currentAnimationFrame = 6*10;
+                    int rng = rand();
+                    if (rng % 2 == 0)
+                        increaseTrustProgress();
+                }
             }
+            --currentAnimationFrame;
 
         }
         else if(currentState == "Peeing")
@@ -196,9 +201,9 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             currentForce = b2Vec2_zero;
             //Bark at random intervals
-            int barkChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
+            float barkChance = (static_cast<float>(rand())) / static_cast<float>(RAND_MAX);
             decreaseTrustProgress();
-            if(barkChance < 5)
+            if(barkChance < 0.05f)
             {
                 currentState = "Idle";
             }
@@ -304,7 +309,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "Walking")
         {
             dogDirectionLeft = false;
-            currentForce.x = walkSpeed;
+            currentForce = b2Vec2_zero;
 
             if(isHungry && hunger >= 0)
             {
@@ -324,7 +329,24 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Eating";
             }
+            else if(trickExists)
+            {
+                currentState = "Flipping";
+                currentAnimationFrame = 6*10;
+                int rng = rand();
+                if (rng % 2 == 0)
+                    increaseTrustProgress();
+            }
 
+        }
+        else if(currentState == "Flipping")
+        {
+            currentForce = b2Vec2_zero;
+            if(currentAnimationFrame <= 6)
+            {
+                currentState = "Idle";
+            }
+            --currentAnimationFrame;
         }
         else if(currentState == "Eating")
         {
@@ -426,7 +448,7 @@ bool Dog::getRandomDogDirectionLeft()
     else
         chance = currentDogPositionX*0.5f;
 
-     return (dogDirectionChance < chance * chance * 0.1f);
+    return (dogDirectionChance < chance * chance * 0.1f);
 }
 
 ///
@@ -531,7 +553,7 @@ float Dog::getBathroom()
 ///
 bool Dog::increaseBathroom()
 {
-    bathroom += 0.1111111f;
+    bathroom += 0.02f;
     if (bathroom < 90)
     {
 
