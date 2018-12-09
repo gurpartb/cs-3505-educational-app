@@ -41,6 +41,7 @@ Dog::~Dog()
 ///
 b2Vec2 Dog::UpdateDogState(bool isNight){
 
+    int frameCount = 0;
     bool isHungry = increaseHunger();
     bool needsToGo = false;
 
@@ -73,6 +74,14 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Barking";
             }
+            else if(trickExists)
+            {
+                currentState = "Flipping";
+                currentAnimationFrame = 6*10;
+                int rng = rand();
+                if (rng % 2 == 0)
+                    increaseTrustProgress();
+            }
             else if(needsToGo)
             {
                 currentState = "Peeing";
@@ -96,6 +105,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             else if(stateFlag == "Flip")
             {
                 currentState = "Flipping";
+                currentAnimationFrame = 6*10;
             }
             else if(stateFlag == "Walk")
             {
@@ -133,6 +143,15 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Eating";
             }
+            else if(trickExists)
+            {
+                currentState = "Flipping";
+                currentForce = b2Vec2_zero;
+                currentAnimationFrame = 6*10;
+                int rng = rand();
+                if (rng % 2 == 0)
+                    increaseTrustProgress();
+            }
         }
         else if(currentState == "Sitting")
         {
@@ -142,6 +161,16 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             if(behaviorChangeChance < 2)
             {
                 currentState = "Idle";
+            }
+
+            if(trickExists)
+            {
+                currentState = "Flipping";
+                currentForce = b2Vec2_zero;
+                currentAnimationFrame = 6*10;
+                int rng = rand();
+                if (rng % 2 == 0)
+                    increaseTrustProgress();
             }
 
         }
@@ -154,13 +183,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         else if(currentState == "Flipping")
         {
             currentForce = b2Vec2_zero;
-            //Random change of behavior to idle
-            srand(static_cast <unsigned int> (time(nullptr)));
-            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 80)
+
+            if(currentAnimationFrame <= 6)
             {
                 currentState = "Idle";
             }
+            currentAnimationFrame --;
         }
         else if(currentState == "Barking")
         {
@@ -638,6 +666,11 @@ void Dog::doesFoodExist(bool exists)
 void Dog::doesTreatExist(bool exists)
 {
     treatExists = exists;
+}
+
+void Dog::doesTrickExist(bool exists)
+{
+    trickExists = exists;
 }
 
 ///

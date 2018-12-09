@@ -15,11 +15,6 @@ Model::Model(){
     createScene();
     createDog();
 
-//    bathroomProgress = 0;
-//    hungerProgress = 0;
-//    trustProgress = 0;
-//    level = 1;
-
     //connections to dog class
     connect(this, &Model::ballOnScreen, dog, &Dog::doesBallExist);
     connect(this, &Model::foodOnScreen, dog, &Dog::doesFoodExist);
@@ -28,6 +23,7 @@ Model::Model(){
     connect(this, &Model::currentDogPosX, dog, &Dog::DogPositionX);
     connect(this, &Model::currentFoodPosX, dog, &Dog::FoodPositionX);
     connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
+   // connect(this, &Model::dogFlip, dog, &Dog::doesTrickExist);
 }
 
 Model::~Model(){
@@ -48,6 +44,7 @@ void Model::update()
         dog->FoodPositionX(foodX());
     if(treatExists)
         dog->TreatPositionX(treatX());
+
     dog->DogPositionX(dogX());
 
     dogBody->ApplyLinearImpulse(dog->UpdateDogState(isNight), dogBody->GetWorldCenter(),true);
@@ -56,6 +53,8 @@ void Model::update()
     {
         emit playBarkSound();
     }
+
+    dog->doesTrickExist(false);
 
     checkCollisions();
 
@@ -330,7 +329,12 @@ void Model::treatCollisions()
 ///
 void Model::dogTrick()
 {
-    //emit dog flip
+    if(!ballExists && !treatExists)
+    {
+       // trickExists = true;
+        dog->doesTrickExist(true);
+    }
+    //emit dogFlip(trickExists);
     emit playWhistleSound();
 }
 

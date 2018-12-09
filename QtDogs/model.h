@@ -38,16 +38,13 @@ private:
     b2Body* leftWall;
 
     int ballplayCount;
-
-//    int bathroomProgress;
-//    int hungerProgress;
-//    int trustProgress;
-//    int level;
+    int trickCount;
 
     bool ballExists;
     bool treatExists;
     bool foodExists;
     bool atPark;
+    bool trickExists;
 
 public:
     Model();
@@ -91,7 +88,6 @@ private:
     void createFood();
     void createScene();
     void createDog();
-
     void dogCollisions();
     void ballCollisions();
     void treatCollisions();
@@ -124,6 +120,8 @@ signals:
     void playWhistleSound();
     void playEatSound();
     void playBarkSound();
+    //void dogFlip(bool);
+    void increaseTrustLevel();
 
 };
 
