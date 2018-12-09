@@ -85,7 +85,9 @@ private:
     int dogFrameNumber = 0;
     int backgroundAnimationLength;
     int backgroundFrameNumber = 0;
+    int parkPos;
     bool gameStarted;
+    bool isInPark;
 
     Ui::MainWindow *ui;
     QTimer* timer;
@@ -116,6 +118,7 @@ private slots:
     void playBounceSound();
     void playWhistleSound();
     void playEatSound();
+
 
 signals:
     void dogWalkLeft();

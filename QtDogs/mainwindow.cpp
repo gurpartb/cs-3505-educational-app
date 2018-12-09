@@ -48,7 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->bathroomProgressBar->setValue(0);
     ui->trustProgressBar->setValue(0);
     ui->levelNumber->display(1);
-    ui->homeButton->setVisible(false);
+    //ui->homeButton->setVisible(false);
+    parkPos = 0;
 
 
     animationDelayCounter = 0;
@@ -121,15 +122,14 @@ MainWindow::~MainWindow()
 void MainWindow::loadAnimations()
 {
     //adding animation frames
-
     dogPath.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
     spriteSheetTool.addAnimation(0,   0,    36, 26,  3, "Dog_Idle",       dogPath);
     spriteSheetTool.addAnimation(0,   28,   36, 26, 14, "Dog_Sitting",    dogPath);
     spriteSheetTool.addAnimation(0,   59,   36, 26, 12, "Dog_Barking",    dogPath);
     spriteSheetTool.addAnimation(0,   138,  36, 26, 22, "Dog_Peeing",     dogPath);
     spriteSheetTool.addAnimation(15,  166,  36, 26, 4,  "Dog_Peeing",     dogPath);
-    spriteSheetTool.addAnimation(0,   189,  36, 26, 9, "Dog_BeginSleep", dogPath);
-    spriteSheetTool.addAnimation(360, 189,  36, 26, 13, "Dog_Sleeping",   dogPath);
+    spriteSheetTool.addAnimation(0,   189,  36, 26, 9, "Dog_Sleeping", dogPath);//start
+    spriteSheetTool.addAnimation(360, 189,  36, 26, 13, "Dog_Sleeping",   dogPath);//reapeat
     spriteSheetTool.addAnimation(122, 215,  36, 24, 9, "Dog_WakeUp",     dogPath);
     spriteSheetTool.addAnimation(0, 240, 36, 24, 11,    "Dog_Walking",    dogPath);
     spriteSheetTool.addAnimation(0, 263, 36, 25, 4,     "Dog_Running",    dogPath);
@@ -164,7 +164,29 @@ void MainWindow::loadAnimations()
 ///
 void MainWindow::updateDogAnimation()
 {
-    ++dogFrameNumber;
+    if(dogAnimation != "Dog_Dead" && dogAnimation != "Dog_Sleeping" && dogAnimation != "Dog_Sitting" && dogAnimation != "Dog_Flipping" )
+    {
+        ++dogFrameNumber;
+    }
+    else if(dogFrameNumber < dogAnimationLength)
+    {
+        ++dogFrameNumber;
+        if(dogFrameNumber >= dogAnimationLength)
+        {
+            if(dogAnimation == "Dog_Sitting")
+            {
+                dogFrameNumber = 4;
+            }
+            else if(dogAnimation == "Dog_Sleeping")
+            {
+                dogFrameNumber = 9;
+            }
+            else
+            {
+                dogFrameNumber--;
+            }
+        }
+    }
 
     if(dogFrameNumber >= dogAnimationLength)
         dogFrameNumber = 0;
@@ -185,7 +207,17 @@ void MainWindow::updateDogAnimation()
 ///
 void MainWindow::updateBackgroundAnimation()
 {
-    ++backgroundFrameNumber;
+
+    if(backgroundAnimation != "Park_Screen")
+    {
+        ++backgroundFrameNumber;
+        background.setOrigin(0,0);
+    }
+    else
+    {
+        parkPos = (parkPos + 24) % 3840;
+        background.setOrigin(parkPos,0);
+    }
 
     if(backgroundFrameNumber >= backgroundAnimationLength)
         backgroundFrameNumber = 0;
@@ -278,11 +310,24 @@ void MainWindow::update()
     if (gameStarted)
     {
         model.update();
-        updateTimeOfDay();
+
+        if(isInPark)
+        {
+           backgroundAnimation = "Park_Screen";
+        }
+        else
+        {
+            updateTimeOfDay();
+        }
+
     }
+
+
 
     std::string tmp =  model.getDogState();
     if(tmp == "Playing" || tmp == "Eating")tmp = "Running";
+    if(tmp == "BeginDeath")tmp = "Death";
+    if(tmp == "BeginSleeping" || tmp == "EndSleeping")tmp = "Sleeping";
     dogAnimation = "Dog_" + tmp;
 
     if(model.getDogDirectionLeft())

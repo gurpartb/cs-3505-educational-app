@@ -95,14 +95,14 @@ private:
     void checkCollisions();
 
 public slots:
-    void dogTrick();
+    void dogTrick(){}
     void dogFed();
     void dogPlayedWithBall();
     void dogWentToThePark();
     void dogLetOut();
     void dogWalkLeft();
     void dogWalkRight();
-    void dogTreat();
+    void dogTreat(){}
 signals:
     void updateLevels(int);
     void updateTrustLevel(int);
