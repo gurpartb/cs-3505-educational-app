@@ -139,7 +139,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             currentForce = b2Vec2_zero;
             //Random change of behavior to idle
             int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 20)
+            if(behaviorChangeChance < 2)
             {
                 currentState = "Idle";
             }
@@ -494,7 +494,7 @@ bool Dog::increaseBathroom()
 {
     if (bathroom < 90)
     {
-        bathroom += 0.0055555f;
+        bathroom += 0.01111111f;
         if ((bathroom > 60 && trustLevel < 6) || (bathroom > 80 && trustLevel < 7))
         {
             return true;

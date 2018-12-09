@@ -85,6 +85,7 @@ private:
     int dogFrameNumber = 0;
     int backgroundAnimationLength;
     int backgroundFrameNumber = 0;
+    int parkPos;
     bool gameStarted;
 
     Ui::MainWindow *ui;
@@ -111,18 +112,20 @@ private slots:
     void playMusic();
     void changeTimeOfDay();
     void startGame();
+    void goToPark();
+    void goHome();
 
     void on_instructionsButton_clicked();
     void playBounceSound();
     void playWhistleSound();
     void playEatSound();
 
+
 signals:
     void dogWalkLeft();
     void dogWalkRight();
     void updateBathroomProgressBar();
     void updateHungerProgressBar();
-
 };
 
 #endif // MAINWINDOW_H

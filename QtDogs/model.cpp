@@ -1,27 +1,16 @@
-/**
-  CS 3505 - A8 Final Project - QT Dogs
-  Educational application to teach youth the importance of pet responsibility.
-  Designed by:
-  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
-*/
-
 #include "model.h"
 
-///
-/// \brief Model::Model
-/// Model constructor to initalize objects and set connections.
-///
 Model::Model(){
     gravity = new b2Vec2(0.0f,9.81f);
     world = new b2World(*gravity);
+
+   // world->list
 
     srand(uint32_t(time(nullptr)));
 
     ballExists = false;
     treatExists = false;
     foodExists = false;
-    isNight = false;
-    atPark = false;
 
     createScene();
     createDog();
@@ -41,18 +30,10 @@ Model::Model(){
     connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
 }
 
-///
-/// \brief Model::~Model
-/// Model destructor
-///
 Model::~Model(){
 
 }
 
-///
-/// \brief Model::update
-/// Update function to handle all of the Box-2d updating and to emit signals back to the MainWindow.
-///
 void Model::update()
 {
     world->Step(1.0f/30.0f,8,3);
@@ -77,11 +58,11 @@ void Model::update()
     {
         emit currentBallPosX(ballX());
     }
-    if (treatExists && dog->getDogState() == "Eating")
+    if (treatExists)
     {
         emit currentTreatPosX(treatX());
     }
-    if (foodExists && dog->getDogState() == "Eating")
+    if (foodExists)
     {
         emit currentFoodPosX(foodX());
     }
@@ -93,10 +74,6 @@ void Model::update()
     emit updateTrustProgress(dog->getTrustProgress());
 }
 
-///
-/// \brief Model::createBall
-/// Craetes the Ball object using Box-2D
-///
 void Model::createBall()
 {
     ballExists = true;
@@ -112,52 +89,39 @@ void Model::createBall()
 
     b2CircleShape shape;
     shape.m_radius = SCALE * 64.0f;
-
     b2FixtureDef FixtureDef;
     FixtureDef.density = 0.05f;
     FixtureDef.friction = 0.7f;
     FixtureDef.restitution = 0.7f;
     FixtureDef.shape = &shape;
-
     ball->CreateFixture(&FixtureDef);
     emit ballOnScreen(ballExists);
 }
 
-///
-/// \brief Model::createDog
-/// Creates the dog object using Box-2D
-///
 void Model::createDog()
 {
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(0.4f, 1.75f);
+    BodyDef.position = b2Vec2(0.5f,1.75f);
     BodyDef.type = b2_dynamicBody;
     dogBody = world->CreateBody(&BodyDef);
-
     b2Vec2 vertices[4];
     vertices[0].Set(SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
     vertices[1].Set(SCALE*36.0f*1.0f,-SCALE*26.0f*2.0f);
     vertices[2].Set(-SCALE*36.0f*1.0f,-SCALE*26.0f*2.0f);
     vertices[3].Set(-SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
-
     b2PolygonShape rect;
     rect.Set(vertices,4);
-
+    //rect.SetAsBox(SCALE*36*2.0,SCALE*26*2.0);
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
-    FixtureDef.restitution = 0.3f;
+    FixtureDef.restitution = 0.1f;
     FixtureDef.friction = 0.4f;
     FixtureDef.shape = &rect;
-
     dogBody->CreateFixture(&FixtureDef);
 
     dog = new Dog();
 }
 
-///
-/// \brief Model::createTreat
-/// Creates the treat object using Box-2D
-///
 void Model::createTreat()
 {
     treatExists = true;
@@ -167,16 +131,13 @@ void Model::createTreat()
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX)*2.0f-1.0f,0.0f);
     treat = world->CreateBody(&BodyDef);
-
     b2PolygonShape shape;
     shape.SetAsBox(SCALE*16.0f,SCALE*16.0f);
-
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
-    FixtureDef.friction = 0.1f;
+    FixtureDef.friction = 0.7f;
     FixtureDef.shape = &shape;
     FixtureDef.restitution = 0.3f;
-
     treat->CreateFixture(&FixtureDef);
     emit treatOnScreen(treatExists);
 }
@@ -200,16 +161,13 @@ void Model::createFood()
     b2FixtureDef FixtureDef;
     FixtureDef.density = .80f;
     FixtureDef.friction = 0.2f;
+
     FixtureDef.shape = &shape;
 
     food->CreateFixture(&FixtureDef);
     emit treatOnScreen(treatExists);
 }
 
-///
-/// \brief Model::createScene
-/// Creates the scene borders using Box-2d
-///
 void Model::createScene()
 {
     //ground
@@ -277,26 +235,19 @@ void Model::createScene()
     }
 }
 
-///
-/// \brief Model::dogCollisions
-/// Sets up all collisions of the dog with objects whether it be the walls or other objects like the ball using Box-2D.
-///
 void Model::dogCollisions()
 {
     for (b2ContactEdge* edge = dogBody->GetContactList() ; edge; edge = edge->next)
     {
         if (edge->contact->IsTouching())
         {
-            if (atPark)
+            if (edge->contact->GetFixtureB()->GetBody() == rightWall)
             {
-                if (edge->contact->GetFixtureB()->GetBody() == rightWall)
-                {
-                    //emit pan right background
-                }
-                if (edge->contact->GetFixtureB()->GetBody() == leftWall)
-                {
-                    //emit pan left background
-                }
+                //emit pan right background
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == leftWall)
+            {
+                //emit pan left background
             }
             if (edge->contact->GetFixtureB()->GetBody() == ball)
             {
@@ -311,21 +262,16 @@ void Model::dogCollisions()
                     ballplayCount++;
                 }
             }
-            if (edge->contact->GetFixtureB()->GetBody() == treat && dog->getDogState() == "Eating")
+            if (edge->contact->GetFixtureB()->GetBody() == treat)
             {
                 treat->SetActive(false);
                 treatExists = false;
                 dog->feedTreat();
-                emit playEatSound();
             }
-            if (edge->contact->GetFixtureB()->GetBody() == food && dog->getDogState() == "Eating")
+            if (edge->contact->GetFixtureB()->GetBody() == food)
             {
                 //emit eating sound
                 //make food disappear
-
-                food->SetActive(false);
-                foodExists = false;
-                emit playEatSound();
                 //change state to idle
                 dog->feedFood();
             }
@@ -333,44 +279,32 @@ void Model::dogCollisions()
     }
 }
 
-///
-/// \brief Model::ballCollisions
-/// Handles all ball collisions with the walls and dog using Box-2D
-///
 void Model::ballCollisions()
 {
     for (b2ContactEdge* edge = ball->GetContactList() ; edge; edge = edge->next)
     {
         if (edge->contact->IsTouching())
         {
-
-            if (edge->contact->GetFixtureA()->GetBody() == rightWall)
+            if (edge->contact->GetFixtureB()->GetBody() == rightWall)
             {
                 //emit bounce sound
-                emit playBounceSound();
             }
-            else if (edge->contact->GetFixtureA()->GetBody() == leftWall)
+            if (edge->contact->GetFixtureB()->GetBody() == leftWall)
             {
                 //emit bounce sound
-                emit playBounceSound();
             }
-            else if (edge->contact->GetFixtureA()->GetBody() == ground)
-            {
-                emit playBounceSound();
-            }
-            else if (edge->contact->GetFixtureA()->GetBody() == ceiling)
+            if (edge->contact->GetFixtureB()->GetBody() == ground)
             {
                 //emit bounce sound
-                emit playBounceSound();
+            }
+            if (edge->contact->GetFixtureB()->GetBody() == ceiling)
+            {
+                //emit bounce sound
             }
         }
     }
 }
 
-///
-/// \brief Model::treatCollisions
-/// Handles all treat collisions on the walls and the dog using Box-2D
-///
 void Model::treatCollisions()
 {
     for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
@@ -385,7 +319,7 @@ void Model::treatCollisions()
     }
 }
 
-///
+
 /// \brief Model::dogTrick
 /// Allows for the dog to do a flip when user presses the button.
 ///
@@ -433,59 +367,34 @@ void Model::deactivateAllObjects()
     }
 }
 
-///
-/// \brief Model::dogPlayedWithBall
-/// Handles when the user clicks the ball button to let the dog play with the ball.
-///
 void Model::dogPlayedWithBall()
 {
     deactivateAllObjects();
     createBall();
 }
 
-///
-/// \brief Model::dogWentToThePark
-/// Changes the scenery and allows the dog to go to the park and handles park information.
-///
-void Model::dogWentToThePark()
+void Model::dogWentToThePark(bool wentToPark)
 {
-    dog->DogInPark(true);
-    atPark = true;
+    dog->DogInPark(wentToPark);
 }
 
-///
-/// \brief Model::dogLetOut
-/// Handles letting the dog go outside to use the restroom.
-///
 void Model::dogLetOut()
 {
     dog->resetBathroom();
 }
 
-///
-/// \brief Model::dogWalkLeft
-/// Information for the dog to walk left using Box-2D forces.
-///
 void Model::dogWalkLeft()
 {
     b2Vec2 vec(-0.01f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
-///
-/// \brief Model::dogWalkRight
-/// Information for the dog to walk right using Box-2D forces.
-///
 void Model::dogWalkRight()
 {
     b2Vec2 vec(0.01f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
-///
-/// \brief Model::checkCollisions
-/// Checks if the dog collides with any active object on screen.
-///
 void Model::checkCollisions()
 {
     if(ballExists)
@@ -493,12 +402,12 @@ void Model::checkCollisions()
         dogCollisions();
         ballCollisions();
     }
-    else if(treatExists)
+    if(treatExists)
     {
         dogCollisions();
         treatCollisions();
     }
-    else if(foodExists)
+    if(foodExists)
     {
         dogCollisions();
     }
