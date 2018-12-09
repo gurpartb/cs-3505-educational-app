@@ -125,7 +125,7 @@ void MainWindow::loadAnimations()
     //adding animation frames
 
     dogPath.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
-    //spriteSheetTool.addAnimation(0,   9,    36, 26,  3, "Dog_Idle",       dogPath);
+    spriteSheetTool.addAnimation(0,   9,    36, 26,  3, "Dog_Idle",       dogPath);
     //spriteSheetTool.addAnimation(410,   339, 72, 40,  7, "Dog_Dying",   dogPath);
     //spriteSheetTool.addAnimation(770, 304, 72, 34,  1, "Dog_Dead",   dogPath);
     spriteSheetTool.addAnimation(0,   37,   36, 26, 14, "Dog_Sitting",    dogPath);
