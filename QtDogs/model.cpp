@@ -13,10 +13,10 @@ Model::Model(){
     createScene();
     createDog();
 
-    bathroomProgress = 0;
-    hungerProgress = 0;
-    trustProgress = 0;
-    level = 1;
+//    bathroomProgress = 0;
+//    hungerProgress = 0;
+//    trustProgress = 0;
+//    level = 1;
 
     //connections to dog class
     connect(this, &Model::ballOnScreen, dog, &Dog::doesBallExist);
@@ -152,20 +152,24 @@ void Model::createFood()
     foodExists = true;
 
     b2BodyDef BodyDef;
-    BodyDef.position = b2Vec2(1.0f,0.1f);
+    BodyDef.position = b2Vec2(1.5f,1.7f);
+   // BodyDef.position = b2Vec2(.7f,1.0f);
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX),0.0f);
-    treat = world->CreateBody(&BodyDef);
+    BodyDef.fixedRotation = true;
+    food = world->CreateBody(&BodyDef);
 
     b2PolygonShape shape;
-    shape.SetAsBox(0.01f,0.02f);
+    //shape.SetAsBox(SCALE*4.0f,SCALE*4.0f);
+    shape.SetAsBox(SCALE*46.0f,SCALE*30.0f);
 
     b2FixtureDef FixtureDef;
-    FixtureDef.density = 2.f;
-    FixtureDef.friction = 0.7f;
+    FixtureDef.density = .80f;
+    FixtureDef.friction = 0.2f;
+
     FixtureDef.shape = &shape;
 
-    treat->CreateFixture(&FixtureDef);
+    food->CreateFixture(&FixtureDef);
     emit treatOnScreen(treatExists);
 }
 
@@ -254,8 +258,9 @@ void Model::dogCollisions()
             {
                 //emit ball sound
                 if (ballplayCount == 30){
-                    ball->SetActive(false);
+
                     ballExists = false;
+                    ball->SetActive(false);
                 }
                 else
                 {
@@ -319,7 +324,36 @@ void Model::treatCollisions()
     }
 }
 
+
+/// \brief Model::dogTrick
+/// Allows for the dog to do a flip when user presses the button.
+///
+void Model::dogTrick()
+{
+    //emit dog flip
+    emit playWhistleSound();
+}
+
+void Model::dogTreat()
+{
+    deactivateAllObjects();
+    createTreat();
+}
+
+///
+/// \brief Model::dogFed
+/// Drops food for the dog and handles eating.
+///
 void Model::dogFed()
+{
+    deactivateAllObjects();
+    createFood();
+}
+
+///
+/// \brief Model::deactivateAllObjects
+///
+void Model::deactivateAllObjects()
 {
     if(ballExists)
     {
@@ -331,21 +365,16 @@ void Model::dogFed()
         treat->SetActive(false);
         treatExists = false;
     }
-    createTreat();
+    if(foodExists)
+    {
+        food->SetActive(false);
+        foodExists = false;
+    }
 }
 
 void Model::dogPlayedWithBall()
 {
-    if(ballExists)
-    {
-        ball->SetActive(false);
-        ballExists = false;
-    }
-    if(treatExists)
-    {
-        treat->SetActive(false);
-        treatExists = false;
-    }
+    deactivateAllObjects();
     createBall();
 }
 
@@ -385,7 +414,7 @@ void Model::checkCollisions()
     }
     if(foodExists)
     {
-
+        dogCollisions();
     }
 }
 
