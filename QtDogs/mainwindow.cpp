@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::dogWalkRight,&model, &Model::dogWalkRight);
     //connections for sound effects
     connect(&model, &Model::playBounceSound, this, &MainWindow::playBounceSound);
+    connect(&model, &Model::playBarkSound, this, &MainWindow::playBarkSound);
     connect(&model, &Model::playWhistleSound, this, &MainWindow::playWhistleSound);
     connect(&model, &Model::playEatSound, this, &MainWindow::playEatSound);
 
@@ -101,11 +102,13 @@ MainWindow::MainWindow(QWidget *parent) :
     whistleBuffer.loadFromFile("../QtDogs/assets/Whistle.wav");
     eatBuffer.loadFromFile("../QtDogs/assets/Eat.wav");
     bounceBuffer.loadFromFile("../QtDogs/assets/Bounce2.wav");
+    barkBuffer.loadFromFile(("../QtDogs/assets/bark_1.ogg"));
 
     musicSound.setBuffer(musicBuffer);
     whistleSound.setBuffer(whistleBuffer);
     eatSound.setBuffer(eatBuffer);
     bounceSound.setBuffer(bounceBuffer);
+    barkSound.setBuffer(barkBuffer);
 }
 
 ///
@@ -483,8 +486,17 @@ void MainWindow::playWhistleSound()
 {
   whistleSound.play();
 }
+
 void MainWindow::playEatSound()
 {
     eatSound.play();
+}
+
+void MainWindow::playBarkSound()
+{
+    unsigned int numOfSound = static_cast<unsigned int>((static_cast<float>(rand()) * 5.0f) / static_cast<float>(RAND_MAX)) + 1;
+    barkBuffer.loadFromFile("../QtDogs/assets/bark_" + std::to_string(numOfSound) + ".ogg");
+    barkSound.setBuffer(barkBuffer);
+    barkSound.play();
 }
 

@@ -50,6 +50,11 @@ void Model::update()
 
     dogBody->ApplyLinearImpulse(dog->UpdateDogState(isNight), dogBody->GetWorldCenter(),true);
 
+    if(dog->getDogState() == "Barking")
+    {
+        emit playBarkSound();
+    }
+
     checkCollisions();
 
     if (ballExists)

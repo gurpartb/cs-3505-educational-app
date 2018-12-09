@@ -45,11 +45,13 @@ private:
     sf::Sound eatSound;
     sf::Sound whistleSound;
     sf::Sound bounceSound;
+    sf::Sound barkSound;
 
     sf::SoundBuffer musicBuffer;
     sf::SoundBuffer eatBuffer;
     sf::SoundBuffer whistleBuffer;
     sf::SoundBuffer bounceBuffer;
+    sf::SoundBuffer barkBuffer;
 
     sf::RenderTexture frame;
 
@@ -118,6 +120,7 @@ private slots:
     void playBounceSound();
     void playWhistleSound();
     void playEatSound();
+    void playBarkSound();
 
 
 signals:
