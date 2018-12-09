@@ -60,6 +60,7 @@ public:
     int getTrustLevel();
     int getTrustProgress();
     bool getDogDirectionLeft();
+    bool isInPark(){return isDogInPark;}
 
     void feedFood();
     void feedTreat();

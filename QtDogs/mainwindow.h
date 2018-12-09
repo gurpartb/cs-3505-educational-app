@@ -89,7 +89,6 @@ private:
     int backgroundFrameNumber = 0;
     int parkPos;
     bool gameStarted;
-    bool isInPark;
 
     Ui::MainWindow *ui;
     QTimer* timer;
@@ -115,6 +114,8 @@ private slots:
     void playMusic();
     void changeTimeOfDay();
     void startGame();
+    void goToPark();
+    void goHome();
 
     void on_instructionsButton_clicked();
     void playBounceSound();
@@ -128,7 +129,6 @@ signals:
     void dogWalkRight();
     void updateBathroomProgressBar();
     void updateHungerProgressBar();
-
 };
 
 #endif // MAINWINDOW_H

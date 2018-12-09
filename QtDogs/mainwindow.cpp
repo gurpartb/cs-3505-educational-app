@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <bits/stdc++.h>
+#include <iostream>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -22,9 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->foodButton, &QPushButton::pressed, &model, &Model::dogFed);
     connect(ui->treatButton, &QPushButton::pressed,&model, &Model::dogTreat);
     connect(ui->ballButton, &QPushButton::pressed, &model, &Model::dogPlayedWithBall);
-    connect(ui->parkButton, &QPushButton::pressed, &model, &Model::dogWentToThePark);
+    connect(ui->parkButton, &QPushButton::pressed, this, &MainWindow::goToPark);
     connect(ui->letOutButton, &QPushButton::pressed, &model, &Model::dogLetOut);
     connect(ui->playButton, &QPushButton::pressed, this, &MainWindow::startGame);
+    connect(ui->homeButton, &QPushButton::pressed, this, &MainWindow::goHome);
 
     //connections for updating status bars
     connect(&model, &Model::updateTrustLevel, this, &MainWindow::on_trustProgressBar_valueChanged);
@@ -48,8 +50,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->hungerProgressBar->setValue(0);
     ui->bathroomProgressBar->setValue(0);
     ui->trustProgressBar->setValue(0);
-    ui->levelNumber->display(1);
-    //ui->homeButton->setVisible(false);
+    ui->levelNumber->display(0);
+    ui->homeButton->setVisible(false);
     parkPos = 0;
 
 
@@ -128,18 +130,18 @@ void MainWindow::loadAnimations()
 {
     //adding animation frames
     dogPath.loadFromFile("../QtDogs/assets/DogSpriteSheetFinal.png");
-    spriteSheetTool.addAnimation(0,   9,    36, 26,  3, "Dog_Idle",       dogPath);
-    spriteSheetTool.addAnimation(410,   339, 72, 40,  7, "Dog_Dying",   dogPath);
-    spriteSheetTool.addAnimation(770, 304, 72, 34,  1, "Dog_Dead",   dogPath);
-    spriteSheetTool.addAnimation(0,   37,   36, 26, 14, "Dog_Sitting",    dogPath);
+    spriteSheetTool.addAnimation(0,   7,    36, 26,  3, "Dog_Idle",       dogPath);
+    spriteSheetTool.addAnimation(410,   339, 72, 40,  7,"Dog_Dying",   dogPath);
+    spriteSheetTool.addAnimation(770, 304, 72, 34,  1,  "Dog_Dead",   dogPath);
+    spriteSheetTool.addAnimation(0,   35,   36, 28, 14, "Dog_Sitting",    dogPath);
     spriteSheetTool.addAnimation(0,   68,   36, 26, 12, "Dog_Barking",    dogPath);
     spriteSheetTool.addAnimation(0,   147,  36, 26, 22, "Dog_Peeing",     dogPath);
     spriteSheetTool.addAnimation(15,  175,  36, 26, 4,  "Dog_Peeing",     dogPath);
-    spriteSheetTool.addAnimation(0,   198,  36, 26, 9,  "Dog_Sleeping", dogPath);
-    spriteSheetTool.addAnimation(360, 198,  36, 26, 13, "Dog_Sleeping",   dogPath);
-    spriteSheetTool.addAnimation(15, 229,  36, 26, 3,   "Dog_Sleeping",   dogPath);
-    spriteSheetTool.addAnimation(122, 224,  36, 24, 9,  "Dog_WakeUp",     dogPath);
-    spriteSheetTool.addAnimation(0, 249, 36, 24, 11,    "Dog_Walking",    dogPath);
+    spriteSheetTool.addAnimation(0,   195,  36, 26, 9,  "Dog_Sleeping", dogPath);
+    spriteSheetTool.addAnimation(360, 195,  36, 26, 13, "Dog_Sleeping",   dogPath);
+    spriteSheetTool.addAnimation(0, 221,  36, 26, 3,    "Dog_Sleeping",   dogPath);
+    spriteSheetTool.addAnimation(108, 223,  36, 24, 9,  "Dog_WakeUp",     dogPath);
+    spriteSheetTool.addAnimation(0, 247, 36, 24, 11,    "Dog_Walking",    dogPath);
     spriteSheetTool.addAnimation(0, 272, 36, 25, 4,     "Dog_Running",    dogPath);
     spriteSheetTool.addAnimation(0, 325, 36, 55, 10,    "Dog_Flipping",   dogPath);
 
@@ -215,7 +217,6 @@ void MainWindow::updateDogAnimation()
 ///
 void MainWindow::updateBackgroundAnimation()
 {
-
     if(backgroundAnimation != "Park_Screen")
     {
         ++backgroundFrameNumber;
@@ -234,7 +235,6 @@ void MainWindow::updateBackgroundAnimation()
     sf::Texture* texture = spriteSheetTool.getTexture(backgroundAnimation);
 
     backgroundAnimationLength = spriteSheetTool.getAnimationFrameCount(backgroundAnimation);
-    background.setOrigin(0,0);
 
     background.setTextureRect(*rect);
     background.setTexture(*texture);
@@ -310,6 +310,25 @@ void MainWindow::updateTimeOfDay()
 }
 
 ///
+/// \brief MainWindow::goToPark
+/// Change background and emit signals to display the park
+///
+void MainWindow::goToPark()
+{
+    backgroundAnimation = "Park_Screen";
+    model.dogWentToThePark(true);
+}
+
+///
+/// \brief MainWindow::goHome
+/// sets the scene for the dog to go home.
+///
+void MainWindow::goHome()
+{
+    model.dogWentToThePark(false);
+}
+
+///
 /// \brief MainWindow::update
 /// Main update function to display SFML objects and call an update to the model if the game is started.
 ///
@@ -317,20 +336,43 @@ void MainWindow::update()
 {
     if (gameStarted)
     {
+
         model.update();
 
-        if(isInPark)
+        if(model.isDogInPark())
         {
            backgroundAnimation = "Park_Screen";
+           ui->parkButton->setVisible(false);
+           ui->homeButton->setVisible(true);
         }
         else
         {
             updateTimeOfDay();
+            ui->parkButton->setVisible(true);
+            ui->homeButton->setVisible(false);
+        }
+
+        if (model.getDogTrustLevel() >= 3)
+        {
+            if (!model.isNight){
+                ui->parkButton->setEnabled(true);
+                ui->parkButton->setText("Go To Park");
+            }
+            else
+            {
+                ui->parkButton->setEnabled(true);
+                ui->parkButton->setText("Park Is Closed");
+            }
+
+        }
+        else
+        {
+            ui->parkButton->setEnabled(false);
+            ui->parkButton->setText("Unlock Lv 3");
+
         }
 
     }
-
-
 
     std::string tmp =  model.getDogState();
     if(tmp == "Playing" || tmp == "Eating")tmp = "Running";
@@ -379,6 +421,7 @@ void MainWindow::update()
     }
 
     dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
+
     frame.draw(dog);
 
     frame.display();
@@ -390,6 +433,7 @@ void MainWindow::update()
     QImage qi(pp,width,height,QImage::Format_ARGB32);
     qi = qi.rgbSwapped();
     ui->imageLabel->setPixmap(QPixmap::fromImage(qi));
+
 }
 
 ///
