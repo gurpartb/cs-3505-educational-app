@@ -81,7 +81,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if((foodExists || treatExists) && isHungry)
+            else if(foodExists && isHungry)
+            {
+                currentState = "Eating";
+            }
+            else if(treatExists)
             {
                 currentState = "Eating";
             }
@@ -121,7 +125,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 currentState = "Playing";
             }
-            else if((foodExists || treatExists) && isHungry)
+            else if(foodExists && isHungry)
+            {
+                currentState = "Eating";
+            }
+            else if(treatExists)
             {
                 currentState = "Eating";
             }
@@ -136,36 +144,6 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 currentState = "Idle";
             }
 
-        }
-        else if(currentState == "Running")
-        {
-            if(getDogDirectionLeft())
-            {
-                dogDirectionLeft = true;
-                currentForce.x = -runSpeed;
-            }
-            else
-            {
-                dogDirectionLeft = false;
-                currentForce.x = runSpeed;
-            }
-            int behaviorChangeChance = int((static_cast<float>(rand()) * 100.0f) / static_cast<float>(RAND_MAX));
-            if(behaviorChangeChance < 50)
-            {
-                currentState = "Walking";
-            }
-            if(ballExists)
-            {
-                currentState = "Playing";
-            }
-            else if(foodExists && isHungry)
-            {
-                currentState = "Eating";
-            }
-            else if(treatExists)
-            {
-                currentState = "Eating";
-            }
         }
         else if(currentState == "Peeing")
         {
@@ -290,16 +268,8 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         }
         else if(currentState == "Walking")
         {
-            if(getDogDirectionLeft())
-            {
-                dogDirectionLeft = true;
-                currentForce.x = -walkSpeed;
-            }
-            else
-            {
-                dogDirectionLeft = false;
-                currentForce.x = walkSpeed;
-            }
+            dogDirectionLeft = false;
+            currentForce.x = walkSpeed;
 
             if(isHungry && hunger >= 0)
             {
@@ -308,12 +278,13 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             else if(needsToGo)
             {
                 currentState = "Peeing";
+                resetBathroom();
             }
             else if(ballExists)
             {
                 currentState = "Playing";
             }
-            else if(foodExists || treatExists)
+            else if(treatExists)
             {
                 currentState = "Eating";
             }
@@ -321,20 +292,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         }
         else if(currentState == "Eating")
         {
-            if(foodExists)
-            {
-                if(currentFoodPositionX > currentDogPositionX)
-                {
-                    dogDirectionLeft = false;
-                    currentForce.x = runSpeed;
-                }
-                else if(currentFoodPositionX < currentDogPositionX)
-                {
-                    dogDirectionLeft = true;
-                    currentForce.x = -runSpeed;
-                }
-            }
-            else if(treatExists)
+            if(treatExists)
             {
                 if(currentTreatPositionX > currentDogPositionX)
                 {
@@ -387,7 +345,12 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
                 currentState = "Idle";
             }
         }
-        else if(currentState == "Dead")
+        else if(currentState == "BeginDeath")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Death";
+        }
+        else if(currentState == "Death")
         {
             currentForce = b2Vec2_zero;
         }
