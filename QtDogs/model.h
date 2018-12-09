@@ -12,6 +12,7 @@
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
 #include "dog.h"
+#include <QTimer>
 
 #define SCALE 2.0f/768.0f
 
@@ -39,9 +40,11 @@ private:
 
     int ballplayCount;
     int foodEatCount;
+    int ballTouchCount;
 
     bool ballExists;
     bool treatExists;
+    bool dogExists;
     bool foodExists;
     bool atPark;
     bool trickExists;
@@ -73,6 +76,7 @@ public:
     float dogX(){return dogBody->GetPosition().x;}
     float dogY(){return dogBody->GetPosition().y;}
     std::string getDogState(){return dog->getDogState();}
+    bool getDogExists(){return dogExists;}
 
     float getDogHunger(){return dog->getHunger();}
     float getDogBathroom(){return dog->getBathroom();}
@@ -93,6 +97,8 @@ private:
     void treatCollisions();
     void checkCollisions();
     void deactivateAllObjects();
+    QTimer *bathroomTimer;
+
 
 public slots:
     void dogTrick();
@@ -103,6 +109,8 @@ public slots:
     void dogWalkLeft();
     void dogWalkRight();
     void dogTreat();
+    void dogRestroom();
+
 signals:
     void updateLevels(int);
     void updateTrustLevel(int);

@@ -1,5 +1,16 @@
+/**
+  CS 3505 - A8 Final Project - QT Dogs
+  Educational application to teach youth the importance of pet responsibility.
+  Designed by:
+  Brendan Johnston, Andrew Dron, Caleb Edwards, Colton Lee, Gurpartap Bhatti, Jacob Haydel, Tyler Trombley, Jared Hansen
+*/
+
 #include "model.h"
 
+///
+/// \brief Model::Model
+/// Model Constructor.
+///
 Model::Model(){
     gravity = new b2Vec2(0.0f,9.81f);
     world = new b2World(*gravity);
@@ -12,6 +23,10 @@ Model::Model(){
     treatExists = false;
     foodExists = false;
 
+    ballTouchCount = 0;
+
+    bathroomTimer = new QTimer(this);
+
     createScene();
     createDog();
 
@@ -23,14 +38,27 @@ Model::Model(){
     connect(this, &Model::currentDogPosX, dog, &Dog::DogPositionX);
     connect(this, &Model::currentFoodPosX, dog, &Dog::FoodPositionX);
     connect(this, &Model::currentTreatPosX, dog, &Dog::TreatPositionX);
+
 }
 
+///
+/// \brief Model::~Model
+/// Model destructor.
+///
 Model::~Model(){
 
 }
 
+///
+/// \brief Model::update
+/// Main update method to handle all model updating functionality.
+///
 void Model::update()
 {
+    if (ballTouchCount > 0)
+    {
+        ballTouchCount--;
+    }
 
     world->Step(1.0f/30.0f,8,3);
 
@@ -76,8 +104,13 @@ void Model::update()
     emit updateHungerLevel(dog->getHunger());
     emit updateBathroomLevel(dog->getBathroom());
     emit updateTrustProgress(dog->getTrustProgress());
+
 }
 
+///
+/// \brief Model::createBall
+/// Helper to create the ball on the screen.
+///
 void Model::createBall()
 {
     ballExists = true;
@@ -102,8 +135,13 @@ void Model::createBall()
     emit ballOnScreen(ballExists);
 }
 
+///
+/// \brief Model::createDog
+/// creates the dog on the screen using Box-2D.
+///
 void Model::createDog()
 {
+    dogExists = true;
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(0.5f,1.75f);
     BodyDef.type = b2_dynamicBody;
@@ -115,7 +153,6 @@ void Model::createDog()
     vertices[3].Set(-SCALE*36.0f*2.0f,SCALE*26.0f*2.0f);
     b2PolygonShape rect;
     rect.Set(vertices,4);
-    //rect.SetAsBox(SCALE*36*2.0,SCALE*26*2.0);
     b2FixtureDef FixtureDef;
     FixtureDef.density = 1.f;
     FixtureDef.restitution = 0.1f;
@@ -126,6 +163,10 @@ void Model::createDog()
     dog = new Dog();
 }
 
+///
+/// \brief Model::createTreat
+/// Creates the treat on the screen using Box-2D.
+///
 void Model::createTreat()
 {
     treatExists = true;
@@ -146,6 +187,10 @@ void Model::createTreat()
     emit treatOnScreen(treatExists);
 }
 
+///
+/// \brief Model::createFood
+/// Helper method to create the food using Box-2D.
+///
 void Model::createFood()
 {
     foodExists = true;
@@ -153,14 +198,12 @@ void Model::createFood()
 
     b2BodyDef BodyDef;
     BodyDef.position = b2Vec2(1.5f,1.7f);
-   // BodyDef.position = b2Vec2(.7f,1.0f);
     BodyDef.type = b2_dynamicBody;
     BodyDef.linearVelocity = b2Vec2(float(rand()) / float(RAND_MAX),0.0f);
     BodyDef.fixedRotation = true;
     food = world->CreateBody(&BodyDef);
 
     b2PolygonShape shape;
-    //shape.SetAsBox(SCALE*4.0f,SCALE*4.0f);
     shape.SetAsBox(SCALE*46.0f,SCALE*30.0f);
 
     b2FixtureDef FixtureDef;
@@ -173,6 +216,10 @@ void Model::createFood()
     emit treatOnScreen(treatExists);
 }
 
+///
+/// \brief Model::createScene
+/// Helper method to create the scene using Box-2D.
+///
 void Model::createScene()
 {
     //ground
@@ -240,23 +287,19 @@ void Model::createScene()
     }
 }
 
+///
+/// \brief Model::dogCollisions
+/// Helper to handle dog collisions.
+///
 void Model::dogCollisions()
 {
     for (b2ContactEdge* edge = dogBody->GetContactList() ; edge; edge = edge->next)
     {
         if (edge->contact->IsTouching())
         {
-            if (edge->contact->GetFixtureB()->GetBody() == rightWall)
-            {
-                //emit pan right background
-            }
-            if (edge->contact->GetFixtureB()->GetBody() == leftWall)
-            {
-                //emit pan left background
-            }
+
             if (edge->contact->GetFixtureB()->GetBody() == ball)
             {
-                //emit ball sound
                 if (ballplayCount == 30){
 
                     ballExists = false;
@@ -275,9 +318,7 @@ void Model::dogCollisions()
             }
             if (edge->contact->GetFixtureB()->GetBody() == food)
             {
-                //emit eating sound
-                //make food disappear
-                //change state to idle
+
                 if (foodEatCount == 20)
                 {
                     dog->feedFood();
@@ -294,32 +335,45 @@ void Model::dogCollisions()
     }
 }
 
+///
+/// \brief Model::ballCollisions
+/// Helper for the
+///
 void Model::ballCollisions()
 {
     for (b2ContactEdge* edge = ball->GetContactList() ; edge; edge = edge->next)
     {
         if (edge->contact->IsTouching())
         {
-            if (edge->contact->GetFixtureB()->GetBody() == rightWall)
+            if (ballTouchCount < 1)
             {
-                //emit bounce sound
+                if (edge->contact->GetFixtureA()->GetBody() == rightWall)
+                {
+                    emit playBounceSound();
+                }
+                if (edge->contact->GetFixtureA()->GetBody() == leftWall)
+                {
+                    emit playBounceSound();
+                }
+                if (edge->contact->GetFixtureA()->GetBody() == ground)
+                {
+                    emit playBounceSound();
+                }
+                if (edge->contact->GetFixtureA()->GetBody() == ceiling)
+                {
+                    emit playBounceSound();
+                }
+                ballTouchCount+=10;
             }
-            if (edge->contact->GetFixtureB()->GetBody() == leftWall)
-            {
-                //emit bounce sound
-            }
-            if (edge->contact->GetFixtureB()->GetBody() == ground)
-            {
-                //emit bounce sound
-            }
-            if (edge->contact->GetFixtureB()->GetBody() == ceiling)
-            {
-                //emit bounce sound
-            }
+
         }
     }
 }
 
+///
+/// \brief Model::treatCollisions
+/// helper to handle the treat collisions.
+///
 void Model::treatCollisions()
 {
     for (b2ContactEdge* edge = treat->GetContactList() ; edge; edge = edge->next)
@@ -328,7 +382,7 @@ void Model::treatCollisions()
         {
             if (edge->contact->GetFixtureB()->GetBody() == ground)
             {
-                //emit falling sound
+                    //emit falling sound
             }
         }
     }
@@ -342,10 +396,8 @@ void Model::dogTrick()
 {
     if(!ballExists && !treatExists)
     {
-       // trickExists = true;
         dog->doesTrickExist(true);
     }
-    //emit dogFlip(trickExists);
     emit playWhistleSound();
 }
 
@@ -387,34 +439,85 @@ void Model::deactivateAllObjects()
     }
 }
 
+///
+/// \brief Model::dogPlayedWithBall
+/// dog playing with the ball.
+///
 void Model::dogPlayedWithBall()
 {
     deactivateAllObjects();
     createBall();
 }
 
+///
+/// \brief Model::dogWentToThePark
+/// Helper to let the dog go to the park.
+///
 void Model::dogWentToThePark(bool wentToPark)
 {
     dog->DogInPark(wentToPark);
 }
 
+///
+/// \brief Model::dogLetOut
+/// Lets the dog out to the bathroom.
+///
 void Model::dogLetOut()
 {
-    dog->resetBathroom();
+    dogRestroom();
+    QTimer::singleShot(1000, this, SLOT(dogRestroom()));
 }
 
+///
+/// \brief Model::dogRestroom
+/// Flashes the dog using the restroom.
+///
+void Model::dogRestroom()
+{
+    if (!atPark)
+    {
+        if (dogExists)
+        {
+            dogExists = false;
+        }
+        else
+        {
+            dogExists = true;
+        }
+
+        dogBody->SetAwake(dogExists);
+
+        if(dogExists)
+        {
+            dog->resetBathroom();
+        }
+    }
+}
+
+///
+/// \brief Model::dogWalkLeft
+/// Helper for the dog to walk left.
+///
 void Model::dogWalkLeft()
 {
     b2Vec2 vec(-0.01f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
+///
+/// \brief Model::dogWalkRight
+/// Helper to help the dog walk right.
+///
 void Model::dogWalkRight()
 {
     b2Vec2 vec(0.01f,0.0f);
     dogBody->ApplyLinearImpulse(vec,dogBody->GetWorldCenter(),true);
 }
 
+///
+/// \brief Model::checkCollisions
+/// helper for the dog to check collisions.
+///
 void Model::checkCollisions()
 {
     if(ballExists)

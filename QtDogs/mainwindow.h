@@ -108,8 +108,6 @@ private slots:
     void on_trustProgressBar_valueChanged(int);
     void on_hungerProgressBar_valueChanged(int);
     void on_bathroomProgressBar_valueChanged(int);
-    void updatePoopBar();
-    void updateHungerBar();
     void on_trustLevel_valueChanged(int);
     void playMusic();
     void changeTimeOfDay();

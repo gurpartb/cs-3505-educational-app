@@ -41,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //connections for sound effects
     connect(&model, &Model::playBounceSound, this, &MainWindow::playBounceSound);
     connect(&model, &Model::playBarkSound, this, &MainWindow::playBarkSound);
-    connect(&model, &Model::playWhistleSound, this, &MainWindow::playWhistleSound);
     connect(&model, &Model::playEatSound, this, &MainWindow::playEatSound);
 
     width = ui->imageLabel->size().width();
@@ -284,7 +283,10 @@ void MainWindow::startGame()
     //sound.stop();
 }
 
-
+///
+/// \brief MainWindow::updateTimeOfDay
+/// Helper to check the time of day.
+///
 void MainWindow::updateTimeOfDay()
 {
     timeOfDay++;
@@ -444,7 +446,10 @@ void MainWindow::update()
 
     dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
 
-    frame.draw(dog);
+    if (model.getDogExists())
+    {
+        frame.draw(dog);
+    }
 
     frame.display();
 
@@ -495,24 +500,6 @@ void MainWindow::on_trustLevel_valueChanged(int value)
 }
 
 ///
-/// \brief MainWindow::updatePoopBar
-/// Updates the value of the bathroom bar.
-///
-void MainWindow::updatePoopBar()
-{
-
-}
-
-///
-/// \brief MainWindow::updateHungerBar
-/// Updates the value of the hunger bar.
-///
-void MainWindow::updateHungerBar()
-{
-
-}
-
-///
 /// \brief MainWindow::playMusic
 ///  Plays the intro music on the splash screen.
 ///
@@ -543,21 +530,37 @@ void MainWindow::on_instructionsButton_clicked()
     msgBox.exec();
 }
 
+///
+/// \brief MainWindow::playBounceSound
+/// Plays the bounce sound.
+///
 void MainWindow::playBounceSound()
 {
     bounceSound.play();
 }
 
+///
+/// \brief MainWindow::playWhistleSound
+/// Plays the whistle sound.
+///
 void MainWindow::playWhistleSound()
 {
   whistleSound.play();
 }
 
+///
+/// \brief MainWindow::playEatSound
+/// Play the eat sound
+///
 void MainWindow::playEatSound()
 {
     eatSound.play();
 }
 
+///
+/// \brief MainWindow::playBarkSound
+/// Play bark sound.
+///
 void MainWindow::playBarkSound()
 {
     unsigned int numOfSound = static_cast<unsigned int>((static_cast<float>(rand()) * 5.0f) / static_cast<float>(RAND_MAX)) + 1;

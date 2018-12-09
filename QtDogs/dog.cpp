@@ -41,7 +41,6 @@ Dog::~Dog()
 ///
 b2Vec2 Dog::UpdateDogState(bool isNight){
 
-    int frameCount = 0;
     bool isHungry = increaseHunger();
     bool needsToGo = false;
 
@@ -445,8 +444,8 @@ float Dog::getHunger()
 ///
 bool Dog::increaseHunger()
 {
-    //hunger-= 0.00555555555555555555f;
-    hunger -= 0.20f;
+    hunger-= 0.00555555555555555555f;
+    //hunger -= 0.20f;
 
     if (hunger < 100)
     {
