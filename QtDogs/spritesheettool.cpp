@@ -40,6 +40,7 @@ void SpriteSheetTool::addAnimation(int x, int y, int w, int h, int numFrames, st
         std::vector<sf::IntRect>* framesMappedToDictionary = &dict[name];
         for(auto& frame : frames)
             framesMappedToDictionary->push_back(frame);
+
     }
     else
     {
