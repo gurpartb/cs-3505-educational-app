@@ -266,6 +266,11 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             currentForce = b2Vec2_zero;
             currentState = "Walking";
         }
+        if(currentState == "Sitting")
+        {
+            currentForce = b2Vec2_zero;
+            currentState = "Walking";
+        }
         else if(currentState == "Walking")
         {
             dogDirectionLeft = false;
