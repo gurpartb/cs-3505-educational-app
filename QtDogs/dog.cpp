@@ -17,7 +17,7 @@ Dog::Dog()
     currentDogPositionX = 0;
     currentFoodPositionX = 0;
     currentTreatPositionX = 0;
-    hunger = 99;
+    hunger = 100;
     bathroom = 0;
     trustLevel = 0;
     currentState = "Idle";
@@ -439,7 +439,7 @@ float Dog::getHunger()
 ///
 bool Dog::increaseHunger()
 {
-    hunger-= 0.0555555555555555555;
+    hunger-= 0.00555555555555555555;
     if (hunger < 100)
     {
         if (hunger > 70)
