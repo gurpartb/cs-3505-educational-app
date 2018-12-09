@@ -41,7 +41,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //connections for sound effects
     connect(&model, &Model::playBounceSound, this, &MainWindow::playBounceSound);
     connect(&model, &Model::playBarkSound, this, &MainWindow::playBarkSound);
-    connect(&model, &Model::playWhistleSound, this, &MainWindow::playWhistleSound);
     connect(&model, &Model::playEatSound, this, &MainWindow::playEatSound);
 
     width = ui->imageLabel->size().width();
@@ -52,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->trustProgressBar->setValue(0);
     ui->levelNumber->display(0);
     ui->homeButton->setVisible(false);
+    ui->trickButton->setEnabled(false);
     parkPos = 0;
 
 
@@ -244,7 +244,6 @@ void MainWindow::updateBackgroundAnimation()
 void MainWindow::enableUi(bool enabled)
 {
     gameStarted = enabled;
-    ui->trickButton->setEnabled(enabled);
     ui->ballButton->setEnabled(enabled);
     ui->foodButton->setEnabled(enabled);
     ui->treatButton->setEnabled(enabled);
@@ -280,7 +279,10 @@ void MainWindow::startGame()
     //sound.stop();
 }
 
-
+///
+/// \brief MainWindow::updateTimeOfDay
+/// Helper to check the time of day.
+///
 void MainWindow::updateTimeOfDay()
 {
     timeOfDay++;
@@ -340,12 +342,34 @@ void MainWindow::update()
            backgroundAnimation = "Park_Screen";
            ui->parkButton->setVisible(false);
            ui->homeButton->setVisible(true);
+           ui->foodButton->setEnabled(false);
         }
         else
         {
             updateTimeOfDay();
             ui->parkButton->setVisible(true);
             ui->homeButton->setVisible(false);
+            ui->foodButton->setEnabled(true);
+        }
+
+        if (model.getDogTrustLevel() >= 2)
+        {
+
+            if (!model.isNight)
+            {
+                ui->trickButton->setText("Trick");
+                ui->trickButton->setEnabled(true);
+            }
+            else
+            {
+                ui->trickButton->setText("It's Too Late");
+                ui->trickButton->setEnabled(false);
+            }
+
+        }
+        else
+        {
+            ui->trickButton->setText("Unlock Lv 2");
         }
 
         if (model.getDogTrustLevel() >= 0)
@@ -417,7 +441,10 @@ void MainWindow::update()
 
     dog.setPosition(model.dogX()*width/2.0f, model.dogY()*height/2.0f);
 
-    frame.draw(dog);
+    if (model.getDogExists())
+    {
+        frame.draw(dog);
+    }
 
     frame.display();
 
@@ -468,24 +495,6 @@ void MainWindow::on_trustLevel_valueChanged(int value)
 }
 
 ///
-/// \brief MainWindow::updatePoopBar
-/// Updates the value of the bathroom bar.
-///
-void MainWindow::updatePoopBar()
-{
-
-}
-
-///
-/// \brief MainWindow::updateHungerBar
-/// Updates the value of the hunger bar.
-///
-void MainWindow::updateHungerBar()
-{
-
-}
-
-///
 /// \brief MainWindow::playMusic
 ///  Plays the intro music on the splash screen.
 ///
@@ -516,21 +525,37 @@ void MainWindow::on_instructionsButton_clicked()
     msgBox.exec();
 }
 
+///
+/// \brief MainWindow::playBounceSound
+/// Plays the bounce sound.
+///
 void MainWindow::playBounceSound()
 {
     bounceSound.play();
 }
 
+///
+/// \brief MainWindow::playWhistleSound
+/// Plays the whistle sound.
+///
 void MainWindow::playWhistleSound()
 {
   whistleSound.play();
 }
 
+///
+/// \brief MainWindow::playEatSound
+/// Play the eat sound
+///
 void MainWindow::playEatSound()
 {
     eatSound.play();
 }
 
+///
+/// \brief MainWindow::playBarkSound
+/// Play bark sound.
+///
 void MainWindow::playBarkSound()
 {
     if(barkCounter == 30) {
