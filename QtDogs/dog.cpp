@@ -162,7 +162,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
             {
                 //Random change of behavior to idle
                 float behaviorChangeChance = (static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
-                if(behaviorChangeChance < 0.02f)
+                if(behaviorChangeChance < 0.2f)
                 {
                     currentState = "Idle";
                 }
@@ -477,8 +477,8 @@ float Dog::getHunger()
 ///
 bool Dog::increaseHunger()
 {
-    hunger-= 0.00555555555555555555f;
-    //hunger -= 0.20f;
+    //hunger-= 0.00555555555555555555f;
+    hunger -= 0.05f;
 
     if (hunger < 100)
     {
@@ -602,7 +602,7 @@ int Dog::getTrustProgress()
 ///
 void Dog::increaseTrustLevel()
 {
-    if (trustLevel < 10 && (trustProgress == 100))
+    if (trustLevel < 10 && (trustProgress > 100))
     {
         trustLevel++;
 
@@ -616,7 +616,7 @@ void Dog::increaseTrustProgress()
 {
     if(trustProgress < 100)
     {
-        trustProgress += 10;
+        trustProgress += 80;
     }
     else
     {
@@ -647,7 +647,7 @@ void Dog::decreaseTrustProgress()
 {
     if(trustProgress > 0)
     {
-        trustProgress -= 0.05;
+        trustProgress--;
     }
     else
     {

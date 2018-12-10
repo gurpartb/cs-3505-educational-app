@@ -57,6 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     animationDelayCounter = 0;
+    timeOfDay = 0;
 
     //setup sfml stuff
     loadAnimations();
@@ -113,6 +114,8 @@ MainWindow::MainWindow(QWidget *parent) :
     bounceSound.setBuffer(bounceBuffer);
     barkSound.setBuffer(barkBuffer);
     ballSound.setBuffer(ballBuffer);
+
+    musicSound.play();
 }
 
 ///
@@ -287,7 +290,7 @@ void MainWindow::startGame()
 ///
 void MainWindow::updateTimeOfDay()
 {
-    timeOfDay++;
+    timeOfDay += 6;
     if(timeOfDay < 30*60)
     {
         backgroundAnimation = "Daytime";
