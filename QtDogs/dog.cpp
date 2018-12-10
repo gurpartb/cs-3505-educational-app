@@ -50,7 +50,7 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
 
     if(!isDogInPark)
     {
-        if(isNight && !(currentState == "Dead")) {
+        if(isNight && !(currentState == "Death") && !(currentState == "BeginDeath")) {
             currentState = "BeginSleeping";
         }
 
@@ -310,8 +310,9 @@ b2Vec2 Dog::UpdateDogState(bool isNight){
         {
             dogDirectionLeft = false;
             currentForce = b2Vec2_zero;
+            float stateFlagChoice = ((static_cast<float>(rand()) * 1.0f) / static_cast<float>(RAND_MAX));
 
-            if(isHungry && hunger >= 0)
+            if(isHungry && hunger >= 0 && stateFlagChoice < 0.05f)
             {
                 currentState = "Barking";
             }
