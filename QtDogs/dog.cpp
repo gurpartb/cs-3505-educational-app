@@ -477,8 +477,8 @@ float Dog::getHunger()
 ///
 bool Dog::increaseHunger()
 {
-    //hunger-= 0.00555555555555555555f;
-    hunger -= 0.05f;
+    hunger-= 0.00555555555555555555f;
+    //hunger -= 0.05f;
 
     if (hunger < 100)
     {

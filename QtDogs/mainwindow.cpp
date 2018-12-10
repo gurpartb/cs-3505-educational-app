@@ -281,7 +281,7 @@ void MainWindow::enableUi(bool enabled)
 void MainWindow::startGame()
 {
     enableUi(true);
-    //sound.stop();
+    musicSound.stop();
 }
 
 ///
@@ -290,7 +290,8 @@ void MainWindow::startGame()
 ///
 void MainWindow::updateTimeOfDay()
 {
-    timeOfDay += 6;
+    //timeOfDay += 6;
+    timeOfDay++;
     if(timeOfDay < 30*60)
     {
         backgroundAnimation = "Daytime";
@@ -382,6 +383,7 @@ void MainWindow::update()
 
         if (model.getDogTrustLevel() >= 3)
         {
+
             if (!model.isNight){
                 ui->parkButton->setEnabled(true);
                 ui->parkButton->setText("Go To Park");

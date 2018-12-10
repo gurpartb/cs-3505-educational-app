@@ -11,11 +11,11 @@
 /// \brief Model::Model
 /// Model Constructor.
 ///
-Model::Model(){
+Model::Model()
+{
+
     gravity = new b2Vec2(0.0f,9.81f);
     world = new b2World(*gravity);
-
-   // world->list
 
     srand(uint32_t(time(nullptr)));
 
